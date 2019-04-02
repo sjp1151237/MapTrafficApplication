@@ -16,20 +16,32 @@
 
 package com.traffic.pd;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.traffic.pd.services.AddressResultReceiver;
+import com.traffic.pd.services.FetchAddressIntentService;
+import com.traffic.pd.utils.GoogleMapManager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -43,7 +55,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
         OnMyLocationButtonClickListener,
         OnMyLocationClickListener,
         OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        GoogleMapManager.GetLoc {
 
     /**
      * Request code for location permission request.
@@ -59,6 +72,17 @@ public class MyLocationDemoActivity extends AppCompatActivity
     private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
+    GoogleMapManager googleMapManager;
+
+    private UiSettings mUiSettings;
+    private AddressResultReceiver mResultReceiver;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +92,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        googleMapManager = new GoogleMapManager(getApplicationContext(),this);
+        mResultReceiver = new AddressResultReceiver(mHandler,this);
     }
 
     @Override
@@ -77,7 +103,37 @@ public class MyLocationDemoActivity extends AppCompatActivity
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         enableMyLocation();
+
+        googleMapManager.getMyLocation();
+        mUiSettings = mMap.getUiSettings();
+        mUiSettings.setZoomControlsEnabled(true);
+//
+
     }
+
+    private void toMyLoc() {
+
+    }
+
+    LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+    };
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.
@@ -140,6 +196,18 @@ public class MyLocationDemoActivity extends AppCompatActivity
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void getLoc(LatLng location) {
+        if(null != location){
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+
+            Intent intent = new Intent(this, FetchAddressIntentService.class);
+            intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
+            intent.putExtra(FetchAddressIntentService.LATLNG_DATA_EXTRA, location);
+            startService(intent);
+        }
     }
 
 }
