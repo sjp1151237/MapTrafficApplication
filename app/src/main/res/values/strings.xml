@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Traffic Application</string>
-    <string name="app_dir">Jesus</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -11,8 +10,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-	
-	<string name="demo_title">Google Maps API Demos</string>
+
+    <string name="demo_title">Google Maps API Demos</string>
     <string name="no_demos">No demos</string>
     <string name="play_services_not_installed">Google Play services is not installed on this device.</string>
 
@@ -236,4 +235,9 @@
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
     <string name="permission_required_toast">Location permission is required for this demo.</string>
+
+    <string name="app_dir">TrafficApp</string>
+    <string name="cache_dir">TrafficAppCache</string>
+    <string name="cache_home_dir">TrafficAppCacheHome</string>
+    <string name="net_error">网络出错</string>
 </resources>

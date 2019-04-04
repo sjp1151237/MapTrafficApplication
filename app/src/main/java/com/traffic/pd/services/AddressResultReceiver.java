@@ -1,14 +1,11 @@
 package com.traffic.pd.services;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-
-import com.traffic.pd.MapsActivity;
 
 public class AddressResultReceiver extends ResultReceiver {
     private String mAddressOutput;

@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".activity.RegisterActivity">
+
+    <include layout="@layout/common_title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="company name"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:hint="enter company name"
+                    android:textColorHint="@color/item_content_font"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="phonenum"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:hint="enter phonenum"
+                    android:textColorHint="@color/item_content_font"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="password"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:hint="enter password"
+                    android:textColorHint="@color/item_content_font"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="password"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:hint="confirm password"
+                    android:textColorHint="@color/item_content_font"/>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="location"/>
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="country"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="province"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="city"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="district"/>
+
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/right"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_height="45dp"
+                android:textSize="16sp"
+                android:textColor="@color/item_title_font"
+                android:text="your detail address"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="license num"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="enter license num"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="license pic"/>
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/pic_add"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/divider_color_dan"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="company pics"/>
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/pic_add"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="company introduce :"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="enter your introduce"/>
+
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/right"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="commit"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:layout_margin="15dp"
+        />
+
+
+</LinearLayout>

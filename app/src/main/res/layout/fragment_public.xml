@@ -1,149 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#fff"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="Release Order"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="#fff">
 
-        <TextView
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:background="@color/colorPrimary"
-            android:text="Release Order"
-            android:gravity="center"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:text="Truck type and num select"/>
+            <LinearLayout
+                android:id="@+id/ll_select_car"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/put_choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:hint="You don't have a choice"
-            android:textColorHint="@color/item_content_font"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/start_pos"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="20dp"
+                        android:text="Truck type and num select"
+                        android:textColor="@color/item_title_font"
+                        android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/put_shipping_address"
+                    <TextView
+                        android:id="@+id/put_choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:hint="You don't have a choice"
+                        android:textColor="@color/item_title_font"
+                        android:textColorHint="@color/item_content_font"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="45dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/right" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/start_pos" />
+
+                <TextView
+                    android:id="@+id/put_shipping_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Please input shipping address."
+                    android:text=""
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/over_pos" />
+
+                <TextView
+                    android:id="@+id/put_receipt_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Please input the receipt address."
+                    android:text=""
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan" />
+
+            <EditText
+                android:id="@+id/put_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@null"
+                android:hint="Please enter the consignee's name."
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:textColor="@color/item_title_font"
-                android:hint="Please input shipping address."
                 android:textColorHint="@color/item_content_font"
-                android:text=""/>
-        </LinearLayout>
+                android:textSize="16sp" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/over_pos"/>
-
-            <TextView
-                android:id="@+id/put_receipt_address"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_phone_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_cn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CN"
+                        android:textColor="@color/item_content_font"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="3dp"
+                        android:src="@mipmap/down_red" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_phone_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="+86"
+                    android:textColor="@color/item_content_font"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/put_phone_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:hint="Please enter the consignee's phone num."
+                    android:maxLines="1"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan" />
+
+            <TextView
+                android:id="@+id/put_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="Please enter the appointment time."
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:textColor="@color/item_title_font"
-                android:hint="Please input the receipt address."
                 android:textColorHint="@color/item_content_font"
-                android:text=""/>
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_publish"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:text="RELEASE" />
+
+
         </LinearLayout>
-
-
-        <EditText
-            android:id="@+id/put_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@null"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:hint="Please enter the consignee's name."
-            android:textColorHint="@color/item_content_font"/>
-
-        <EditText
-            android:id="@+id/put_phone_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@null"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:hint="Please enter the consignee's phone num."
-            android:textColorHint="@color/item_content_font"/>
-
-        <TextView
-            android:id="@+id/put_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:hint="Please enter the appointment time."
-            android:textColorHint="@color/item_content_font"/>
-
-        <Button
-            android:id="@+id/btn_publish"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
-            android:text="RELEASE"/>
-
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
