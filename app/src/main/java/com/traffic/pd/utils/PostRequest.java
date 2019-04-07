@@ -7,11 +7,13 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.traffic.pd.R;
 import com.traffic.pd.app.MyApplication;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.ui.Loading;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PostRequest {
@@ -43,7 +45,7 @@ public class PostRequest {
             if (context != null) {
                 this.isLoading = isLoading;
                 if (isLoading) {
-                    mLoading = new Loading(context, R.style.dialog);
+                    mLoading = new Loading(context, R.style.Dialog);
                 }
             }
         } catch (Exception e) {
@@ -61,7 +63,7 @@ public class PostRequest {
         Log.i(TAG, map.toString());
         postRequest.postStart();
         showLoading();
-        BaseRequest objectRequest = new BaseRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest objectRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -95,6 +97,7 @@ public class PostRequest {
             }
         };
         MyApplication.getInstance().addToRequestQueue(objectRequest, TAG);
+
     }
 
     private void showLoading() {
