@@ -46,12 +46,16 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-                <TextView
+                <EditText
                     android:id="@+id/tv_location"
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:enabled="false"
+                    android:clickable="true"
                     android:textColor="@color/item_title_font"
-                    android:text="China CN 86"
+                    android:hint="Please select your phone country"
+                    android:text=""
+                    android:textColorHint="@color/item_content_font"
                     android:gravity="center_vertical"
                     android:layout_height="45dp"
                     android:textSize="16sp"/>

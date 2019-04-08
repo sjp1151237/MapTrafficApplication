@@ -1,6 +1,8 @@
 package com.traffic.pd.data;
 
-public class PhoneCodeBean {
+import java.io.Serializable;
+
+public class PhoneCodeBean implements Serializable {
     private String A;
     private String B;
 

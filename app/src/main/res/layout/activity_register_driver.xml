@@ -9,8 +9,6 @@
     android:orientation="vertical"
     tools:context=".activity.RegisterActivity">
 
-    <include layout="@layout/common_title"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,41 +19,53 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/item_title_font"
+                    android:textSize="16sp"
+                    android:text="phone location"/>
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_location_phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:text="driver name"/>
-
-                <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
+                    android:id="@+id/tv_location"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="8dp"
-                    android:background="@null"
+                    android:textColor="@color/item_content_font"
+                    android:text="Please select your phone country"
                     android:gravity="center_vertical"
-                    android:layout_height="50dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:textColorHint="@color/item_content_font"
-                    android:hint="enter driver name"/>
+                    android:layout_height="45dp"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@mipmap/right"/>
             </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
@@ -79,6 +89,7 @@
                     android:src="@mipmap/xing"/>
 
                 <EditText
+                    android:id="@+id/et_phone_num"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
@@ -118,6 +129,7 @@
                     android:src="@mipmap/xing"/>
 
                 <EditText
+                    android:id="@+id/et_psw"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
@@ -157,6 +169,7 @@
                     android:src="@mipmap/xing"/>
 
                 <EditText
+                    android:id="@+id/et_psw_conf"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
@@ -188,7 +201,7 @@
                     android:gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="location"/>
+                    android:text="car location"/>
                 <ImageView
                     android:layout_width="8dp"
                     android:layout_height="8dp"
@@ -197,13 +210,15 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_select_car_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_country"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
@@ -214,7 +229,8 @@
                     android:textColorHint="@color/item_content_font"
                     android:hint="country"/>
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_province"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
@@ -225,7 +241,8 @@
                     android:textColorHint="@color/item_content_font"
                     android:hint="province"/>
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_city"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
@@ -236,7 +253,8 @@
                     android:textColorHint="@color/item_content_font"
                     android:hint="city"/>
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_district"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
@@ -258,15 +276,17 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <TextView
+            <EditText
+                android:id="@+id/tv_address_detail"
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
                 android:layout_height="50dp"
                 android:textSize="16sp"
                 android:textColor="@color/item_title_font"
-                android:text="your detail address"
+                android:textColorHint="@color/item_content_font"
+                android:hint="enter your detail address"
                 />
 
             <View
@@ -296,6 +316,7 @@
                     android:src="@mipmap/xing"/>
 
                 <EditText
+                    android:id="@+id/et_car_license_num"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
@@ -305,7 +326,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:hint="enter car num"/>
+                    android:hint="enter car license num"/>
             </LinearLayout>
 
             <View
@@ -336,6 +357,7 @@
 
 
             <ImageView
+                android:id="@+id/iv_car_license_num"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
@@ -370,6 +392,7 @@
 
 
             <ImageView
+                android:id="@+id/iv_car_pics"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
@@ -432,6 +455,7 @@
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
+                android:id="@+id/ll_introduce"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -477,6 +501,7 @@
 
 
     <TextView
+        android:id="@+id/tv_commit"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:textColor="@color/white"

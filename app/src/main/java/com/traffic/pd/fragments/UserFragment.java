@@ -1,18 +1,33 @@
 package com.traffic.pd.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.traffic.pd.R;
+import com.traffic.pd.activity.LoginActivity;
 import com.traffic.pd.activity.RegisterActivity;
+import com.traffic.pd.constant.Constant;
+import com.traffic.pd.data.TestBean;
+import com.traffic.pd.utils.ComUtils;
+import com.traffic.pd.utils.PostRequest;
+import com.traffic.pd.utils.PreferencesUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +38,7 @@ public class UserFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     @BindView(R.id.take_picture)
-    SimpleDraweeView takePicture;
+    ImageView takePicture;
     @BindView(R.id.my_name)
     TextView myName;
     @BindView(R.id.tv_invite)
@@ -45,11 +60,15 @@ public class UserFragment extends Fragment {
     @BindView(R.id.ll_Charge_standard)
     LinearLayout llChargeStandard;
     Unbinder unbinder;
+    @BindView(R.id.tv_state)
+    TextView tvState;
 
     private String mParam1;
     private String mParam2;
 
     private View mView;
+
+    private MyReceiver myReceiver;
 
     public UserFragment() {
         // Required empty public constructor
@@ -81,6 +100,11 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         if (null == mView) {
             mView = inflater.inflate(R.layout.fragment_user, container, false);
+            myReceiver = new MyReceiver();
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Constant.LOGIN_SUCESS);
+            getActivity().registerReceiver(myReceiver, intentFilter);
         }
         unbinder = ButterKnife.bind(this, mView);
         return mView;
@@ -90,14 +114,14 @@ public class UserFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        getActivity().unregisterReceiver(myReceiver);
     }
 
     @OnClick({R.id.take_picture, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.take_picture:
-                Intent intent = new Intent(getContext(), RegisterActivity.class);
-                intent.putExtra("tag",mParam1);
+                Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
                 break;
             case R.id.ll_order_center:
@@ -114,4 +138,22 @@ public class UserFragment extends Fragment {
                 break;
         }
     }
+
+    class MyReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constant.REGIST_SUCESS)) {
+
+//                toLogin(intent.getStringExtra("username"), intent.getStringExtra("psw"));
+
+            }
+            if (intent.getAction().equals(Constant.LOGIN_SUCESS)) {
+
+                myName.setText(intent.getStringExtra("num"));
+
+            }
+        }
+    }
+
 }

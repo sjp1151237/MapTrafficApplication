@@ -1,5 +1,6 @@
 package com.traffic.pd.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,7 +58,9 @@ public class ChoosePhoneCodeActivity extends AppCompatActivity implements PhoneC
 
     @Override
     public void selectCode(int i) {
-        Toast.makeText(this,beanList.get(i).getA(),Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra("res",beanList.get(i));
+        setResult(2, intent);
         finish();
     }
 }

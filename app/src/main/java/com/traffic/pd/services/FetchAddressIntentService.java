@@ -11,6 +11,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.traffic.pd.constant.EventMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,6 +84,7 @@ public class FetchAddressIntentService extends IntentService {
 
         // Handle case where no address was found.
         if (addresses == null || addresses.size()  == 0) {
+                    EventBus.getDefault().post(new EventMessage(EventMessage.TYPE_GET_LOCATION, latLng));
             if (errorMessage.isEmpty()) {
                 errorMessage = "no_address_found";
                 Log.e(TAG, errorMessage);
@@ -88,16 +92,16 @@ public class FetchAddressIntentService extends IntentService {
             deliverResultToReceiver(FAILURE_RESULT, errorMessage);
         } else {
             Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
-
-            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            Log.i(TAG, "address_found");
-            deliverResultToReceiver(SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
-
+//            ArrayList<String> addressFragments = new ArrayList<String>();
+//
+//            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+//                addressFragments.add(address.getAddressLine(i));
+//            }
+//            Log.i(TAG, "address_found");
+//            deliverResultToReceiver(SUCCESS_RESULT,
+//                    TextUtils.join(System.getProperty("line.separator"),
+//                            addressFragments));
+            EventBus.getDefault().post(new EventMessage(EventMessage.TYPE_GET_LOCATION, address));
             /**
              * stringBuilder.append(address.getCountryName()).append("_");//国家
              *                 stringBuilder.append(address.getFeatureName()).append("_");//周边地址

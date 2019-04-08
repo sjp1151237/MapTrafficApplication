@@ -91,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
 //                mLastKnownLocation = null;
 
-                ComUtils.getLocationPermission(this);
+//                ComUtils.getLocationPermission(this);
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());

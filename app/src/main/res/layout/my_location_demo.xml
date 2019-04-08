@@ -14,15 +14,45 @@
      limitations under the License.
 -->
 <!-- This can go anywhere in your layout (see other demos for some examples). -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout">
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/common_title"/>
 
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
+        android:id="@+id/tv_pos"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:text="position"
+        android:textColor="@color/item_title_font"/>
+
+    <TextView
+        android:id="@+id/tv_pos_2"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:text="30.26 123.56"
+        android:textColor="@color/item_content_font"/>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/layout">
+
+        <fragment
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+</LinearLayout>
+
