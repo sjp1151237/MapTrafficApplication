@@ -9,8 +9,6 @@
     android:orientation="vertical"
     tools:context=".activity.RegisterActivity">
 
-    <include layout="@layout/common_title"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -19,163 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="company name"/>
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:hint="enter company name"
-                    android:textColorHint="@color/item_content_font"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:background="@color/divider_color_dan"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="phonenum"/>
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:hint="enter phonenum"
-                    android:textColorHint="@color/item_content_font"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:background="@color/divider_color_dan"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="password"/>
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:hint="enter password"
-                    android:textColorHint="@color/item_content_font"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:background="@color/divider_color_dan"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="password"/>
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:hint="confirm password"
-                    android:textColorHint="@color/item_content_font"/>
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/divider_color_dan"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -188,7 +29,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/item_title_font"
                     android:textSize="16sp"
-                    android:text="location"/>
+                    android:text="phone location"/>
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
@@ -196,53 +37,229 @@
                     android:src="@mipmap/xing"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_location_phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/item_content_font"
+                    android:text="Please select your phone country"
+                    android:gravity="center_vertical"
+                    android:layout_height="45dp"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@mipmap/right"/>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan"/>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="phonenum"/>
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:id="@+id/et_phone_num"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="enter phonenum"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="password"/>
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:id="@+id/et_psw"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="enter password"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="password"/>
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:id="@+id/et_psw_conf"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="confirm password"/>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="company location"/>
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_select_car_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_country"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
                     android:hint="country"/>
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_province"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
                     android:hint="province"/>
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_city"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
                     android:hint="city"/>
 
-                <EditText
+                <TextView
+                    android:id="@+id/tv_district"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
@@ -259,15 +276,17 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <TextView
+            <EditText
+                android:id="@+id/tv_address_detail"
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="20dp"
-                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:layout_height="50dp"
                 android:textSize="16sp"
                 android:textColor="@color/item_title_font"
-                android:text="your detail address"
+                android:textColorHint="@color/item_content_font"
+                android:hint="enter your detail address"
                 />
 
             <View
@@ -286,27 +305,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
                     android:textSize="16sp"
-                    android:text="license num"/>
+                    android:textColor="@color/item_title_font"
+                    android:text="company license"/>
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_marginLeft="5dp"
                     android:src="@mipmap/xing"/>
 
                 <EditText
+                    android:id="@+id/et_car_license_num"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:hint="enter license num"/>
+                    android:hint="enter company license num"/>
             </LinearLayout>
 
             <View
@@ -317,28 +337,29 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/item_title_font"
                     android:textSize="16sp"
-                    android:text="license pic"/>
+                    android:textColor="@color/item_title_font"
+                    android:gravity="center_vertical"
+                    android:text="company num pic"/>
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_marginLeft="5dp"
                     android:src="@mipmap/xing"/>
             </LinearLayout>
 
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:id="@+id/iv_car_license_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:src="@mipmap/pic_add"/>
 
@@ -346,44 +367,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/divider_color_dan"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:textColor="@color/item_title_font"
                     android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
                     android:text="company pics"/>
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_marginLeft="5dp"
                     android:src="@mipmap/xing"/>
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginLeft="20dp"
-                android:src="@mipmap/pic_add"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_pic"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
+                android:id="@+id/ll_cartype"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -392,18 +420,24 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="company introduce :"/>
+                    android:text="car type :"/>
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="enter your introduce"/>
+                    android:text="car type"/>
 
                 <RelativeLayout
                     android:layout_width="50dp"
@@ -423,13 +457,56 @@
                 android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan"/>
 
+            <LinearLayout
+                android:id="@+id/ll_introduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="company introduce :"/>
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="enter your company introduce"/>
+
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/right"/>
+                </RelativeLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
 
     <TextView
+        android:id="@+id/tv_commit"
         android:layout_width="200dp"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:text="commit"

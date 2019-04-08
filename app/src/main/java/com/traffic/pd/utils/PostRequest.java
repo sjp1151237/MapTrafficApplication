@@ -4,16 +4,23 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.luck.picture.lib.tools.PictureFileUtils;
 import com.traffic.pd.R;
 import com.traffic.pd.app.MyApplication;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.ui.Loading;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PostRequest {
@@ -151,5 +158,40 @@ public class PostRequest {
         };
         MyApplication.getInstance().addToRequestQueue(objectRequest, TAG);
     }
+
+    public void uploadFile(final PostListener postRequest, String url, File file, final Map<String, String> map) {
+        MultipartRequestUpload request = new MultipartRequestUpload(url, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                postRequest.postError(error.getMessage());
+            }
+        }, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                PictureFileUtils.deleteCacheDirFile(mContext);
+                postRequest.postSuccessful(response);
+            }
+        }, "file", file, map);
+        MyApplication.getInstance().addToRequestQueue(request, TAG);
+    }
+
+    public void uploadFiles(final PostListener postRequest, String url, List<File> files, final Map<String, String> map) {
+        MultipartRequestUpload request = new MultipartRequestUpload(url, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                postRequest.postError(error.getMessage());
+            }
+        }, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                PictureFileUtils.deleteCacheDirFile(mContext);
+                postRequest.postSuccessful(response);
+            }
+        }, "file", files, map);
+        MyApplication.getInstance().addToRequestQueue(request, TAG);
+    }
+
 
 }

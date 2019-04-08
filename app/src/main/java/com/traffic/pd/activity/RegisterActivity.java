@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.register_activity);
         ButterKnife.bind(this);
         consigerRegistFragment = new ConsigerRegistFragment();
-        driversRegisterFragment = new DriversRegisterFragment();
+
         //获取管理者
         supportFragmentManager = getSupportFragmentManager();
         // 事物
@@ -50,10 +50,12 @@ public class RegisterActivity extends AppCompatActivity {
             ft.add(R.id.fl_regist, consigerRegistFragment).commit();
         }
         if(mType.equals(Constant.Val_Drivers)){
+            driversRegisterFragment = DriversRegisterFragment.newInstance(mType,"");
             ft.add(R.id.fl_regist, driversRegisterFragment).commit();
         }
         if(mType.equals(Constant.Val_Company)){
-            ft.add(R.id.fl_regist, new ConsigerRegistFragment()).commit();
+            driversRegisterFragment = DriversRegisterFragment.newInstance(mType,"");
+            ft.add(R.id.fl_regist, driversRegisterFragment).commit();
         }
 
 

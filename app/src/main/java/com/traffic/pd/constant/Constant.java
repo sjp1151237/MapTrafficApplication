@@ -19,4 +19,7 @@ public class Constant {
 
     public static String USER_SIGN = "USER_SIGN";
     public static String USER_NUM = "USER_NUM";
+    public static String UP_IMG = HOST + "/api/Uploadify/imageUp";
+
+    public static final int REQUEST_CODE = 1024;
 }

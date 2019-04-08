@@ -1,1 +1,1 @@
-include ':app',':nicedialog'
+include ':app',':nicedialog', ':picture_library', ':ucrop'

@@ -10,6 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    useLibrary 'org.apache.http.legacy'
     buildTypes {
         release {
             minifyEnabled false
@@ -36,7 +37,7 @@ dependencies {
     implementation files('libs/fastjson-1.2.11.jar')
     implementation files('libs/volley.jar')
     implementation project(path: ':nicedialog')
-
+    implementation project(':picture_library')
     implementation 'org.greenrobot:eventbus:3.0.0'
 
 }

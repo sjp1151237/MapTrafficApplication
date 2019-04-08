@@ -358,8 +358,8 @@
 
             <ImageView
                 android:id="@+id/iv_car_license_num"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:src="@mipmap/pic_add"/>
 
@@ -391,12 +391,14 @@
             </LinearLayout>
 
 
-            <ImageView
-                android:id="@+id/iv_car_pics"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="20dp"
-                android:src="@mipmap/pic_add"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_pic"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
 
             <View
                 android:layout_width="match_parent"
