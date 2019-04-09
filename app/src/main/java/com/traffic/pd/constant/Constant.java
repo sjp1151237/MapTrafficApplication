@@ -21,5 +21,13 @@ public class Constant {
     public static String USER_NUM = "USER_NUM";
     public static String UP_IMG = HOST + "/api/Uploadify/imageUp";
 
+    public static String DIVER_STATUS = HOST + "/api/user/driver_status";
+    public static String COMPANY_STATUS = HOST + "/api/user/company_status";
+
+    public static String DIVER_UPINFO = HOST + "/api/user/driver";
+    public static String COMPANY_UPINFO = HOST + "/api/user/company";
+
+    public static String USER_INFO = "USER_INFO";
+
     public static final int REQUEST_CODE = 1024;
 }

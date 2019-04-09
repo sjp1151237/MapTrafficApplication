@@ -27,13 +27,13 @@ public class MainFreagmentAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (pos){
             case 0:
-                if(tag.equals(Constant.Val_Consigner)){
+                if(tag.equals("1")){
                     fragment = new PublishFragment();
                 }
-                if(tag.equals(Constant.Val_Drivers)){
+                if(tag.equals("2")){
                     fragment = OrderHallFragment.newInstance(tag,"");
                 }
-                if(tag.equals(Constant.Val_Company)){
+                if(tag.equals("3")){
                     fragment = OrderHallFragment.newInstance(tag,"");
                 }
                 break;

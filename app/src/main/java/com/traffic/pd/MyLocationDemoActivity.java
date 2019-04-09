@@ -29,7 +29,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -40,7 +39,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -55,8 +53,8 @@ import com.traffic.pd.utils.GoogleMapManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,6 +90,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
     TextView tvPos;
     @BindView(R.id.tv_pos_2)
     TextView tvPos2;
+    @BindView(R.id.layout)
+    FrameLayout layout;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -110,23 +110,30 @@ public class MyLocationDemoActivity extends AppCompatActivity
             super.handleMessage(msg);
         }
     };
-
+    Address address;
+    LatLng latLng;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventMessage(EventMessage eventMessage) {
         switch (eventMessage.getType()) {
             case EventMessage.TYPE_GET_LOCATION:
                 try {
-                    if(eventMessage.getObject() instanceof Address){
-                        Address msg = (Address) eventMessage.getObject();
-                        if(null != msg){
-                            tvPos.setText(msg.getCountryName() + "   " + msg.getAdminArea() + "    " + msg.getLocality() + "    " + msg.getSubLocality());
-                            tvPos2.setText(msg.getLatitude() + "    "+msg.getLongitude());
+                    if (eventMessage.getObject() instanceof Address) {
+                        address = (Address) eventMessage.getObject();
+                        if (null != address) {
+                            tvPos.setText(address.getCountryName() + "   " + address.getAdminArea() + "    " + address.getLocality() + "    " + address.getSubLocality());
+                            tvPos2.setText(address.getLatitude() + "    " + address.getLongitude());
                         }
                     }
-                    if(eventMessage.getObject() instanceof LatLng){
-                        LatLng msg = (LatLng) eventMessage.getObject();
+                    if (eventMessage.getObject() instanceof LatLng) {
+                        Locale locale = new Locale("","");
+                        address = new Address(locale);
+                        address.setLatitude(latLng.latitude);
+                        address.setLongitude(latLng.longitude);
+                        latLng = (LatLng) eventMessage.getObject();
                         tvPos.setText("no address found");
-                        tvPos2.setText(msg.latitude + "    "+msg.longitude);
+                        if(null != latLng){
+                            tvPos2.setText(latLng.latitude + "    " + latLng.longitude);
+                        }
                     }
 
 
@@ -146,7 +153,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         mLocationSource = new LongPressLocationSource(this);
-
+        tvBtn.setText("sure");
+        tvBtn.setVisibility(View.VISIBLE);
         tvTitle.setText("Location");
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -276,6 +284,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
         if (null != location) {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
 
+            address = null;
             Intent intent = new Intent(this, FetchAddressIntentService.class);
             intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
             intent.putExtra(FetchAddressIntentService.LATLNG_DATA_EXTRA, location);
@@ -283,7 +292,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.tv_title, R.id.tv_pos, R.id.tv_pos_2})
+    @OnClick({R.id.ll_back, R.id.tv_title, R.id.tv_pos, R.id.tv_pos_2,R.id.tv_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -294,6 +303,16 @@ public class MyLocationDemoActivity extends AppCompatActivity
             case R.id.tv_pos:
                 break;
             case R.id.tv_pos_2:
+                break;
+            case R.id.tv_btn:
+                if(address != null){
+                    Intent intent = new Intent();
+                    intent.putExtra("address",address);
+                    setResult(0, intent);
+                    finish();
+                }else{
+                    ComUtils.showMsg(MyLocationDemoActivity.this,"获取定位信息失败");
+                }
                 break;
         }
     }

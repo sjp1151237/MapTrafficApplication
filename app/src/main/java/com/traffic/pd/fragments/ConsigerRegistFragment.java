@@ -6,21 +6,25 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.data.UserBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
+import com.traffic.pd.utils.PreferencesUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +57,17 @@ public class ConsigerRegistFragment extends Fragment {
     LinearLayout llLocation;
 
     private static int locCode = 1024;
+    @BindView(R.id.rb_consiger)
+    RadioButton rbConsiger;
+    @BindView(R.id.rb_driver)
+    RadioButton rbDriver;
+    @BindView(R.id.rb_company)
+    RadioButton rbCompany;
+    @BindView(R.id.rg_main)
+    RadioGroup rgMain;
+    Unbinder unbinder2;
+    @BindView(R.id.et_username)
+    EditText etUsername;
 
     @Nullable
     @Override
@@ -61,6 +76,7 @@ public class ConsigerRegistFragment extends Fragment {
             mView = inflater.inflate(R.layout.activity_register_consigner, container, false);
             unbinder = ButterKnife.bind(this, mView);
         }
+        unbinder2 = ButterKnife.bind(this, mView);
         return mView;
     }
 
@@ -77,6 +93,10 @@ public class ConsigerRegistFragment extends Fragment {
                 startActivityForResult(new Intent(getContext(), ChoosePhoneCodeActivity.class), locCode);
                 break;
             case R.id.btn_regist:
+                if(TextUtils.isEmpty(etUsername.getText().toString())){
+                    ComUtils.showMsg(getContext(),"please enter user name");
+                    return;
+                }
                 if (null == phoneCodeBean || TextUtils.isEmpty(tvLocation.getText().toString())) {
                     ComUtils.showMsg(getContext(), "Please select your phone country");
                     return;
@@ -98,12 +118,26 @@ public class ConsigerRegistFragment extends Fragment {
                     ComUtils.showMsg(getContext(), "not same");
                     return;
                 }
+                int type = 0;
+                switch (rgMain.getCheckedRadioButtonId()) {
+                    case R.id.rb_consiger:
+                        type = 1;
+                        break;
+                    case R.id.rb_driver:
+                        type = 2;
+                        break;
+                    case R.id.rb_company:
+                        type = 3;
+                        break;
+                }
                 String url = Constant.USER_REGISTER;
                 Map<String, String> map = new HashMap<>();
-                map.put("username", phoneCodeBean.getD() + etPhonenum.getText().toString());
+                map.put("mobile", phoneCodeBean.getD() + etPhonenum.getText().toString());
                 map.put("password", etPassword.getText().toString());
                 map.put("password2", etPasswordTwo.getText().toString());
-                map.put("country", phoneCodeBean.getA());
+                map.put("country", phoneCodeBean.getD());
+                map.put("username", etUsername.getText().toString());
+                map.put("identity", String.valueOf(type));
                 new PostRequest(TAG, getContext(), false)
                         .go(getContext(), new PostRequest.PostListener() {
                             @Override
@@ -116,12 +150,16 @@ public class ConsigerRegistFragment extends Fragment {
                                     String msg = jsonObject.getString("msg");
                                     ComUtils.showMsg(getContext(), msg);
                                     if (status == 1) {
-//                                        Intent intent = new Intent();
+                                        UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),UserBean.class);
+                                        PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,jsonObject.getString("data"));
+                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        intent.putExtra("user",userBean);
+                                        startActivity(intent);
+                                        getActivity().finish();
 //                                        intent.setAction(Constant.REGIST_SUCESS);
 //                                        intent.putExtra("username",phoneCodeBean.getD() + etPhonenum.getText().toString());
 //                                        intent.putExtra("psw",etPassword.getText().toString());
 //                                        getActivity().sendBroadcast(intent);
-                                        getActivity().finish();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

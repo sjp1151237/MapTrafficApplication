@@ -429,6 +429,7 @@
                     android:src="@mipmap/xing"/>
 
                 <TextView
+                    android:id="@+id/tv_car_type"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
