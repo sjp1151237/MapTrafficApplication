@@ -104,8 +104,8 @@ public class LoginActivity extends AppCompatActivity {
                             String msg = jsonObject.getString("msg");
                             ComUtils.showMsg(getContext(), msg);
                             if (status == 1) {
-                                UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),UserBean.class);
-                                PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,jsonObject.getString("data"));
+                                UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("result"),UserBean.class);
+                                PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,jsonObject.getString("result"));
                                 Intent intent = new Intent(getContext(), MainActivity.class);
                                 intent.putExtra("user",userBean);
                                 startActivity(intent);

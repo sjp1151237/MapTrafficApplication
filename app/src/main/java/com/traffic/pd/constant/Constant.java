@@ -30,5 +30,9 @@ public class Constant {
     public static String USER_INFO = "USER_INFO";
     public static String UP_ORDER = HOST + "/api/user/order";
 
+    public static String GET_ORDER_LIST = HOST + "/api/user/order_list";
+
+
+
     public static final int REQUEST_CODE = 1024;
 }

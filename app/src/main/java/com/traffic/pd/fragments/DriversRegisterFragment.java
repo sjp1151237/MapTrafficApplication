@@ -507,6 +507,8 @@ public class DriversRegisterFragment extends Fragment {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
 
+                                ComUtils.showMsg(getContext(),"注册成功");
+                                getActivity().finish();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

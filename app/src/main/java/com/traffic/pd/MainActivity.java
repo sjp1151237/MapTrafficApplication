@@ -115,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
                                 isDetailUp = true;
+                                if(userBean.getIdentity().equals("2")){
+                                    orderHallFragmentD.refreshData();
+                                }
+                                if(userBean.getIdentity().equals("3")){
+                                    orderHallFragmentC.refreshData();
+                                }
                             }
                             if(status == 0){
                                 isDetailUp = false;

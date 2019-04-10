@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -94,7 +95,8 @@ public class PublishFragment extends Fragment {
         unbinder1 = ButterKnife.bind(this, mView);
         return mView;
     }
-
+    StringBuilder carSelects;
+    int carNum;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventMessage(EventMessage eventMessage) {
         switch (eventMessage.getType()) {
@@ -102,11 +104,14 @@ public class PublishFragment extends Fragment {
                 try {
                     carSelect.clear();
                     carSelect.addAll((List<CarType>) eventMessage.getObject());
-
+                    carNum = 0;
                     if (null != carSelect && carSelect.size() > 0) {
                         StringBuilder stringBuilder = new StringBuilder();
+                        carSelects= new StringBuilder();
                         for (int i = 0; i < carSelect.size(); i++) {
                             stringBuilder.append("型号：" + carSelect.get(i).getId() + "  车数：" + carSelect.get(i).getNum() + "、");
+                            carSelects.append(carSelect.get(i).getId() + ":" + carSelect.get(i).getNum() + ",");
+                            carNum = carNum + carSelect.get(i).getNum();
                         }
                         putChoice.setText(stringBuilder.toString());
                     }
@@ -181,6 +186,7 @@ public class PublishFragment extends Fragment {
                     ComUtils.showMsg(getContext(),"Please select car");
                     return;
                 }
+
 //                if(null == addressS){
 //                    ComUtils.showMsg(getContext(),"Please input shipping address.");
 //                    return;
@@ -210,6 +216,8 @@ public class PublishFragment extends Fragment {
                     return;
                 }
 
+                upOrder();
+
                 break;
         }
     }
@@ -217,18 +225,34 @@ public class PublishFragment extends Fragment {
     private void upOrder() {
         String url = Constant.UP_ORDER;
         Map<String, String> map = new HashMap<>();
-//        map.put("user_sign", MainActivity.userBean.getUser_id());
-//        map.put("mobile", phoneCodeBean.getD() + etPhoneNum.getText().toString());
-////        map.put("lat", String.valueOf(address.getLatitude()));
-////        map.put("long", String.valueOf(address.getLongitude()));
-//
-//        map.put("lat", "30");
-//        map.put("long", "120");
-//
-//        map.put("car_num", etCarLicenseNum.getText().toString());
-//        map.put("car_num_pic", carLicenseImg);
-//        map.put("car_pic", "");
-//        map.put("type", carType.getId());
+        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("car_type", carSelects.toString());
+        map.put("num", String.valueOf(carNum));
+
+        map.put("lat", "35");
+        map.put("long", "120");
+//        map.put("lat", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLatitude()))));
+//        map.put("long", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
+//        map.put("country", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getCountryName()))));
+//        map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
+//        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
+//        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
+
+//        map.put("address", String.valueOf(ComUtils.formatString(String.valueOf(addressS.get()))));
+        map.put("recive_lat", "15");
+        map.put("recive_long", "80");
+//        map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
+//        map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
+//        map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));
+//        map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
+//        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
+//        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
+
+//        map.put("recive_address", String.valueOf(address.getLongitude()));
+        map.put("recive_mobile", phoneCodeBean.getD() + putPhoneNum.getText().toString());
+        map.put("recive_name", putName.getText().toString());
+
+        map.put("start_time", String.valueOf(new Date().getTime()));
 
         new PostRequest("upInfo", getContext(), true)
                 .go(getContext(), new PostRequest.PostListener() {
@@ -242,6 +266,7 @@ public class PublishFragment extends Fragment {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
 
+                                ComUtils.showMsg(getContext(),"订单发布成功");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
