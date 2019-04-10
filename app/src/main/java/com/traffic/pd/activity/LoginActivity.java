@@ -14,9 +14,11 @@ import com.othershe.nicedialog.BaseNiceDialog;
 import com.othershe.nicedialog.NiceDialog;
 import com.othershe.nicedialog.ViewConvertListener;
 import com.othershe.nicedialog.ViewHolder;
+import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.data.UserBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 import com.traffic.pd.utils.PreferencesUtils;
@@ -53,8 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        tvTitle.setText("Sign in");
         tvBtn.setVisibility(View.VISIBLE);
+        tvBtn.setText("Sign up");
         niceDialog = NiceDialog.init();
 
     }
@@ -63,55 +66,12 @@ public class LoginActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
+                finish();
                 break;
             case R.id.tv_btn:
                 // 注册
-                niceDialog.setLayoutId(R.layout.confirm_identity)
-                        .setConvertListener(new ViewConvertListener() {
-                            @Override
-                            public void convertView(ViewHolder holder, final BaseNiceDialog dialog) {
-                                // 生成view
-                                LinearLayout ll_Consigner = holder.getView(R.id.ll_Consigner);
-                                LinearLayout ll_Drivers = holder.getView(R.id.ll_Drivers);
-                                LinearLayout ll_Company = holder.getView(R.id.ll_Company);
-
-                                ll_Consigner.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                                        intent.putExtra("tag", Constant.Val_Consigner);
-                                        startActivity(intent);
-
-                                        niceDialog.cancelDialog();
-                                    }
-                                });
-                                ll_Drivers.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                                        intent.putExtra("tag", Constant.Val_Drivers);
-                                        startActivity(intent);
-                                        finish();
-
-                                        niceDialog.cancelDialog();
-                                    }
-                                });
-                                ll_Company.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                                        intent.putExtra("tag", Constant.Val_Company);
-                                        startActivity(intent);
-                                        finish();
-
-                                        niceDialog.cancelDialog();
-                                    }
-                                });
-                            }
-                        })
-                        .setDimAmount(0.3f)
-                        .setShowBottom(true).show(getSupportFragmentManager());
-
+                startActivity(new Intent(getContext(),RegisterActivity.class));
+                finish();
                 break;
             case R.id.tv_commit:
                 if (TextUtils.isEmpty(etNum.getText().toString())) {
@@ -144,11 +104,11 @@ public class LoginActivity extends AppCompatActivity {
                             String msg = jsonObject.getString("msg");
                             ComUtils.showMsg(getContext(), msg);
                             if (status == 1) {
-                                PreferencesUtils.putSharePre(getContext(), Constant.USER_SIGN, String.valueOf(jsonObject.getInt("result")));
-                                PreferencesUtils.putSharePre(getContext(), Constant.USER_NUM, username);
-                                Intent intent = new Intent(Constant.LOGIN_SUCESS);
-                                intent.putExtra("num",username);
-                                sendBroadcast(intent);
+                                UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),UserBean.class);
+                                PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,jsonObject.getString("data"));
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                intent.putExtra("user",userBean);
+                                startActivity(intent);
                                 finish();
                             }
                         } catch (JSONException e) {

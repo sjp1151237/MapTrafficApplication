@@ -132,7 +132,7 @@ public class ConsigerRegistFragment extends Fragment {
                 }
                 String url = Constant.USER_REGISTER;
                 Map<String, String> map = new HashMap<>();
-                map.put("mobile", phoneCodeBean.getD() + etPhonenum.getText().toString());
+                map.put("mobile", etPhonenum.getText().toString());
                 map.put("password", etPassword.getText().toString());
                 map.put("password2", etPasswordTwo.getText().toString());
                 map.put("country", phoneCodeBean.getD());

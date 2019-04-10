@@ -226,6 +226,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:hint="Please enter the appointment Date."
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:textColor="@color/item_title_font"
+                android:textColorHint="@color/item_content_font"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan" />
+
+            <TextView
+                android:id="@+id/put_time_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:hint="Please enter the appointment time."
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"

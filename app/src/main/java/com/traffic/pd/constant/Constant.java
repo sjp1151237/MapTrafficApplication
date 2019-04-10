@@ -28,6 +28,7 @@ public class Constant {
     public static String COMPANY_UPINFO = HOST + "/api/user/company";
 
     public static String USER_INFO = "USER_INFO";
+    public static String UP_ORDER = HOST + "/api/user/order";
 
     public static final int REQUEST_CODE = 1024;
 }

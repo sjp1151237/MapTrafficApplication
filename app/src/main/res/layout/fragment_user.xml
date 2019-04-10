@@ -71,6 +71,14 @@
 
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
     <LinearLayout
         android:id="@+id/ll_order_center"
         android:layout_width="match_parent"
@@ -310,5 +318,47 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="50dp"
         android:background="@color/tabcontral_n" />
+
+    <LinearLayout
+        android:id="@+id/ll_out_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/pay" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Sign out"
+            android:textColor="@color/item_title_font"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/right" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="50dp"
+        android:background="@color/tabcontral_n" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

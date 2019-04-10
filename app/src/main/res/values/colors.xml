@@ -12,5 +12,7 @@
     <color name="divider_color_dan">#e6e6e6</color>
     <color name="white">#fff</color>
     <color name="tabcontral_n">#F3F3F3</color>
+    <color name="color_white_80">#ccffffff</color>
+    <color name="color_black_50">#80000000</color>
 
 </resources>

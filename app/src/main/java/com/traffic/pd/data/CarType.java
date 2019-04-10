@@ -58,4 +58,14 @@ public class CarType implements Serializable {
     String        volume;
     String capacity;
     String     logo;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    int num;
 }

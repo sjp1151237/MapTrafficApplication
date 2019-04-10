@@ -2,7 +2,7 @@ package com.traffic.pd.constant;
 
 public class EventMessage {
     public static final int TYPE_GET_LOCATION = 0x4;
-
+    public static final int SELECT_CAR = 0x5;
     private int type;
 
     private Object object;

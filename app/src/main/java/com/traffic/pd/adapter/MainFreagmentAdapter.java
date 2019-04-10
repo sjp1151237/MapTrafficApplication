@@ -4,22 +4,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
-
-import com.traffic.pd.constant.Constant;
-import com.traffic.pd.fragments.HomeFragment;
 import com.traffic.pd.fragments.OrderHallFragment;
 import com.traffic.pd.fragments.PublishFragment;
 import com.traffic.pd.fragments.UserFragment;
 
+import java.util.List;
+
 public class MainFreagmentAdapter extends FragmentPagerAdapter {
 
     private FragmentManager mFm;
-
+    List<Fragment> fragments;
     String tag;
-    public MainFreagmentAdapter(FragmentManager fm, String tag) {
+    public MainFreagmentAdapter(FragmentManager fm, String tag, List<Fragment> fragments) {
         super(fm);
         this.tag = tag;
         mFm = fm;
+        this.fragments = fragments;
     }
 
     @Override
@@ -28,13 +28,13 @@ public class MainFreagmentAdapter extends FragmentPagerAdapter {
         switch (pos){
             case 0:
                 if(tag.equals("1")){
-                    fragment = new PublishFragment();
+                    fragment = fragments.get(0);
                 }
                 if(tag.equals("2")){
-                    fragment = OrderHallFragment.newInstance(tag,"");
+                    fragment  = fragments.get(1);
                 }
                 if(tag.equals("3")){
-                    fragment = OrderHallFragment.newInstance(tag,"");
+                    fragment = fragments.get(2);
                 }
                 break;
             case 1:

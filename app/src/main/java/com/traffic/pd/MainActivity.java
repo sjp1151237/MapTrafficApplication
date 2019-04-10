@@ -2,6 +2,8 @@ package com.traffic.pd;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +16,8 @@ import com.traffic.pd.adapter.MainFreagmentAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.data.UserBean;
+import com.traffic.pd.fragments.OrderHallFragment;
+import com.traffic.pd.fragments.PublishFragment;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 import com.traffic.pd.utils.PreferencesUtils;
@@ -22,7 +26,9 @@ import com.traffic.pd.weigets.NoScrollViewPager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -47,12 +53,23 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isDetailUp;
 
     public static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 555;
+
+    List<Fragment> fragments;
+    PublishFragment publishFragment = new PublishFragment();
+    OrderHallFragment orderHallFragmentD = OrderHallFragment.newInstance("2","");
+    OrderHallFragment orderHallFragmentC = OrderHallFragment.newInstance("3","");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fresco.initialize(this);
         ButterKnife.bind(this);
+
+        fragments = new ArrayList<>();
+        fragments.add(publishFragment);
+        fragments.add(orderHallFragmentD);
+        fragments.add(orderHallFragmentC);
 
         isDetailUp = false;
         userBean = (UserBean) getIntent().getSerializableExtra("user");
@@ -63,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
         if(null != tag){
-            vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(),tag));
+            vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(),tag,fragments));
         }
         vpMain.setScroll(false);
 
@@ -140,5 +157,11 @@ public class MainActivity extends AppCompatActivity {
                 ivMine.setImageDrawable(getResources().getDrawable(R.mipmap.main_select));
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        publishFragment.onActivityResult(requestCode,resultCode,data);
     }
 }

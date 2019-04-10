@@ -41,7 +41,6 @@ import com.traffic.pd.activity.CarTypeSelectActivity;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.CarType;
-import com.traffic.pd.data.LocationBean;
 import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
@@ -65,7 +64,7 @@ import butterknife.Unbinder;
 public class DriversRegisterFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @BindView(R.id.tv_car_type)
+    @BindView(R.id.car_type)
     TextView tvCarType;
     private String mParam1;
     private String mParam2;
@@ -109,7 +108,6 @@ public class DriversRegisterFragment extends Fragment {
     PhoneCodeBean phoneCodeBean;
 
     String carLicenseImg;
-    String[] carImgs;
     CarType carType;
 
     private RequestOptions requestOptions;
@@ -217,7 +215,7 @@ public class DriversRegisterFragment extends Fragment {
                 startActivityForResult(new Intent(getContext(), ChoosePhoneCodeActivity.class), Location_phone);
                 break;
             case R.id.ll_select_car_location:
-                startActivityForResult(new Intent(getContext(), MyLocationDemoActivity.class),Location_map);
+                startActivityForResult(new Intent(getContext(), MyLocationDemoActivity.class), Location_map);
                 break;
             case R.id.ll_cartype:
                 startActivityForResult(new Intent(getContext(), CarTypeSelectActivity.class), Location_phone);
@@ -245,9 +243,9 @@ public class DriversRegisterFragment extends Fragment {
                     ComUtils.showMsg(getContext(), "Please up car license picture");
                     return;
                 }
-//                if (null == carImgs || carImgs.length == 0) {
-//                    ComUtils.showMsg(getContext(), "Please up car pictures");
-//                }
+                if (null == selectListImg || selectListImg.size() == 0) {
+                    ComUtils.showMsg(getContext(), "Please up car pictures");
+                }
                 if (null == carType) {
                     ComUtils.showMsg(getContext(), "Please select car type");
                     return;
@@ -257,7 +255,9 @@ public class DriversRegisterFragment extends Fragment {
                 break;
         }
     }
+
     Address address;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null)
@@ -270,8 +270,14 @@ public class DriversRegisterFragment extends Fragment {
             carType = (CarType) data.getSerializableExtra("car");
             tvCarType.setText(carType.getId());
         }
-        if(requestCode == Location_map){
-             address = (Address) data.getSerializableExtra("adddress");
+        if (requestCode == Location_map) {
+            address = (Address) data.getSerializableExtra("address");
+            if(null != address){
+                tvCountry.setText(ComUtils.formatString(address.getCountryName()));
+                tvProvince.setText(ComUtils.formatString(address.getAdminArea()));
+                tvCity.setText(ComUtils.formatString(address.getLocality()));
+                tvDistrict.setText(ComUtils.formatString(address.getSubLocality()));
+            }
         }
         if (resultCode == getActivity().RESULT_OK) {
             switch (requestCode) {
@@ -298,6 +304,7 @@ public class DriversRegisterFragment extends Fragment {
                             imgs.add(selectList.get(i).getCompressPath());
                         }
                         imgAdapter.notifyDataSetChanged();
+                        setAvatars(selectListImg);
                     } catch (Exception e) {
                         Log.i("1111111111", e.getMessage());
                     }
@@ -326,9 +333,9 @@ public class DriversRegisterFragment extends Fragment {
                 try {
                     jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("state");
-                    if (status .equals("SUCCESS")) {
-                        List<String> imgs = JSONArray.parseArray(jsonObject.getString("url"),String.class);
-                        if(null != imgs && imgs.size() > 0){
+                    if (status.equals("SUCCESS")) {
+                        List<String> imgs = JSONArray.parseArray(jsonObject.getString("url"), String.class);
+                        if (null != imgs && imgs.size() > 0) {
                             carLicenseImg = imgs.get(0);
                         }
 
@@ -351,28 +358,35 @@ public class DriversRegisterFragment extends Fragment {
         }, url, new File(path), map);
     }
 
-//    private void setAvatars(List<File> files) {
-//        String url = Constant.UP_IMG;
-//        Map<String, String> map = new HashMap<>();
-//        map.put("dir", "driver");
-//        map.put("file", path);
-//        new PostRequest("setAvatar", getContext(), false).uploadFiles(new PostRequest.PostListener() {
-//            @Override
-//            public TestBean postSuccessful(String response) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void postError(String error) {
-//                super.postError(error);
-//            }
-//
-//            @Override
-//            public void postNull() {
-//                super.postNull();
-//            }
-//        }, url, new File(path), map);
-//    }
+    private void setAvatars(List<LocalMedia> imgs) {
+        List<File> files = new ArrayList<>();
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < imgs.size(); i++) {
+            files.add(new File(imgs.get(i).getCompressPath()));
+            strings.add(imgs.get(i).getCompressPath());
+        }
+        String url = Constant.UP_IMG;
+        Map<String, String> map = new HashMap<>();
+        map.put("dir", "driver");
+        map.put("file", "fils");
+        new PostRequest("setAvatar", getContext(), true).uploadFiles(new PostRequest.PostListener() {
+            @Override
+            public TestBean postSuccessful(String response) {
+                Log.e("tag",response);
+                return null;
+            }
+
+            @Override
+            public void postError(String error) {
+                super.postError(error);
+            }
+
+            @Override
+            public void postNull() {
+                super.postNull();
+            }
+        }, url, files, map);
+    }
 
 
     class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.MyViewHolder> {

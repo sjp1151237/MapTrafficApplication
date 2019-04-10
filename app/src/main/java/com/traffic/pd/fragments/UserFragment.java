@@ -1,7 +1,9 @@
 package com.traffic.pd.fragments;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -14,20 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.othershe.nicedialog.NiceDialog;
+import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.LoginActivity;
-import com.traffic.pd.activity.RegisterActivity;
 import com.traffic.pd.constant.Constant;
-import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
-import com.traffic.pd.utils.PostRequest;
 import com.traffic.pd.utils.PreferencesUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +57,9 @@ public class UserFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tv_state)
     TextView tvState;
+    @BindView(R.id.ll_out_login)
+    LinearLayout llOutLogin;
+    Unbinder unbinder1;
 
     private String mParam1;
     private String mParam2;
@@ -69,6 +67,8 @@ public class UserFragment extends Fragment {
     private View mView;
 
     private MyReceiver myReceiver;
+
+    NiceDialog alertDialog;
 
     public UserFragment() {
         // Required empty public constructor
@@ -100,13 +100,20 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         if (null == mView) {
             mView = inflater.inflate(R.layout.fragment_user, container, false);
+            unbinder = ButterKnife.bind(this, mView);
             myReceiver = new MyReceiver();
 
+            alertDialog = NiceDialog.init();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constant.LOGIN_SUCESS);
             getActivity().registerReceiver(myReceiver, intentFilter);
+
+            if (null != MainActivity.userBean) {
+                myName.setText(ComUtils.formatString(MainActivity.userBean.getNickname()));
+            }
         }
-        unbinder = ButterKnife.bind(this, mView);
+
+        unbinder1 = ButterKnife.bind(this, mView);
         return mView;
     }
 
@@ -117,7 +124,7 @@ public class UserFragment extends Fragment {
         getActivity().unregisterReceiver(myReceiver);
     }
 
-    @OnClick({R.id.take_picture, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard})
+    @OnClick({R.id.take_picture, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard,R.id.ll_out_login})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.take_picture:
@@ -135,6 +142,32 @@ public class UserFragment extends Fragment {
             case R.id.ll_about_us:
                 break;
             case R.id.ll_Charge_standard:
+                break;
+            case R.id.ll_out_login:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setIcon(R.mipmap.ic_launcher);
+                builder.setTitle("提醒");
+                builder.setMessage("确定退出？");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        getActivity().finish();
+                        startActivity(new Intent(getContext(),LoginActivity.class));
+
+                        PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,"");
+                        MainActivity.userBean = null;
+
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+                builder.show();
                 break;
         }
     }

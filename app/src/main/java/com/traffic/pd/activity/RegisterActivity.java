@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
         ButterKnife.bind(this);
+        tvTitle.setText("Sign up");
         consigerRegistFragment = new ConsigerRegistFragment();
 
         //获取管理者
