@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.traffic.pd.MainActivity;
-import com.traffic.pd.MyLocationDemoActivity;
+import com.traffic.pd.maps.MyLocationDemoActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.CarSelectActivity;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
@@ -229,7 +229,7 @@ public class PublishFragment extends Fragment {
         map.put("car_type", carSelects.toString());
         map.put("num", String.valueOf(carNum));
 
-        map.put("lat", "35");
+        map.put("lat", "30");
         map.put("long", "120");
 //        map.put("lat", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLatitude()))));
 //        map.put("long", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
@@ -239,8 +239,8 @@ public class PublishFragment extends Fragment {
 //        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
 
 //        map.put("address", String.valueOf(ComUtils.formatString(String.valueOf(addressS.get()))));
-        map.put("recive_lat", "15");
-        map.put("recive_long", "80");
+        map.put("recive_lat", "20");
+        map.put("recive_long", "105");
 //        map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
 //        map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
 //        map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));

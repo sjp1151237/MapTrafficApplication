@@ -16,6 +16,8 @@
 
 package com.traffic.pd;
 
+import com.traffic.pd.maps.MyLocationDemoActivity;
+
 /**
  * A list of all the demos we have available.
  */

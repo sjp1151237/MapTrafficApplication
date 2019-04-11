@@ -2,6 +2,7 @@ package com.traffic.pd;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.adapter.MainFreagmentAdapter;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.data.CarInfo;
+import com.traffic.pd.data.CompanyInfo;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.data.UserBean;
 import com.traffic.pd.fragments.OrderHallFragment;
@@ -50,14 +53,16 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlMine;
 
     public static UserBean userBean;
+    public static CompanyInfo companyInfo;
+    public static CarInfo carInfo;
     public static boolean isDetailUp;
 
     public static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 555;
 
     List<Fragment> fragments;
     PublishFragment publishFragment = new PublishFragment();
-    OrderHallFragment orderHallFragmentD = OrderHallFragment.newInstance("2","");
-    OrderHallFragment orderHallFragmentC = OrderHallFragment.newInstance("3","");
+    OrderHallFragment orderHallFragmentD = OrderHallFragment.newInstance("2", "");
+    OrderHallFragment orderHallFragmentC = OrderHallFragment.newInstance("3", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +78,28 @@ public class MainActivity extends AppCompatActivity {
 
         isDetailUp = false;
         userBean = (UserBean) getIntent().getSerializableExtra("user");
-        tag = userBean.getIdentity();
-//        if (TextUtils.isEmpty(tag)) {
-//            if (!TextUtils.isEmpty(PreferencesUtils.getSharePreStr(this, Constant.Identity_Name))) {
-//                tag = PreferencesUtils.getSharePreStr(this, Constant.Identity_Name);
-//            }
-//        }
-        if(null != tag){
-            vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(),tag,fragments));
+        if (null != userBean) {
+            tag = userBean.getIdentity();
+            if (TextUtils.isEmpty(tag)) {
+                if (!TextUtils.isEmpty(PreferencesUtils.getSharePreStr(this, Constant.Identity_Name))) {
+                    tag = PreferencesUtils.getSharePreStr(this, Constant.Identity_Name);
+                }
+            }
+            if (null != tag) {
+                vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(), tag, fragments));
+            }
+            vpMain.setScroll(false);
         }
-        vpMain.setScroll(false);
-
-
+//        else {
+//            tag = "2";
+//            if (null != tag) {
+//                vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(), tag, fragments));
+//            }
+//            vpMain.setScroll(false);
+//        }
         ComUtils.getLocationPermission(this);
 
-        if(null != userBean && !userBean.getIdentity().equals("1")){
+        if (null != userBean && !userBean.getIdentity().equals("1")) {
             getUserStatus();
         }
 
@@ -95,15 +107,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void getUserStatus() {
         String url = "";
-        if(userBean.getIdentity().equals("2")){
+        if (userBean.getIdentity().equals("2")) {
             url = Constant.DIVER_STATUS;
         }
-        if(userBean.getIdentity().equals("3")){
+        if (userBean.getIdentity().equals("3")) {
             url = Constant.COMPANY_STATUS;
         }
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", userBean.getUser_id());
-        new PostRequest("getUserStatus", this, true)
+        new PostRequest("getUserStatus", this, false)
                 .go(this, new PostRequest.PostListener() {
                     @Override
                     public TestBean postSuccessful(String response) {
@@ -115,17 +127,18 @@ public class MainActivity extends AppCompatActivity {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
                                 isDetailUp = true;
-                                if(userBean.getIdentity().equals("2")){
-                                    orderHallFragmentD.refreshData();
+                                if (userBean.getIdentity().equals("2")) {
+//                                    orderHallFragmentD.refreshData();
+                                    carInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CarInfo.class);
                                 }
-                                if(userBean.getIdentity().equals("3")){
-                                    orderHallFragmentC.refreshData();
+                                if (userBean.getIdentity().equals("3")) {
+                                    companyInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CompanyInfo.class);
                                 }
                             }
-                            if(status == 0){
+                            if (status == 0) {
                                 isDetailUp = false;
                                 Intent intent = new Intent(MainActivity.this, UpDetailActivity.class);
-                                intent.putExtra("tag",userBean.getIdentity());
+                                intent.putExtra("tag", userBean.getIdentity());
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
@@ -168,6 +181,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        publishFragment.onActivityResult(requestCode,resultCode,data);
+        publishFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (orderHallFragmentC != null) {
+            orderHallFragmentC.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        if (orderHallFragmentD != null) {
+            orderHallFragmentD.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

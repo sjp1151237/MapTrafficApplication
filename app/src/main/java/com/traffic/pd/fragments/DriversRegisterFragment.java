@@ -3,6 +3,7 @@ package com.traffic.pd.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,7 +36,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.traffic.pd.MainActivity;
-import com.traffic.pd.MyLocationDemoActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.CarTypeSelectActivity;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
@@ -43,6 +43,7 @@ import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.maps.MyLocationDemoActivity;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.FrescoUtils;
 import com.traffic.pd.utils.PostRequest;
@@ -66,6 +67,8 @@ public class DriversRegisterFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     @BindView(R.id.car_type)
     TextView tvCarType;
+    @BindView(R.id.et_introduce)
+    EditText etIntroduce;
     private String mParam1;
     private String mParam2;
     @BindView(R.id.et_phone_num)
@@ -101,6 +104,8 @@ public class DriversRegisterFragment extends Fragment {
     RecyclerView rcvPic;
     Unbinder unbinder1;
     private View mView;
+
+    EditText et_company_name, et_contacts;
 
     private static int Location_phone = 1001;
     private static int Location_map = 1002;
@@ -144,7 +149,9 @@ public class DriversRegisterFragment extends Fragment {
             }
             if (mParam1.equals("3")) {
                 mView = inflater.inflate(R.layout.activity_register_company, container, false);
+                et_contacts = mView.findViewById(R.id.et_contacts);
             }
+            et_company_name = mView.findViewById(R.id.et_company_name);
             unbinder = ButterKnife.bind(this, mView);
             initGlide();
             selectListImg = new ArrayList<>();
@@ -163,6 +170,94 @@ public class DriversRegisterFragment extends Fragment {
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ivCarLicenseNum.getLayoutParams();
             lp.width = withL;
             lp.height = heightL;
+
+            if(mParam1.equals("3")){
+                if(null != MainActivity.companyInfo){
+                    tvLocation.setText(MainActivity.companyInfo.getCode());
+                    etPhoneNum.setText(MainActivity.companyInfo.getMobile());
+                    et_company_name.setText(MainActivity.companyInfo.getName());
+                    et_contacts.setText(MainActivity.companyInfo.getOwner());
+                    tvCountry.setText(MainActivity.companyInfo.getCountry());
+                    tvProvince.setText(MainActivity.companyInfo.getProvince());
+                    tvCity.setText(MainActivity.companyInfo.getCity());
+                    tvDistrict.setText(MainActivity.companyInfo.getDistrict());
+                    tvAddressDetail.setText(MainActivity.companyInfo.getAddress());
+                    etCarLicenseNum.setText(MainActivity.companyInfo.getLicense_num());
+                    Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.companyInfo.getLicense_pic());
+                    ivCarLicenseNum.setImageDrawable(drawable);
+
+                    etIntroduce.setText(MainActivity.companyInfo.getIntroduce());
+                    // 审核中
+                    // 审核失败
+                    // 审核成功 不可编辑
+                    if(MainActivity.companyInfo.getStatus().equals("1") || MainActivity.companyInfo.getStatus().equals("2")){
+                        imgs.clear();
+                        imgs.add("");
+                        if(null != MainActivity.companyInfo.getPics() && MainActivity.companyInfo.getPics().size() > 0){
+                            imgs.addAll(imgs);
+                        }
+                        imgAdapter.notifyDataSetChanged();
+                    }else{
+                        imgs.clear();
+                        if(null != MainActivity.companyInfo.getPics() && MainActivity.companyInfo.getPics().size() > 0){
+                            imgs.addAll(imgs);
+                        }
+                        rcvPic.setEnabled(false);
+                        imgAdapter.notifyDataSetChanged();
+                    }
+                    if(MainActivity.companyInfo.getStatus().equals("3")){
+
+                        llLocationPhone.setEnabled(false);
+                        llSelectCarLocation.setEnabled(false);
+                        tvCommit.setVisibility(View.GONE);
+
+                    }
+                }
+            }
+
+            if(mParam1.equals("2")){
+                if(null != MainActivity.carInfo){
+                    tvLocation.setText(MainActivity.carInfo.getCode());
+                    etPhoneNum.setText(MainActivity.carInfo.getMobile());
+                    et_company_name.setText(MainActivity.carInfo.getDriver());
+                    tvCountry.setText(MainActivity.carInfo.getCountry());
+                    tvProvince.setText(MainActivity.carInfo.getProvince());
+                    tvCity.setText(MainActivity.carInfo.getCity());
+                    tvDistrict.setText(MainActivity.carInfo.getDistrict());
+                    tvAddressDetail.setText(MainActivity.carInfo.getAddress());
+                    etCarLicenseNum.setText(MainActivity.carInfo.getLicense_num());
+                    Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.carInfo.getCar_num_pic());
+                    ivCarLicenseNum.setImageDrawable(drawable);
+
+                    etIntroduce.setText(MainActivity.carInfo.getIntroduce());
+                    // 审核中
+                    // 审核失败
+                    // 审核成功 不可编辑
+                    if(MainActivity.carInfo.getStatus().equals("1") || MainActivity.carInfo.getStatus().equals("2")){
+                        imgs.clear();
+                        imgs.add("");
+                        if(null != MainActivity.carInfo.getCar_pic() && MainActivity.carInfo.getCar_pic().size() > 0){
+                            imgs.addAll(imgs);
+                        }
+                        imgAdapter.notifyDataSetChanged();
+                    }else{
+                        imgs.clear();
+                        if(null != MainActivity.carInfo.getCar_pic() && MainActivity.carInfo.getCar_pic().size() > 0){
+                            imgs.addAll(imgs);
+                        }
+                        rcvPic.setEnabled(false);
+                        imgAdapter.notifyDataSetChanged();
+                    }
+                    if(MainActivity.carInfo.getStatus().equals("3")){
+
+                        llLocationPhone.setEnabled(false);
+                        llSelectCarLocation.setEnabled(false);
+                        tvCommit.setVisibility(View.GONE);
+
+                    }
+                }
+            }
+
         }
         unbinder1 = ButterKnife.bind(this, mView);
         return mView;
@@ -245,13 +340,30 @@ public class DriversRegisterFragment extends Fragment {
                 }
                 if (null == selectListImg || selectListImg.size() == 0) {
                     ComUtils.showMsg(getContext(), "Please up car pictures");
+//                    return;
                 }
-                if (null == carType) {
-                    ComUtils.showMsg(getContext(), "Please select car type");
-                    return;
+                if (mParam1.equals("2")) {
+                    if(TextUtils.isEmpty(et_company_name.getText().toString())){
+                        ComUtils.showMsg(getContext(), "Please input driver name");
+                        return;
+                    }
+                    if (null == carType) {
+                        ComUtils.showMsg(getContext(), "Please select car type");
+                        return;
+                    }
+                    upDriverInfo();
                 }
-                upInfo();
-
+                if (mParam1.equals("3")) {
+                    if(TextUtils.isEmpty(et_company_name.getText().toString())){
+                        ComUtils.showMsg(getContext(), "Please input company name");
+                        return;
+                    }
+                    if(TextUtils.isEmpty(et_contacts.getText().toString())){
+                        ComUtils.showMsg(getContext(), "Please input contacts name");
+                        return;
+                    }
+                    upCompanyInfo();
+                }
                 break;
         }
     }
@@ -272,7 +384,7 @@ public class DriversRegisterFragment extends Fragment {
         }
         if (requestCode == Location_map) {
             address = (Address) data.getSerializableExtra("address");
-            if(null != address){
+            if (null != address) {
                 tvCountry.setText(ComUtils.formatString(address.getCountryName()));
                 tvProvince.setText(ComUtils.formatString(address.getAdminArea()));
                 tvCity.setText(ComUtils.formatString(address.getLocality()));
@@ -372,7 +484,7 @@ public class DriversRegisterFragment extends Fragment {
         new PostRequest("setAvatar", getContext(), true).uploadFiles(new PostRequest.PostListener() {
             @Override
             public TestBean postSuccessful(String response) {
-                Log.e("tag",response);
+                Log.e("tag", response);
                 return null;
             }
 
@@ -479,21 +591,31 @@ public class DriversRegisterFragment extends Fragment {
     }
 
 
-    private void upInfo() {
+    private void upDriverInfo() {
         String url = Constant.DIVER_UPINFO;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
         map.put("mobile", phoneCodeBean.getD() + etPhoneNum.getText().toString());
-//        map.put("lat", String.valueOf(address.getLatitude()));
-//        map.put("long", String.valueOf(address.getLongitude()));
+        map.put("driver", et_company_name.getText().toString());
+        map.put("code", phoneCodeBean.getD());
+//        if(null != address){
+//            map.put("lat", String.valueOf(address.getLatitude()));
+//            map.put("longi", String.valueOf(address.getLongitude()));
+//            map.put("country", ComUtils.formatString(address.getCountryName()));
+//            map.put("province", ComUtils.formatString(address.getAdminArea()));
+//            map.put("city", ComUtils.formatString(address.getLocality()));
+//            map.put("district", ComUtils.formatString(address.getSubLocality()));
+//            map.put("address", tvAddressDetail.getText().toString());
+//        }
+
 
         map.put("lat", "30");
-        map.put("long", "120");
-
+        map.put("longi", "120");
         map.put("car_num", etCarLicenseNum.getText().toString());
         map.put("car_num_pic", carLicenseImg);
         map.put("car_pic", "");
         map.put("type", carType.getId());
+        map.put("introduce", etIntroduce.getText().toString());
 
         new PostRequest("upInfo", getContext(), true)
                 .go(getContext(), new PostRequest.PostListener() {
@@ -507,7 +629,67 @@ public class DriversRegisterFragment extends Fragment {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
 
-                                ComUtils.showMsg(getContext(),"注册成功");
+                                ComUtils.showMsg(getContext(), "注册成功");
+                                getActivity().finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void postError(String error) {
+                        super.postError(error);
+                        ComUtils.showMsg(getContext(), "error");
+                    }
+
+                    @Override
+                    public void postNull() {
+                        super.postNull();
+                        ComUtils.showMsg(getContext(), "error");
+                    }
+                }, url, map);
+
+    }
+
+    private void upCompanyInfo() {
+        String url = Constant.COMPANY_UPINFO;
+        Map<String, String> map = new HashMap<>();
+        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("mobile", phoneCodeBean.getD() + etPhoneNum.getText().toString());
+//        if(null != address){
+//            map.put("lat", String.valueOf(address.getLatitude()));
+//            map.put("longi", String.valueOf(address.getLongitude()));
+//            map.put("country", ComUtils.formatString(address.getCountryName()));
+//            map.put("province", ComUtils.formatString(address.getAdminArea()));
+//            map.put("city", ComUtils.formatString(address.getLocality()));
+//            map.put("district", ComUtils.formatString(address.getSubLocality()));
+//            map.put("address", tvAddressDetail.getText().toString());
+//        }
+        map.put("name", et_company_name.getText().toString());
+        map.put("owner", et_contacts.getText().toString());
+        map.put("lat", "35");
+        map.put("longi", "136");
+        map.put("license_num", etCarLicenseNum.getText().toString());
+        map.put("license_pic", carLicenseImg);// 少了
+        map.put("pics", "");
+        map.put("code", phoneCodeBean.getD());
+        map.put("introduce", etIntroduce.getText().toString());
+
+        new PostRequest("upInfo", getContext(), true)
+                .go(getContext(), new PostRequest.PostListener() {
+                    @Override
+                    public TestBean postSuccessful(String response) {
+
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            int status = jsonObject.getInt("status");
+                            String msg = jsonObject.getString("msg");
+                            if (status == 1) {
+
+                                ComUtils.showMsg(getContext(), "注册成功");
                                 getActivity().finish();
                             }
                         } catch (JSONException e) {

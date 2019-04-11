@@ -29,7 +29,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/item_title_font"
                     android:textSize="16sp"
-                    android:text="phone location"/>
+                    android:text="phone location code"/>
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
@@ -65,7 +65,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="15dp"
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
@@ -105,7 +105,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="password"/>
+                    android:text="company name"/>
 
                 <ImageView
                     android:layout_width="8dp"
@@ -129,7 +129,7 @@
                     android:src="@mipmap/xing"/>
 
                 <EditText
-                    android:id="@+id/et_psw"
+                    android:id="@+id/et_company_name"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
@@ -139,13 +139,13 @@
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:hint="enter password"/>
+                    android:hint="enter company name"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="password"/>
+                    android:text="contacts name"/>
 
                 <ImageView
                     android:layout_width="8dp"
@@ -169,7 +169,7 @@
                     android:src="@mipmap/xing"/>
 
                 <EditText
-                    android:id="@+id/et_psw_conf"
+                    android:id="@+id/et_contacts"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
@@ -179,14 +179,13 @@
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:hint="confirm password"/>
+                    android:hint="enter contacts name"/>
             </LinearLayout>
-
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="15dp"
                 android:background="@color/divider_color_dan"/>
 
             <LinearLayout
@@ -470,34 +469,21 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="company introduce :"/>
+                    android:text="introduce :"/>
 
-                <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <TextView
+                <EditText
+                    android:id="@+id/et_introduce"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="enter your company introduce"/>
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="enter your company introduce"/>
 
-                <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/right"/>
-                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>

@@ -88,7 +88,9 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+
+        </activity>
         <activity
             android:name=".BasicMapDemoActivity"
             android:label="@string/basic_map_demo_label" />
@@ -135,7 +137,7 @@
             android:name=".MultiMapDemoActivity"
             android:label="@string/multi_map_demo_label" />
         <activity
-            android:name=".MyLocationDemoActivity"
+            android:name=".maps.MyLocationDemoActivity"
             android:label="@string/my_location_demo_label"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
@@ -200,7 +202,9 @@
             android:label="@string/visible_region_demo_label" />
         <activity
             android:name=".MainActivityDemo"
-            android:label="@string/visible_region_demo_label" />
+            android:label="@string/visible_region_demo_label" >
+
+        </activity>
     </application>
 
 </manifest>

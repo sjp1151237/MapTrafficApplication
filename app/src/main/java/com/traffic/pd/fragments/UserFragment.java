@@ -20,6 +20,7 @@ import com.othershe.nicedialog.NiceDialog;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.LoginActivity;
+import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PreferencesUtils;
@@ -70,6 +71,8 @@ public class UserFragment extends Fragment {
 
     NiceDialog alertDialog;
 
+    String[] userStatus = {"资料未上传"};
+
     public UserFragment() {
         // Required empty public constructor
     }
@@ -111,6 +114,28 @@ public class UserFragment extends Fragment {
             if (null != MainActivity.userBean) {
                 myName.setText(ComUtils.formatString(MainActivity.userBean.getNickname()));
             }
+            if(null != MainActivity.carInfo){
+                if(MainActivity.carInfo.getStatus().equals("1")){
+                    tvState.setText("审核中");
+                }
+                if(MainActivity.carInfo.getStatus().equals("2")){
+                    tvState.setText("审核失败");
+                }
+                if(MainActivity.carInfo.getStatus().equals("3")){
+                    tvState.setText("审核通过");
+                }
+            }
+            if(null != MainActivity.companyInfo){
+                if(MainActivity.companyInfo.getStatus().equals("1")){
+                    tvState.setText("审核中");
+                }
+                if(MainActivity.companyInfo.getStatus().equals("2")){
+                    tvState.setText("审核失败");
+                }
+                if(MainActivity.companyInfo.getStatus().equals("3")){
+                    tvState.setText("审核通过");
+                }
+            }
         }
 
         unbinder1 = ButterKnife.bind(this, mView);
@@ -124,7 +149,7 @@ public class UserFragment extends Fragment {
         getActivity().unregisterReceiver(myReceiver);
     }
 
-    @OnClick({R.id.take_picture, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard,R.id.ll_out_login})
+    @OnClick({R.id.take_picture, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard,R.id.ll_out_login,R.id.rl_to_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.take_picture:
@@ -158,6 +183,8 @@ public class UserFragment extends Fragment {
 
                         PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,"");
                         MainActivity.userBean = null;
+                        MainActivity.companyInfo = null;
+
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -168,6 +195,11 @@ public class UserFragment extends Fragment {
                     }
                 }).create();
                 builder.show();
+                break;
+            case R.id.rl_to_share:
+                Intent intent1 = new Intent(getContext(), UpDetailActivity.class);
+                intent1.putExtra("tag",mParam1);
+                startActivity(intent1);
                 break;
         }
     }

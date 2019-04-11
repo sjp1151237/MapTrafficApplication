@@ -110,6 +110,46 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:text="driver name"/>
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/xing"/>
+
+                <EditText
+                    android:id="@+id/et_company_name"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="input driver name"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -390,32 +430,19 @@
                     android:textColor="@color/item_title_font"
                     android:text="car introduce :"/>
 
-                <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <TextView
+                <EditText
+                    android:id="@+id/et_introduce"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:layout_height="50dp"
                     android:textSize="16sp"
                     android:textColor="@color/item_title_font"
-                    android:text="enter your car introduce"/>
+                    android:textColorHint="@color/item_content_font"
+                    android:hint="enter your car introduce"/>
 
-                <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/right"/>
-                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>

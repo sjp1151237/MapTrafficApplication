@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.traffic.pd;
+package com.traffic.pd.maps;
 
 import android.Manifest;
 import android.content.Intent;
@@ -43,6 +43,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.traffic.pd.PermissionUtils;
+import com.traffic.pd.R;
 import com.traffic.pd.constant.EventMessage;
 import com.traffic.pd.services.AddressResultReceiver;
 import com.traffic.pd.services.FetchAddressIntentService;
@@ -282,7 +285,11 @@ public class MyLocationDemoActivity extends AppCompatActivity
     @Override
     public void getLoc(LatLng location) {
         if (null != location) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+            LatLngBounds bounds = new LatLngBounds.Builder()
+                    .include(location)
+                    .build();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
 
             address = null;
             Intent intent = new Intent(this, FetchAddressIntentService.class);

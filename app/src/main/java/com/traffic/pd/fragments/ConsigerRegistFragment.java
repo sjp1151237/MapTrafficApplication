@@ -156,10 +156,6 @@ public class ConsigerRegistFragment extends Fragment {
                                         intent.putExtra("user",userBean);
                                         startActivity(intent);
                                         getActivity().finish();
-//                                        intent.setAction(Constant.REGIST_SUCESS);
-//                                        intent.putExtra("username",phoneCodeBean.getD() + etPhonenum.getText().toString());
-//                                        intent.putExtra("psw",etPassword.getText().toString());
-//                                        getActivity().sendBroadcast(intent);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
