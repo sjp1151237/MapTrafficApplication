@@ -21,6 +21,7 @@ import com.traffic.pd.data.TestBean;
 import com.traffic.pd.data.UserBean;
 import com.traffic.pd.fragments.OrderHallFragment;
 import com.traffic.pd.fragments.PublishFragment;
+import com.traffic.pd.fragments.UserFragment;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 import com.traffic.pd.utils.PreferencesUtils;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     OrderHallFragment orderHallFragmentD = OrderHallFragment.newInstance("2", "");
     OrderHallFragment orderHallFragmentC = OrderHallFragment.newInstance("3", "");
 
+    UserFragment userFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (null != tag) {
+                userFragment = UserFragment.newInstance(tag,"");
+                fragments.add(userFragment);
                 vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(), tag, fragments));
             }
             vpMain.setScroll(false);
@@ -133,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 if (userBean.getIdentity().equals("3")) {
                                     companyInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CompanyInfo.class);
+                                }
+                                if(null != userFragment){
+                                    userFragment.resetData();
                                 }
                             }
                             if (status == 0) {

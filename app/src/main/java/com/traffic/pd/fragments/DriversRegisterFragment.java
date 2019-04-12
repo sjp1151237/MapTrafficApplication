@@ -193,7 +193,7 @@ public class DriversRegisterFragment extends Fragment {
                     // 审核中
                     // 审核失败
                     // 审核成功 不可编辑
-                    if(MainActivity.companyInfo.getStatus().equals("1") || MainActivity.companyInfo.getStatus().equals("2")){
+                    if(MainActivity.companyInfo.getStatus().equals("1") || MainActivity.companyInfo.getStatus().equals("3")){
                         imgs.clear();
                         imgs.add("");
                         if(null != MainActivity.companyInfo.getPics() && MainActivity.companyInfo.getPics().size() > 0){
@@ -215,11 +215,14 @@ public class DriversRegisterFragment extends Fragment {
                         tvCommit.setVisibility(View.GONE);
 
                     }
+                }else{
+                    getActivity().finish();
                 }
             }
 
             if(mParam1.equals("2")){
                 if(null != MainActivity.carInfo){
+                    tvCarType.setText(MainActivity.carInfo.getType());
                     tvLocation.setText(MainActivity.carInfo.getCode());
                     etPhoneNum.setText(MainActivity.carInfo.getMobile());
                     et_company_name.setText(MainActivity.carInfo.getDriver());
@@ -236,7 +239,7 @@ public class DriversRegisterFragment extends Fragment {
                     // 审核中
                     // 审核失败
                     // 审核成功 不可编辑
-                    if(MainActivity.carInfo.getStatus().equals("1") || MainActivity.carInfo.getStatus().equals("2")){
+                    if(MainActivity.carInfo.getStatus().equals("1") || MainActivity.carInfo.getStatus().equals("3")){
                         imgs.clear();
                         imgs.add("");
                         if(null != MainActivity.carInfo.getCar_pic() && MainActivity.carInfo.getCar_pic().size() > 0){
@@ -251,13 +254,15 @@ public class DriversRegisterFragment extends Fragment {
                         rcvPic.setEnabled(false);
                         imgAdapter.notifyDataSetChanged();
                     }
-                    if(MainActivity.carInfo.getStatus().equals("3")){
+                    if(MainActivity.carInfo.getStatus().equals("2")){
 
                         llLocationPhone.setEnabled(false);
                         llSelectCarLocation.setEnabled(false);
                         tvCommit.setVisibility(View.GONE);
 
                     }
+                }else{
+                    getActivity().finish();
                 }
             }
 

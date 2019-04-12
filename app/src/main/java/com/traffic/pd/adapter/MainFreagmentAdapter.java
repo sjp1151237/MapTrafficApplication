@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
-import com.traffic.pd.fragments.OrderHallFragment;
-import com.traffic.pd.fragments.PublishFragment;
 import com.traffic.pd.fragments.UserFragment;
 
 import java.util.List;
@@ -38,7 +36,7 @@ public class MainFreagmentAdapter extends FragmentPagerAdapter {
                 }
                 break;
             case 1:
-                fragment = UserFragment.newInstance(tag,"");
+                fragment = fragments.get(3);
                 break;
         }
         return fragment;

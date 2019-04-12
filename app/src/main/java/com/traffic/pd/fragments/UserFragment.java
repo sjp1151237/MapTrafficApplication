@@ -20,6 +20,7 @@ import com.othershe.nicedialog.NiceDialog;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.LoginActivity;
+import com.traffic.pd.activity.MyDriverActivity;
 import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.utils.ComUtils;
@@ -104,6 +105,7 @@ public class UserFragment extends Fragment {
         if (null == mView) {
             mView = inflater.inflate(R.layout.fragment_user, container, false);
             unbinder = ButterKnife.bind(this, mView);
+            llDriver.setVisibility(View.GONE);
             myReceiver = new MyReceiver();
 
             alertDialog = NiceDialog.init();
@@ -114,28 +116,7 @@ public class UserFragment extends Fragment {
             if (null != MainActivity.userBean) {
                 myName.setText(ComUtils.formatString(MainActivity.userBean.getNickname()));
             }
-            if(null != MainActivity.carInfo){
-                if(MainActivity.carInfo.getStatus().equals("1")){
-                    tvState.setText("审核中");
-                }
-                if(MainActivity.carInfo.getStatus().equals("2")){
-                    tvState.setText("审核失败");
-                }
-                if(MainActivity.carInfo.getStatus().equals("3")){
-                    tvState.setText("审核通过");
-                }
-            }
-            if(null != MainActivity.companyInfo){
-                if(MainActivity.companyInfo.getStatus().equals("1")){
-                    tvState.setText("审核中");
-                }
-                if(MainActivity.companyInfo.getStatus().equals("2")){
-                    tvState.setText("审核失败");
-                }
-                if(MainActivity.companyInfo.getStatus().equals("3")){
-                    tvState.setText("审核通过");
-                }
-            }
+
         }
 
         unbinder1 = ButterKnife.bind(this, mView);
@@ -159,6 +140,7 @@ public class UserFragment extends Fragment {
             case R.id.ll_order_center:
                 break;
             case R.id.ll_driver:
+                startActivity(new Intent(getContext(), MyDriverActivity.class));
                 break;
             case R.id.ll_Customer_Service:
                 break;
@@ -217,6 +199,34 @@ public class UserFragment extends Fragment {
 
                 myName.setText(intent.getStringExtra("num"));
 
+            }
+        }
+    }
+
+    public void resetData(){
+        if(null != MainActivity.carInfo){
+            llDriver.setVisibility(View.GONE);
+            if(MainActivity.carInfo.getStatus().equals("1")){
+                tvState.setText("审核中");
+            }
+            if(MainActivity.carInfo.getStatus().equals("3")){
+                tvState.setText("审核失败:" + MainActivity.carInfo.getReson());
+            }
+            if(MainActivity.carInfo.getStatus().equals("2")){
+                tvState.setText("审核通过");
+            }
+        }
+        if(null != MainActivity.companyInfo){
+            llDriver.setVisibility(View.VISIBLE);
+
+            if(MainActivity.companyInfo.getStatus().equals("1")){
+                tvState.setText("审核中");
+            }
+            if(MainActivity.companyInfo.getStatus().equals("3")){
+                tvState.setText("审核失败:" + MainActivity.companyInfo.getReson());
+            }
+            if(MainActivity.companyInfo.getStatus().equals("2")){
+                tvState.setText("审核通过");
             }
         }
     }

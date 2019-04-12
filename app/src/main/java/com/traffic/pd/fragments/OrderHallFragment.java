@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -143,7 +144,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             isMapReady = false;
             isDataLoad = false;
             isAddMaker = false;
-//            loadData();
+            loadData();
 
             mLocationSource = new LongPressLocationSource(this);
             SupportMapFragment mapFragment =
@@ -154,7 +155,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             googleMapManager = new GoogleMapManager(getContext(), this);
 
 
-            loadDataR();
+//            loadDataR();
 
             mView.findViewById(R.id.ll_pos).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,7 +225,6 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                                 if(!isAddMaker && isMapReady){
                                     addMakers();
                                 }
-                                addMakers();
                                 Log.e("tag",response);
                             }
                         } catch (JSONException e) {
@@ -246,14 +246,16 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                     }
                 }, url, map);
     }
-
+    String[] lats = {"30","-21","-56","69","80","60","32","78"};
+    String[] longitudes = {"-25.36","108.256","29.265","39.245","78.598","88.598","-25.36","-28.63"};
     private void addMakers() {
         isAddMaker = true;
 
         if(null != orderBeans){
 
             for (int i = 0; i < orderBeans.size(); i++) {
-                LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeans.get(i).getLat()), Double.parseDouble(orderBeans.get(i).getLongi()));
+//                LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeans.get(i).getLat()), Double.parseDouble(orderBeans.get(i).getLongi()));
+                LatLng BRISBANE = new LatLng(Double.parseDouble(lats[new Random().nextInt(6)]), Double.parseDouble(longitudes[new Random().nextInt(6)]));
                 mMap.addMarker(new MarkerOptions()
                         .position(BRISBANE)
                         .title(orderBeans.get(i).getCar_type())
@@ -280,7 +282,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     public void refreshData(){
         mPage = 1;
         mSize = 100;
-        loadDataR();
+        loadData();
     }
 
     @Override
