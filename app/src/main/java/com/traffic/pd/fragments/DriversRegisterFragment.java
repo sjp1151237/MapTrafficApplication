@@ -53,6 +53,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +119,7 @@ public class DriversRegisterFragment extends Fragment {
     private RequestOptions requestOptions;
     List<LocalMedia> selectListImg;
     List<String> imgs;
+    List<String> selectImgs;
     private int mWith;
     ImgAdapter imgAdapter;
 
@@ -155,6 +157,7 @@ public class DriversRegisterFragment extends Fragment {
             unbinder = ButterKnife.bind(this, mView);
             initGlide();
             selectListImg = new ArrayList<>();
+            selectImgs = new ArrayList<>();
             imgs = new ArrayList<>();
             imgs.add("");
             WindowManager wm = getActivity().getWindowManager();
@@ -338,9 +341,9 @@ public class DriversRegisterFragment extends Fragment {
                     ComUtils.showMsg(getContext(), "Please up car license picture");
                     return;
                 }
-                if (null == selectListImg || selectListImg.size() == 0) {
+                if (null == selectImgs || selectImgs.size() == 0) {
                     ComUtils.showMsg(getContext(), "Please up car pictures");
-//                    return;
+                    return;
                 }
                 if (mParam1.equals("2")) {
                     if(TextUtils.isEmpty(et_company_name.getText().toString())){
@@ -480,10 +483,17 @@ public class DriversRegisterFragment extends Fragment {
         String url = Constant.UP_IMG;
         Map<String, String> map = new HashMap<>();
         map.put("dir", "driver");
-        map.put("file", "fils");
+        map.put("file[]", strings.toString());
         new PostRequest("setAvatar", getContext(), true).uploadFiles(new PostRequest.PostListener() {
             @Override
             public TestBean postSuccessful(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    selectImgs.clear();
+                    selectImgs.addAll(JSONArray.parseArray(jsonObject.getString("url"),String.class));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Log.e("tag", response);
                 return null;
             }
@@ -613,7 +623,7 @@ public class DriversRegisterFragment extends Fragment {
         map.put("longi", "120");
         map.put("car_num", etCarLicenseNum.getText().toString());
         map.put("car_num_pic", carLicenseImg);
-        map.put("car_pic", "");
+        map.put("car_pic", selectImgs.toString());
         map.put("type", carType.getId());
         map.put("introduce", etIntroduce.getText().toString());
 
@@ -672,8 +682,8 @@ public class DriversRegisterFragment extends Fragment {
         map.put("lat", "35");
         map.put("longi", "136");
         map.put("license_num", etCarLicenseNum.getText().toString());
-        map.put("license_pic", carLicenseImg);// 少了
-        map.put("pics", "");
+        map.put("license_pic", carLicenseImg);
+        map.put("pics", selectImgs.toString());
         map.put("code", phoneCodeBean.getD());
         map.put("introduce", etIntroduce.getText().toString());
 

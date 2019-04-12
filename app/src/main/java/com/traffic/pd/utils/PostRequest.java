@@ -189,7 +189,7 @@ public class PostRequest {
                 PictureFileUtils.deleteCacheDirFile(mContext);
                 postRequest.postSuccessful(response);
             }
-        }, "files", files, map);
+        }, "file", files, map);
         MyApplication.getInstance().addToRequestQueue(request, TAG);
     }
 
