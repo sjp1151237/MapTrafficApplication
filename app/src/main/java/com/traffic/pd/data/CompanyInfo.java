@@ -1,8 +1,9 @@
 package com.traffic.pd.data;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CompanyInfo {
+public class CompanyInfo implements Serializable {
     String id;
     String uid;
     String name;

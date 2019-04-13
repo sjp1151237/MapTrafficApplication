@@ -20,6 +20,7 @@ import com.othershe.nicedialog.NiceDialog;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.LoginActivity;
+import com.traffic.pd.activity.MyCompanyActivity;
 import com.traffic.pd.activity.MyDriverActivity;
 import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.constant.Constant;
@@ -62,6 +63,10 @@ public class UserFragment extends Fragment {
     @BindView(R.id.ll_out_login)
     LinearLayout llOutLogin;
     Unbinder unbinder1;
+    @BindView(R.id.ll_company)
+    LinearLayout llCompany;
+    @BindView(R.id.v_company)
+    View vCompany;
 
     private String mParam1;
     private String mParam2;
@@ -130,7 +135,7 @@ public class UserFragment extends Fragment {
         getActivity().unregisterReceiver(myReceiver);
     }
 
-    @OnClick({R.id.take_picture, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard,R.id.ll_out_login,R.id.rl_to_share})
+    @OnClick({R.id.take_picture,R.id.ll_company, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard, R.id.ll_out_login, R.id.rl_to_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.take_picture:
@@ -161,9 +166,9 @@ public class UserFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         getActivity().finish();
-                        startActivity(new Intent(getContext(),LoginActivity.class));
+                        startActivity(new Intent(getContext(), LoginActivity.class));
 
-                        PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,"");
+                        PreferencesUtils.putSharePre(getContext(), Constant.USER_INFO, "");
                         MainActivity.userBean = null;
                         MainActivity.companyInfo = null;
 
@@ -180,8 +185,11 @@ public class UserFragment extends Fragment {
                 break;
             case R.id.rl_to_share:
                 Intent intent1 = new Intent(getContext(), UpDetailActivity.class);
-                intent1.putExtra("tag",mParam1);
+                intent1.putExtra("tag", mParam1);
                 startActivity(intent1);
+                break;
+            case R.id.ll_company:
+                startActivity(new Intent(getContext(), MyCompanyActivity.class));
                 break;
         }
     }
@@ -203,29 +211,32 @@ public class UserFragment extends Fragment {
         }
     }
 
-    public void resetData(){
-        if(null != MainActivity.carInfo){
+    public void resetData() {
+        if (null != MainActivity.carInfo) {
             llDriver.setVisibility(View.GONE);
-            if(MainActivity.carInfo.getStatus().equals("1")){
+            llCompany.setVisibility(View.VISIBLE);
+            if (MainActivity.carInfo.getStatus().equals("1")) {
                 tvState.setText("审核中");
             }
-            if(MainActivity.carInfo.getStatus().equals("3")){
+            if (MainActivity.carInfo.getStatus().equals("3")) {
                 tvState.setText("审核失败:" + MainActivity.carInfo.getReson());
             }
-            if(MainActivity.carInfo.getStatus().equals("2")){
+            if (MainActivity.carInfo.getStatus().equals("2")) {
                 tvState.setText("审核通过");
             }
-        }
-        if(null != MainActivity.companyInfo){
-            llDriver.setVisibility(View.VISIBLE);
 
-            if(MainActivity.companyInfo.getStatus().equals("1")){
+            myName.setText(ComUtils.formatString(MainActivity.userBean.getNickname()) + "   ID:" + MainActivity.carInfo.getId());
+        }
+        if (null != MainActivity.companyInfo) {
+            llDriver.setVisibility(View.VISIBLE);
+            llCompany.setVisibility(View.GONE);
+            if (MainActivity.companyInfo.getStatus().equals("1")) {
                 tvState.setText("审核中");
             }
-            if(MainActivity.companyInfo.getStatus().equals("3")){
+            if (MainActivity.companyInfo.getStatus().equals("3")) {
                 tvState.setText("审核失败:" + MainActivity.companyInfo.getReson());
             }
-            if(MainActivity.companyInfo.getStatus().equals("2")){
+            if (MainActivity.companyInfo.getStatus().equals("2")) {
                 tvState.setText("审核通过");
             }
         }

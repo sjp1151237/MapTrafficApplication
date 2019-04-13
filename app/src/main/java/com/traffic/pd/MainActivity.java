@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -123,16 +124,13 @@ public class MainActivity extends AppCompatActivity {
                 .go(this, new PostRequest.PostListener() {
                     @Override
                     public TestBean postSuccessful(String response) {
-
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = new JSONObject(response);
                             int status = jsonObject.getInt("status");
-                            String msg = jsonObject.getString("msg");
                             if (status == 1) {
                                 isDetailUp = true;
                                 if (userBean.getIdentity().equals("2")) {
-//                                    orderHallFragmentD.refreshData();
                                     carInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CarInfo.class);
                                 }
                                 if (userBean.getIdentity().equals("3")) {

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="ddddddd"
+            android:textColor="@color/item_title_font"
+            />
+
+        <TextView
+            android:id="@+id/tv_contacts_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="ddddddd"
+            android:textColor="@color/item_title_font"
+            />
+
+        <TextView
+            android:id="@+id/tv_company_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="ddddddd"
+            android:textColor="@color/item_title_font"
+            />
+
+        <TextView
+            android:id="@+id/tv_license"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="ddddddd"
+            android:textColor="@color/item_title_font"
+            />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="ddddddd"
+            android:textColor="@color/item_title_font"
+            />
+
+        <TextView
+            android:id="@+id/tv_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:text="ddddddd"
+            android:textColor="@color/item_title_font"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_pic"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_commit"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="commint"
+        android:textSize="16sp"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

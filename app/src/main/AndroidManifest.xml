@@ -23,7 +23,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MyDriverActivity"></activity>
+        <activity android:name=".activity.CompanyDetailActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".activity.MyCompanyActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.MyOrderActivity" />
+        <activity
+            android:name=".activity.MyDriverActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.CarSelectActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -90,7 +97,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".BasicMapDemoActivity"
             android:label="@string/basic_map_demo_label" />
@@ -202,7 +209,7 @@
             android:label="@string/visible_region_demo_label" />
         <activity
             android:name=".MainActivityDemo"
-            android:label="@string/visible_region_demo_label"></activity>
+            android:label="@string/visible_region_demo_label" />
     </application>
 
 </manifest>

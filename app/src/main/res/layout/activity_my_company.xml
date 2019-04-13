@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".activity.MyDriverActivity">
+    tools:context=".activity.MyCompanyActivity">
 
     <include layout="@layout/common_title"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_driver"
+        android:id="@+id/rcv_companys"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

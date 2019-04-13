@@ -32,6 +32,11 @@ public class Constant {
 
     public static String GET_ORDER_LIST = HOST + "/api/user/order_list";
     public static String GET_Driver_LIST = HOST + "/api/user/company_drivers";
+    public static String GET_ADD_Driver = HOST + "/api/user/company_driver_add";
+
+    public static String GET_COMPANY_LIST = HOST + "/api/user/driver_join_list";
+
+    public static String BIND_COMPANY = HOST + "/api/user/driver_join";
 
 
 

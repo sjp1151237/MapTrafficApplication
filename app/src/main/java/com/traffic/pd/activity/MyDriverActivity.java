@@ -1,15 +1,22 @@
 package com.traffic.pd.activity;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.othershe.nicedialog.BaseNiceDialog;
+import com.othershe.nicedialog.NiceDialog;
+import com.othershe.nicedialog.ViewConvertListener;
+import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
-import com.traffic.pd.data.CarInfo;
-import com.traffic.pd.data.CompanyInfo;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
@@ -20,16 +27,38 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MyDriverActivity extends AppCompatActivity {
+
+    @BindView(R.id.ll_back)
+    LinearLayout llBack;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.tv_btn)
+    TextView tvBtn;
+    @BindView(R.id.rcv_driver)
+    RecyclerView rcvDriver;
+
+    NiceDialog niceDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_driver);
+        ButterKnife.bind(this);
+        tvTitle.setText("My Driver");
+        tvBtn.setText("Add Driver");
+        tvBtn.setVisibility(View.VISIBLE);
+        niceDialog = NiceDialog.init();
 
-        if(null != MainActivity.userBean && !TextUtils.isEmpty(MainActivity.userBean.getUser_id())){
+        rcvDriver.setLayoutManager(new LinearLayoutManager(this));
+//        rcvDriver.setAdapter();
+        if (null != MainActivity.userBean && !TextUtils.isEmpty(MainActivity.userBean.getUser_id())) {
             loadDriver();
-        }else{
+        } else {
 
         }
 
@@ -75,5 +104,77 @@ public class MyDriverActivity extends AppCompatActivity {
                 }, url, map);
 
 
+    }
+
+    private void addDriver(String id){
+        String url = Constant.GET_ADD_Driver;
+        Map<String, String> map = new HashMap<>();
+        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("driver_id",id);
+        new PostRequest("getUserStatus", this, true)
+                .go(this, new PostRequest.PostListener() {
+                    @Override
+                    public TestBean postSuccessful(String response) {
+
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            int status = jsonObject.getInt("status");
+                            String msg = jsonObject.getString("msg");
+                            ComUtils.showMsg(MyDriverActivity.this,msg);
+                            if(status == 1){
+                                loadDriver();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void postError(String error) {
+                        super.postError(error);
+                        ComUtils.showMsg(MyDriverActivity.this, "error");
+                    }
+
+                    @Override
+                    public void postNull() {
+                        super.postNull();
+                        ComUtils.showMsg(MyDriverActivity.this, "error");
+                    }
+                }, url, map);
+    }
+
+    @OnClick({R.id.ll_back, R.id.tv_btn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_back:
+                finish();
+                break;
+            case R.id.tv_btn:
+                niceDialog.setLayoutId(R.layout.add_driver_dialog).setConvertListener(new ViewConvertListener() {
+                    @Override
+                    protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+
+                        final EditText editText = holder.getView(R.id.et_driver);
+                        TextView tv_commit = holder.getView(R.id.tv_commit);
+                        tv_commit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(TextUtils.isEmpty(editText.getText().toString())){
+                                    ComUtils.showMsg(MyDriverActivity.this,"Please input driver's ID");
+                                    return;
+                                }else{
+                                    addDriver(editText.getText().toString());
+                                    niceDialog.dismiss();
+                                }
+
+                            }
+                        });
+                    }
+                }).setDimAmount(0.3f).setShowBottom(true).show(getSupportFragmentManager());
+                break;
+        }
     }
 }
