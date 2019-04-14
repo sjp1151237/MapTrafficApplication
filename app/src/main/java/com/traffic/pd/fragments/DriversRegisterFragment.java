@@ -261,13 +261,11 @@ public class DriversRegisterFragment extends Fragment {
                         tvCommit.setVisibility(View.GONE);
 
                     }
-                }else{
-                    getActivity().finish();
                 }
             }
 
         }
-        unbinder1 = ButterKnife.bind(this, mView);
+
         return mView;
     }
 

@@ -88,18 +88,19 @@ public class CompanyDetailActivity extends AppCompatActivity {
             case R.id.tv_commit:
 
                 if(null != companyInfo){
-                    bindCompany(companyInfo.getId());
+                    bindCompany(companyInfo);
                 }
 
                 break;
         }
     }
 
-    private void bindCompany(String companyId) {
+    private void bindCompany(CompanyInfo companyInfo) {
         String url = Constant.BIND_COMPANY;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
-        map.put("company_id", companyId);
+        map.put("status", "2");
+        map.put("id", companyInfo.getId());
         new PostRequest("loadData", this, true)
                 .go(this, new PostRequest.PostListener() {
                     @Override
@@ -110,6 +111,7 @@ public class CompanyDetailActivity extends AppCompatActivity {
                             jsonObject = new JSONObject(response);
                             int status = jsonObject.getInt("status");
                             String msg = jsonObject.getString("msg");
+                            ComUtils.showMsg(CompanyDetailActivity.this,msg);
                             if (status == 1) {
 
                             }

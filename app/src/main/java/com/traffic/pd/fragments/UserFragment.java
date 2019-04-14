@@ -171,7 +171,7 @@ public class UserFragment extends Fragment {
                         PreferencesUtils.putSharePre(getContext(), Constant.USER_INFO, "");
                         MainActivity.userBean = null;
                         MainActivity.companyInfo = null;
-
+                        MainActivity.carInfo = null;
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
