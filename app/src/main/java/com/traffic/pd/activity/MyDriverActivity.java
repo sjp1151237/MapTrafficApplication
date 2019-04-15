@@ -10,13 +10,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.othershe.nicedialog.BaseNiceDialog;
 import com.othershe.nicedialog.NiceDialog;
 import com.othershe.nicedialog.ViewConvertListener;
 import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
+import com.traffic.pd.adapter.DriversAdapter;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.data.CarInfo;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
@@ -24,7 +27,9 @@ import com.traffic.pd.utils.PostRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -44,6 +49,9 @@ public class MyDriverActivity extends AppCompatActivity {
 
     NiceDialog niceDialog;
 
+    List<CarInfo> carInfoList;
+    DriversAdapter driversAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +62,10 @@ public class MyDriverActivity extends AppCompatActivity {
         tvBtn.setVisibility(View.VISIBLE);
         niceDialog = NiceDialog.init();
 
+        carInfoList = new ArrayList<>();
+        driversAdapter = new DriversAdapter(this,carInfoList);
         rcvDriver.setLayoutManager(new LinearLayoutManager(this));
-//        rcvDriver.setAdapter();
+        rcvDriver.setAdapter(driversAdapter);
         if (null != MainActivity.userBean && !TextUtils.isEmpty(MainActivity.userBean.getUser_id())) {
             loadDriver();
         } else {
@@ -68,7 +78,7 @@ public class MyDriverActivity extends AppCompatActivity {
         String url = Constant.GET_Driver_LIST;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
-        new PostRequest("getUserStatus", this, true)
+        new PostRequest("loadDriver", this, true)
                 .go(this, new PostRequest.PostListener() {
                     @Override
                     public TestBean postSuccessful(String response) {
@@ -79,7 +89,9 @@ public class MyDriverActivity extends AppCompatActivity {
                             int status = jsonObject.getInt("status");
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
-
+                                carInfoList.clear();
+                                carInfoList.addAll(JSONArray.parseArray(jsonObject.getString("data"),CarInfo.class));
+                                driversAdapter.notifyDataSetChanged();
                             }
                             if (status == 0) {
 
@@ -110,7 +122,7 @@ public class MyDriverActivity extends AppCompatActivity {
         String url = Constant.GET_ADD_Driver;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
-        map.put("driver_id",id);
+        map.put("car_num",id);
         new PostRequest("getUserStatus", this, true)
                 .go(this, new PostRequest.PostListener() {
                     @Override

@@ -1,6 +1,7 @@
 package com.traffic.pd.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.traffic.pd.R;
+import com.traffic.pd.activity.CarDetailActivity;
 import com.traffic.pd.data.CarInfo;
 
 import java.util.List;
@@ -30,10 +32,10 @@ public class DriversAdapter extends RecyclerView.Adapter<DriversAdapter.DriversH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DriversHolder driversHolder, int i) {
+    public void onBindViewHolder(@NonNull DriversHolder driversHolder, final int i) {
         CarInfo carInfo = carInfoList.get(i);
-        driversHolder.tv_company_name.setText("name: "+carInfo.getCar_num());
-        driversHolder.tv_license.setText("License: "+carInfo.getLicense_num());
+        driversHolder.tv_company_name.setText("mobile: "+carInfo.getMobile());
+        driversHolder.tv_license.setText("License: "+carInfo.getCar_num());
         driversHolder.tv_location.setText("location: "+carInfo.getCountry()  + "   "+ carInfo.getProvince()+ "   " + carInfo.getCity()+ "   " + carInfo.getDistrict()+ "   " + carInfo.getAddress());
 
         if(carInfo.getStatus().equals("2")){
@@ -41,6 +43,15 @@ public class DriversAdapter extends RecyclerView.Adapter<DriversAdapter.DriversH
         }else{
             driversHolder.tv_status.setText("未同意");
         }
+
+        driversHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, CarDetailActivity.class);
+                intent.putExtra("info",carInfoList.get(i));
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
