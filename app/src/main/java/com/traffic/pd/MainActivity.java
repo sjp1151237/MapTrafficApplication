@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSONArray;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.traffic.pd.activity.CarSelectActivity;
 import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.adapter.MainFreagmentAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.CarInfo;
+import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.CompanyInfo;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.data.UserBean;
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     OrderHallFragment orderHallFragmentC = OrderHallFragment.newInstance("3", "");
 
     UserFragment userFragment;
+
+    public static List<CarType> carTypeList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(orderHallFragmentC);
 
         isDetailUp = false;
+        carTypeList = new ArrayList<>();
         userBean = (UserBean) getIntent().getSerializableExtra("user");
         if (null != userBean) {
             tag = userBean.getIdentity();
@@ -108,6 +114,46 @@ public class MainActivity extends AppCompatActivity {
             getUserStatus();
         }
 
+        loadCar();
+
+    }
+
+    private void loadCar() {
+        String url = Constant.GET_CAR_TYPE;
+        Map<String, String> map = new HashMap<>();
+        new PostRequest("loadCar", this, true)
+                .go(this, new PostRequest.PostListener() {
+                    @Override
+                    public TestBean postSuccessful(String response) {
+
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            int status = jsonObject.getInt("status");
+                            if (status == 1) {
+                                carTypeList.clear();
+                                List<CarType> carTypes = JSONArray.parseArray(jsonObject.getString("result"), CarType.class);
+                                for (int i = 0; i < carTypes.size(); i++) {
+                                    carTypes.get(i).setNum(0);
+                                }
+                                carTypeList.addAll(carTypes);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void postError(String error) {
+                        super.postError(error);
+                    }
+
+                    @Override
+                    public void postNull() {
+                        super.postNull();
+                    }
+                }, url, map);
     }
 
     private void getUserStatus() {

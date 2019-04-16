@@ -1,6 +1,8 @@
 package com.traffic.pd.data;
 
-public class OrderBean {
+import java.io.Serializable;
+
+public class OrderBean implements Serializable {
     String id;
     String        uid;
     String weight;

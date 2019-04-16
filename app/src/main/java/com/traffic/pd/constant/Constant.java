@@ -38,6 +38,8 @@ public class Constant {
 
     public static String BIND_COMPANY = HOST + "/api/user/driver_join";
 
+    public static String GRAB_ORDER = HOST + "/api/user/grab_order";
+
 
 
     public static final int REQUEST_CODE = 1024;

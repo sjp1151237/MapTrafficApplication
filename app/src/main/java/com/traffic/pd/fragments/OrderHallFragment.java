@@ -34,18 +34,15 @@ import com.traffic.pd.MainActivityDemo;
 import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
+import com.traffic.pd.activity.OrderDetailActivity;
 import com.traffic.pd.adapter.HallListAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
-import com.traffic.pd.data.UserBean;
-import com.traffic.pd.maps.MyLocationDemoActivity;
-import com.traffic.pd.services.FetchAddressIntentService;
 import com.traffic.pd.services.LongPressLocationSource;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.GoogleMapManager;
 import com.traffic.pd.utils.PostRequest;
-import com.traffic.pd.utils.PreferencesUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -134,9 +131,10 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (null == mView) {
+            orderBeans = new ArrayList<>();
             mView = inflater.inflate(R.layout.fragment_order_hall, container, false);
             unbinder = ButterKnife.bind(this, mView);
-            hallListAdapter = new HallListAdapter(getContext());
+            hallListAdapter = new HallListAdapter(getContext(),orderBeans);
             rcvHallList.setLayoutManager(new LinearLayoutManager(getContext()));
             rcvHallList.setAdapter(hallListAdapter);
             mPage = 1;
@@ -216,12 +214,12 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                             jsonObject = new JSONObject(response);
                             int status = jsonObject.getInt("status");
                             String msg = jsonObject.getString("msg");
-                            ComUtils.showMsg(getContext(), msg);
                             if (status == 1) {
                                 isDataLoad = true;
                                 orderBeans.clear();
-                                orderBeans = JSONArray.parseArray(jsonObject.getString("msg"),OrderBean.class);
+                                orderBeans.addAll(JSONArray.parseArray(jsonObject.getString("data"),OrderBean.class));
 
+                                hallListAdapter.notifyDataSetChanged();
                                 if(!isAddMaker && isMapReady){
                                     addMakers();
                                 }
@@ -411,6 +409,10 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
+        Intent intent = new Intent(getContext(), OrderDetailActivity.class);
+        intent.putExtra("info",orderBean);
+        startActivity(intent);
         ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
     }
 }
