@@ -1,5 +1,9 @@
 package com.traffic.pd.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,7 +12,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -23,13 +26,14 @@ import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
+import com.traffic.pd.utils.PreferencesUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -59,6 +63,10 @@ public class OrderDetailActivity extends AppCompatActivity implements
     private static final LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
     @BindView(R.id.tv_add_cars)
     TextView tvAddCars;
+    @BindView(R.id.ll_call_send)
+    LinearLayout llCallSend;
+    @BindView(R.id.ll_call_get)
+    LinearLayout llCallGet;
 
     private GoogleMap mMap = null;
 
@@ -66,6 +74,8 @@ public class OrderDetailActivity extends AppCompatActivity implements
      * Keeps track of the selected marker.
      */
     private Marker mSelectedMarker;
+
+    String fromWhere;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +86,55 @@ public class OrderDetailActivity extends AppCompatActivity implements
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         new OnMapAndViewReadyListener(mapFragment, this);
-
-        tvBtn.setVisibility(View.VISIBLE);
-        tvBtn.setText("ADD");
         orderBean = (OrderBean) getIntent().getSerializableExtra("info");
+        fromWhere = getIntent().getStringExtra("from");
+        tvBtn.setVisibility(View.VISIBLE);
+        if (fromWhere.equals("home")) {
+            if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+                if (null != orderBean.getCan_grab()) {
+                    if (orderBean.getCan_grab().equals("0")) {
+                        tvBtn.setText("Cancel");
+                    }
+                    if (orderBean.getCan_grab().equals("1")) {
+                        tvBtn.setText("ADD");
+                    }
+                }
+            }
+        }
+        if (fromWhere.equals("user")) {
+            if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+                // 审核中、发布中 可以取消订单
+                if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
+                    tvBtn.setText("Cancel");
+                }
+                // 以拒绝、已完成 可以删除订单
+                if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
+                    tvBtn.setText("Delete");
+                }
+                // 进行中只有发布者可以操作
+                if (orderBean.getStatus().equals("4")) {
+                    tvBtn.setVisibility(View.GONE);
+                }
+            } else {
+                // 待审核/发布中
+                if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
+                    tvBtn.setText("Cancel");
+                }
+                // 已拒绝
+                if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
+                    tvBtn.setText("Delete");
+                }
+                // 进行中只有发布者可以操作
+                if (orderBean.getStatus().equals("4")) {
+                    tvBtn.setVisibility(View.GONE);
+                }
+            }
+        }
+
         tvAddCars.setText("已有" + orderBean.getGrab_num() + "辆车接单");
         if (null != orderBean) {
             tvGetPhone.setText(orderBean.getRecive_mobile());
-
+            tvSendPhone.setText(orderBean.getB_country() + orderBean.getMobile());
             try {
                 if (null != MainActivity.carTypeList) {
                     String[] cars = orderBean.getCar_type().split(",");
@@ -120,7 +171,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.ll_car_detail,R.id.tv_btn})
+    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn,R.id.ll_call_send, R.id.ll_call_get})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -130,24 +181,99 @@ public class OrderDetailActivity extends AppCompatActivity implements
 
                 break;
             case R.id.tv_btn:
-                if(MainActivity.userBean.getIdentity().equals("2")){
-                    toAddOrder();
-                }else{
-                    toCars();
+                if (fromWhere.equals("home")) {
+                    if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+                        if (null != orderBean.getCan_grab()) {
+                            if (orderBean.getCan_grab().equals("0")) {
+                                driverCancelOrder();
+                            }
+                            if (orderBean.getCan_grab().equals("1")) {
+                                if (MainActivity.userBean.getIdentity().equals("2")) {
+                                    toAddOrder();
+                                } else {
+                                    toCars();
+                                }
+                            }
+                        }
+                    }
                 }
+                if (fromWhere.equals("user")) {
+                    if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+                        // 审核中、发布中 可以取消订单
+                        if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
+                            driverCancelOrder();
+                        }
+                        // 以拒绝、已完成 可以删除订单
+                        if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
+                            driverDeleteOrder();
+                        }
+                        // 进行中只有发布者可以操作
+                        if (orderBean.getStatus().equals("4")) {
 
+                        }
+                    } else {
+                        // 待审核/发布中
+                        if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
+                            userCancelOrder();
+                        }
+                        // 已拒绝
+                        if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
+                            userDeleteOrder();
+                        }
+                        // 进行中只有发布者可以操作
+                        if (orderBean.getStatus().equals("4")) {
+                            tvBtn.setVisibility(View.GONE);
+                        }
+                    }
+                }
+                break;
+            case R.id.ll_call_send:
+                try {
+                    ComUtils.showCallDialog(OrderDetailActivity.this,orderBean.getB_country() + orderBean.getMobile());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.ll_call_get:
+                try {
+                    ComUtils.showCallDialog(OrderDetailActivity.this,orderBean.getRecive_mobile());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
 
+    // 用户删除订单
+    private void userDeleteOrder() {
+
+    }
+
+    // 用户取消订单
+    private void userCancelOrder() {
+
+    }
+
+    // 司机删除订单
+    private void driverDeleteOrder() {
+
+    }
+
+    // 司机取消订单
+    private void driverCancelOrder() {
+
+    }
+
+    // 公司跳转到自己的车辆
     private void toCars() {
+
     }
 
     private void toAddOrder() {
         String url = Constant.GRAB_ORDER;
         Map<String, String> map = new HashMap<>();
-        map.put("user_sign",MainActivity.userBean.getUser_id());
-        map.put("order_id",orderBean.getId());
+        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("order_id", orderBean.getId());
         new PostRequest("toAddOrder", this, true)
                 .go(this, new PostRequest.PostListener() {
                     @Override
@@ -156,6 +282,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
                         try {
                             jsonObject = new JSONObject(response);
                             int status = jsonObject.getInt("status");
+                            ComUtils.showMsg(OrderDetailActivity.this, jsonObject.getString("msg"));
                             if (status == 1) {
 
                             }
@@ -185,11 +312,6 @@ public class OrderDetailActivity extends AppCompatActivity implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (marker.equals(mSelectedMarker)) {
-            // The showing info window has already been closed - that's the first thing to happen
-            // when any marker is clicked.
-            // Return true to indicate we have consumed the event and that we do not want the
-            // the default behavior to occur (which is for the camera to move such that the
-            // marker is centered and for the marker's info window to open, if it has one).
             mSelectedMarker = null;
             return true;
         }
@@ -238,5 +360,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
                 .snippet("Population: 4,137,400"));
 
     }
+
+
 
 }

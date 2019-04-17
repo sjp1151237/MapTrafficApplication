@@ -1,12 +1,17 @@
 package com.traffic.pd.utils;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
@@ -19,6 +24,8 @@ import android.widget.Toast;
 
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
+import com.traffic.pd.activity.LoginActivity;
+import com.traffic.pd.constant.Constant;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -65,6 +72,19 @@ public class ComUtils {
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     MainActivity.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
+    }
+
+    public static final int REQUEST_CALL_PERMISSION = 10111;
+
+    public static boolean checkReadPermission(Activity context) {
+        boolean isget = false;
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {//已有权限
+            isget = true;
+        } else {//申请权限
+            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
+            isget = false;
+        }
+        return isget;
     }
 
     /**
@@ -150,7 +170,7 @@ public class ComUtils {
      * @param tv
      */
     public static void showTimePickerDialog(Activity activity, final TextView tv) {
-         Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         // 创建一个TimePickerDialog实例，并把它显示出来
         // 解释一哈，Activity是context的子类
         new TimePickerDialog(activity,
@@ -195,8 +215,7 @@ public class ComUtils {
         datePickerDialog.show();
     }
 
-    public static Drawable loadImageFromNetwork(String imageUrl)
-    {
+    public static Drawable loadImageFromNetwork(String imageUrl) {
         Drawable drawable = null;
         try {
             // 可以在这里通过文件名来判断，是否本地有此图片
@@ -211,7 +230,31 @@ public class ComUtils {
             Log.d("test", "not null drawable");
         }
 
-        return drawable ;
+        return drawable;
+    }
+
+    public static void showCallDialog(final Activity context, final String phone) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("Tip");
+        builder.setMessage("Are you call mobile " + phone);
+        builder.setPositiveButton("sure", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+                if(ComUtils.checkReadPermission(context)){
+                    context.startActivity(intent);
+                }
+            }
+        }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).create();
+        builder.show();
     }
 
 }

@@ -26,11 +26,14 @@ public class Constant {
 
     public static String DIVER_UPINFO = HOST + "/api/user/driver";
     public static String COMPANY_UPINFO = HOST + "/api/user/company";
+    public static String DIVER_EDIT = HOST + "/api/user/driver_edit";
+    public static String COMPANY_EDIT = HOST + "/api/user/company_edit";
 
     public static String USER_INFO = "USER_INFO";
     public static String UP_ORDER = HOST + "/api/user/order";
 
     public static String GET_ORDER_LIST = HOST + "/api/user/order_list";
+    public static String GET_ORDER_GRAB_LIST = HOST + "/api/user/grab_list";
     public static String GET_Driver_LIST = HOST + "/api/user/company_drivers";
     public static String GET_ADD_Driver = HOST + "/api/user/company_driver_add";
 

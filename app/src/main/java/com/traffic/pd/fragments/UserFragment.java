@@ -22,6 +22,7 @@ import com.traffic.pd.R;
 import com.traffic.pd.activity.LoginActivity;
 import com.traffic.pd.activity.MyCompanyActivity;
 import com.traffic.pd.activity.MyDriverActivity;
+import com.traffic.pd.activity.MyOrderActivity;
 import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.utils.ComUtils;
@@ -143,6 +144,8 @@ public class UserFragment extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.ll_order_center:
+                Intent intent1 = new Intent(getActivity(), MyOrderActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.ll_driver:
                 startActivity(new Intent(getContext(), MyDriverActivity.class));
@@ -184,9 +187,9 @@ public class UserFragment extends Fragment {
                 builder.show();
                 break;
             case R.id.rl_to_share:
-                Intent intent1 = new Intent(getContext(), UpDetailActivity.class);
-                intent1.putExtra("tag", mParam1);
-                startActivity(intent1);
+                Intent intent23 = new Intent(getContext(), UpDetailActivity.class);
+                intent23.putExtra("tag", mParam1);
+                startActivity(intent23);
                 break;
             case R.id.ll_company:
                 startActivity(new Intent(getContext(), MyCompanyActivity.class));

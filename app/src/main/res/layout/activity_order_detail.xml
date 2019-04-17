@@ -33,14 +33,26 @@
 
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/tv_add_cars"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_add_cars"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textSize="16sp"
+                android:textColor="@color/item_title_font"
+                />
+            <ImageView
+                android:layout_margin="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/right"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -48,31 +60,61 @@
             android:layout_marginLeft="15dp"
             android:background="@color/divider_color_dan"/>
 
-        <TextView
-            android:id="@+id/tv_send_phone"
+        <LinearLayout
+            android:id="@+id/ll_call_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
             android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:text="这个是发货人的联系方式"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_send_phone"
+                android:layout_width="0dp"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/item_title_font"
+                android:text="这个是发货人的联系方式"/>
+
+            <ImageView
+                android:layout_margin="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/call_phone"/>
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginLeft="15dp"
             android:background="@color/divider_color_dan"/>
-
-        <TextView
-            android:id="@+id/tv_get_phone"
+        <LinearLayout
+            android:id="@+id/ll_call_get"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="15dp"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:text="这个是收货人的联系方式"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_get_phone"
+                android:layout_width="0dp"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/item_title_font"
+                android:text="这个是发货人的联系方式"/>
+
+            <ImageView
+                android:layout_margin="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/call_phone"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -123,6 +125,22 @@ public class DriversRegisterFragment extends Fragment {
     private int mWith;
     ImgAdapter imgAdapter;
 
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            try {
+                Drawable drawable = (Drawable) msg.obj;
+                if(null != drawable){
+                    ivCarLicenseNum.setImageDrawable(drawable);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
     public static DriversRegisterFragment newInstance(String param1, String param2) {
 
         Bundle args = new Bundle();
@@ -177,7 +195,7 @@ public class DriversRegisterFragment extends Fragment {
             if(mParam1.equals("3")){
                 if(null != MainActivity.companyInfo){
                     tvLocation.setText(MainActivity.companyInfo.getCode());
-                    etPhoneNum.setText(MainActivity.companyInfo.getMobile());
+                    etPhoneNum.setText(MainActivity.companyInfo.getMobile().replace(MainActivity.companyInfo.getCode(),""));
                     et_company_name.setText(MainActivity.companyInfo.getName());
                     et_contacts.setText(MainActivity.companyInfo.getOwner());
                     tvCountry.setText(MainActivity.companyInfo.getCountry());
@@ -186,8 +204,17 @@ public class DriversRegisterFragment extends Fragment {
                     tvDistrict.setText(MainActivity.companyInfo.getDistrict());
                     tvAddressDetail.setText(MainActivity.companyInfo.getAddress());
                     etCarLicenseNum.setText(MainActivity.companyInfo.getLicense_num());
-                    Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.companyInfo.getLicense_pic());
-                    ivCarLicenseNum.setImageDrawable(drawable);
+                    if(null != MainActivity.companyInfo.getLicense_pic()){
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.companyInfo.getLicense_pic());
+                                Message msg = new Message();
+                                msg.obj = drawable;
+                                handler.sendMessage(msg);
+                            }
+                        }).start();
+                    }
 
                     etIntroduce.setText(MainActivity.companyInfo.getIntroduce());
                     // 审核中
@@ -197,13 +224,13 @@ public class DriversRegisterFragment extends Fragment {
                         imgs.clear();
                         imgs.add("");
                         if(null != MainActivity.companyInfo.getPics() && MainActivity.companyInfo.getPics().size() > 0){
-                            imgs.addAll(imgs);
+                            imgs.addAll(MainActivity.companyInfo.getPics());
                         }
                         imgAdapter.notifyDataSetChanged();
                     }else{
                         imgs.clear();
                         if(null != MainActivity.companyInfo.getPics() && MainActivity.companyInfo.getPics().size() > 0){
-                            imgs.addAll(imgs);
+                            imgs.addAll(MainActivity.companyInfo.getPics());
                         }
                         rcvPic.setEnabled(false);
                         imgAdapter.notifyDataSetChanged();
@@ -215,8 +242,6 @@ public class DriversRegisterFragment extends Fragment {
                         tvCommit.setVisibility(View.GONE);
 
                     }
-                }else{
-                    getActivity().finish();
                 }
             }
 
@@ -224,7 +249,7 @@ public class DriversRegisterFragment extends Fragment {
                 if(null != MainActivity.carInfo){
                     tvCarType.setText(MainActivity.carInfo.getType());
                     tvLocation.setText(MainActivity.carInfo.getCode());
-                    etPhoneNum.setText(MainActivity.carInfo.getMobile());
+                    etPhoneNum.setText(MainActivity.companyInfo.getMobile().replace(MainActivity.companyInfo.getCode(),""));
                     et_company_name.setText(MainActivity.carInfo.getDriver());
                     tvCountry.setText(MainActivity.carInfo.getCountry());
                     tvProvince.setText(MainActivity.carInfo.getProvince());
@@ -324,7 +349,7 @@ public class DriversRegisterFragment extends Fragment {
             case R.id.ll_introduce:
                 break;
             case R.id.tv_commit:
-                if (null == phoneCodeBean) {
+                if (tvLocation.getText().toString().contains("Please")) {
                     ComUtils.showMsg(getContext(), "Please select your phone country");
                     return;
                 }
@@ -442,7 +467,12 @@ public class DriversRegisterFragment extends Fragment {
     private void setAvatar(String path) {
         String url = Constant.UP_IMG;
         Map<String, String> map = new HashMap<>();
-        map.put("dir", "driver");
+        if(MainActivity.userBean.getIdentity().equals("2")){
+            map.put("dir", "driver");
+        }
+        if(MainActivity.userBean.getIdentity().equals("3")){
+            map.put("dir", "company");
+        }
         map.put("file", path);
         new PostRequest("setAvatar", getContext(), false).uploadFile(new PostRequest.PostListener() {
             @Override
@@ -485,7 +515,12 @@ public class DriversRegisterFragment extends Fragment {
         }
         String url = Constant.UP_IMG;
         Map<String, String> map = new HashMap<>();
-        map.put("dir", "driver");
+        if(MainActivity.userBean.getIdentity().equals("2")){
+            map.put("dir", "driver");
+        }
+        if(MainActivity.userBean.getIdentity().equals("3")){
+            map.put("dir", "company");
+        }
         map.put("file[]", strings.toString());
         new PostRequest("setAvatar", getContext(), true).uploadFiles(new PostRequest.PostListener() {
             @Override
@@ -544,8 +579,13 @@ public class DriversRegisterFragment extends Fragment {
                 Uri uri = Uri.parse("res:///" + R.mipmap.pic_add);
                 FrescoUtils.showThumb(uri, holder.iv_des, withL, heightL);
             } else {
-                Uri uri = Uri.parse("file://" + imgs.get(position));
-                FrescoUtils.showThumb(uri, holder.iv_des, withL, heightL);
+                if(imgs.get(position).contains("http://")){
+                    Uri uri = Uri.parse(imgs.get(position));
+                    FrescoUtils.showThumb(uri, holder.iv_des, withL, heightL);
+                }else{
+                    Uri uri = Uri.parse("file://" + imgs.get(position));
+                    FrescoUtils.showThumb(uri, holder.iv_des, withL, heightL);
+                }
             }
 
             if (imgs.get(position).equals("")) {
@@ -605,8 +645,14 @@ public class DriversRegisterFragment extends Fragment {
 
 
     private void upDriverInfo() {
-        String url = Constant.DIVER_UPINFO;
+        String url = "";
         Map<String, String> map = new HashMap<>();
+        if(MainActivity.carInfo != null){
+            url = Constant.DIVER_EDIT;
+            map.put("id",MainActivity.carInfo.getId());
+        }else{
+            url = Constant.DIVER_UPINFO;
+        }
         map.put("user_sign", MainActivity.userBean.getUser_id());
         map.put("mobile", phoneCodeBean.getD() + etPhoneNum.getText().toString());
         map.put("driver", et_company_name.getText().toString());
@@ -620,8 +666,6 @@ public class DriversRegisterFragment extends Fragment {
 //            map.put("district", ComUtils.formatString(address.getSubLocality()));
 //            map.put("address", tvAddressDetail.getText().toString());
 //        }
-
-
         map.put("lat", "30");
         map.put("longi", "120");
         map.put("car_num", etCarLicenseNum.getText().toString());
@@ -642,7 +686,7 @@ public class DriversRegisterFragment extends Fragment {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
 
-                                ComUtils.showMsg(getContext(), "注册成功");
+                                ComUtils.showMsg(getContext(), "请耐心等待审核");
                                 getActivity().finish();
                             }
                         } catch (JSONException e) {
@@ -667,10 +711,18 @@ public class DriversRegisterFragment extends Fragment {
     }
 
     private void upCompanyInfo() {
-        String url = Constant.COMPANY_UPINFO;
         Map<String, String> map = new HashMap<>();
+        String url = "";
+        if(MainActivity.companyInfo != null){
+            url = Constant.COMPANY_EDIT;
+            map.put("id",MainActivity.companyInfo.getId());
+        }else{
+            url = Constant.COMPANY_UPINFO;
+        }
+
         map.put("user_sign", MainActivity.userBean.getUser_id());
-        map.put("mobile", phoneCodeBean.getD() + etPhoneNum.getText().toString());
+
+        map.put("mobile", tvLocation.getText().toString() + etPhoneNum.getText().toString());
 //        if(null != address){
 //            map.put("lat", String.valueOf(address.getLatitude()));
 //            map.put("longi", String.valueOf(address.getLongitude()));
@@ -687,7 +739,7 @@ public class DriversRegisterFragment extends Fragment {
         map.put("license_num", etCarLicenseNum.getText().toString());
         map.put("license_pic", carLicenseImg);
         map.put("pics", selectImgs.toString());
-        map.put("code", phoneCodeBean.getD());
+        map.put("code", tvLocation.getText().toString());
         map.put("introduce", etIntroduce.getText().toString());
 
         new PostRequest("upInfo", getContext(), true)
@@ -702,7 +754,7 @@ public class DriversRegisterFragment extends Fragment {
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
 
-                                ComUtils.showMsg(getContext(), "注册成功");
+                                ComUtils.showMsg(getContext(), "请耐心等待审核");
                                 getActivity().finish();
                             }
                         } catch (JSONException e) {

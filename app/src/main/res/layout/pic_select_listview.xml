@@ -11,6 +11,7 @@
         android:id="@+id/iv_des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        fresco:placeholderImage="@mipmap/zhanwei"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         fresco:actualImageScaleType="fitXY"

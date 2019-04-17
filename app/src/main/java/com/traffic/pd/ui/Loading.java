@@ -13,13 +13,11 @@ import com.traffic.pd.R;
 public class Loading extends Dialog {
 	private View mView;
 	private LayoutInflater mInflater;
-	private MyProgressBar pb = null;
 
 	public Loading(Context context, int theme) {
 		super(context,theme);
 		mInflater = LayoutInflater.from(context);
 		mView = mInflater.inflate(R.layout.loading, null);
-		pb = (MyProgressBar) mView.findViewById(R.id.progressBar1);
 		setContentView(mView);
 		setCancelable(true);
 		setCanceledOnTouchOutside(true);
@@ -30,11 +28,9 @@ public class Loading extends Dialog {
 
 	public void show(){
 		super.show();
-		pb.start(false);
 	}
 
 	public void dismiss(){
 		super.dismiss();
-		pb.stop();
 	}
 }

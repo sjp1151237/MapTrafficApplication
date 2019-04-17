@@ -7,7 +7,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-feature android:name="android.hardware.location.gps" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -32,7 +32,7 @@
         <activity
             android:name=".activity.MyCompanyActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.MyOrderActivity" />
+        <activity android:name=".activity.MyOrderActivity" android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".activity.MyDriverActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

@@ -14,13 +14,15 @@ import com.traffic.pd.data.OrderBean;
 
 import java.util.List;
 
-public class HallListAdapter extends RecyclerView.Adapter<HallListAdapter.HallViewHolder> {
+public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.HallViewHolder> {
 
     List<OrderBean> orderBeans;
     Context mContext;
-    public HallListAdapter(Context mContext,List<OrderBean> orderBeans){
+    String fromWhere;
+    public OrderListAdapter(Context mContext, List<OrderBean> orderBeans,String fromWhere){
         this.mContext = mContext;
         this.orderBeans = orderBeans;
+        this.fromWhere = fromWhere;
     }
 
     @NonNull
@@ -38,6 +40,7 @@ public class HallListAdapter extends RecyclerView.Adapter<HallListAdapter.HallVi
             public void onClick(View view) {
                 OrderBean orderBean = orderBeans.get(i);
                 Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                intent.putExtra("from",fromWhere);
                 intent.putExtra("info",orderBean);
                 mContext.startActivity(intent);
             }

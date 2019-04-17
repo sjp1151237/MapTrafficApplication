@@ -35,7 +35,7 @@ import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.OrderDetailActivity;
-import com.traffic.pd.adapter.HallListAdapter;
+import com.traffic.pd.adapter.OrderListAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
@@ -87,7 +87,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     private View mView;
 
-    HallListAdapter hallListAdapter;
+    OrderListAdapter hallListAdapter;
 
     int mPage,mSize;
 
@@ -134,7 +134,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             orderBeans = new ArrayList<>();
             mView = inflater.inflate(R.layout.fragment_order_hall, container, false);
             unbinder = ButterKnife.bind(this, mView);
-            hallListAdapter = new HallListAdapter(getContext(),orderBeans);
+            hallListAdapter = new OrderListAdapter(getContext(),orderBeans,"home");
             rcvHallList.setLayoutManager(new LinearLayoutManager(getContext()));
             rcvHallList.setAdapter(hallListAdapter);
             mPage = 1;

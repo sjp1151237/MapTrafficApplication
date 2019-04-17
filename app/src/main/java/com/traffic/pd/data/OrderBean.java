@@ -11,6 +11,37 @@ public class OrderBean implements Serializable {
     String         grab_num;
     String pics;
 
+    String b_country;
+
+    public String getCan_grab() {
+        return can_grab;
+    }
+
+    public void setCan_grab(String can_grab) {
+        this.can_grab = can_grab;
+    }
+
+    String can_grab;
+
+    public String getB_country() {
+        return b_country;
+    }
+
+    public void setB_country(String b_country) {
+        this.b_country = b_country;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    String mobile;
+
+
     public String getId() {
         return id;
     }
