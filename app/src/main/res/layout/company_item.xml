@@ -61,10 +61,19 @@
             android:layout_width="50dp"
             android:layout_height="match_parent">
             <ImageView
+                android:id="@+id/iv_next"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerInParent="true"
                 android:src="@mipmap/right"/>
+
+            <ImageView
+                android:id="@+id/iv_select"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/item_selector"
+                />
         </RelativeLayout>
     </LinearLayout>
 

@@ -1,6 +1,8 @@
 package com.traffic.pd.fragments;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +27,7 @@ import com.traffic.pd.activity.MyDriverActivity;
 import com.traffic.pd.activity.MyOrderActivity;
 import com.traffic.pd.activity.UpDetailActivity;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.services.AlarmReceiver;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PreferencesUtils;
 
@@ -167,6 +170,13 @@ public class UserFragment extends Fragment {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        AlarmManager manager = (AlarmManager) getActivity()
+                                .getSystemService(Context.ALARM_SERVICE);
+                        Intent intent1 = new Intent(getContext(), AlarmReceiver.class);
+                        PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0, intent1, 0);
+                        //取消正在执行的服务
+                        manager.cancel(pi);
 
                         getActivity().finish();
                         startActivity(new Intent(getContext(), LoginActivity.class));

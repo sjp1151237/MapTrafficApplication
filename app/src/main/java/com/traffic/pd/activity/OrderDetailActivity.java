@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +24,10 @@ import com.traffic.pd.MainActivity;
 import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.data.CarInfo;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
+import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
@@ -33,7 +36,9 @@ import com.traffic.pd.utils.PreferencesUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -93,7 +98,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
             if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
                 if (null != orderBean.getCan_grab()) {
                     if (orderBean.getCan_grab().equals("0")) {
-                        tvBtn.setText("Cancel");
+                        tvBtn.setVisibility(View.GONE);
                     }
                     if (orderBean.getCan_grab().equals("1")) {
                         tvBtn.setText("ADD");
@@ -189,7 +194,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
                             }
                             if (orderBean.getCan_grab().equals("1")) {
                                 if (MainActivity.userBean.getIdentity().equals("2")) {
-                                    toAddOrder();
+                                    toAddOrder(null);
                                 } else {
                                     toCars();
                                 }
@@ -265,15 +270,44 @@ public class OrderDetailActivity extends AppCompatActivity implements
     }
 
     // 公司跳转到自己的车辆
+    private static int TO_CAR = 1002;
     private void toCars() {
-
+        Intent intent = new Intent(this,MyDriverActivity.class);
+        intent.putExtra("type","dsfsdf");
+        startActivityForResult(intent,TO_CAR);
     }
 
-    private void toAddOrder() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(null == data){
+            return;
+        }
+        if (requestCode == TO_CAR ) {
+
+            ArrayList<String> cars = data.getStringArrayListExtra("cars");
+            if(null != cars && cars.size() > 0){
+                toAddOrder(cars);
+            }
+        }
+    }
+
+    private void toAddOrder(ArrayList<String> cars) {
         String url = Constant.GRAB_ORDER;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
         map.put("order_id", orderBean.getId());
+        if(null != cars){
+            StringBuilder carss = new StringBuilder();
+            for (int i = 0; i < cars.size(); i++) {
+                if(i == (cars.size() - 1)){
+                    carss.append(cars.get(i));
+                }else{
+                    carss.append(cars.get(i) + ",");
+                }
+            }
+            map.put("list", carss.toString());
+        }
         new PostRequest("toAddOrder", this, true)
                 .go(this, new PostRequest.PostListener() {
                     @Override

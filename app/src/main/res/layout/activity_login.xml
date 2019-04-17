@@ -14,20 +14,23 @@
     <EditText
         android:id="@+id/et_num"
         android:layout_width="match_parent"
+        android:background="@drawable/line_et_bg"
         android:layout_height="45dp"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
         android:gravity="center_vertical"
         android:textSize="16sp"
         android:textColor="@color/item_title_font"
         android:textColorHint="@color/item_content_font"
-        android:hint="phone num"/>
+        android:hint="phone num"
+        />
+
 
     <EditText
         android:id="@+id/et_psw"
         android:layout_width="match_parent"
+        android:background="@drawable/line_et_bg"
         android:layout_height="45dp"
         android:layout_margin="15dp"
         android:gravity="center_vertical"

@@ -13,6 +13,26 @@ public class CarInfo implements Serializable {
     String district;
     String introduce;
 
+    public String getDriver_id() {
+        return driver_id;
+    }
+
+    public void setDriver_id(String driver_id) {
+        this.driver_id = driver_id;
+    }
+
+    String driver_id;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
+
+    boolean isSelect;
+
     public String getIntroduce() {
         return introduce;
     }

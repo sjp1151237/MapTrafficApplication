@@ -26,6 +26,7 @@ import com.traffic.pd.data.UserBean;
 import com.traffic.pd.fragments.OrderHallFragment;
 import com.traffic.pd.fragments.PublishFragment;
 import com.traffic.pd.fragments.UserFragment;
+import com.traffic.pd.services.LocationUpService;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 import com.traffic.pd.utils.PreferencesUtils;
@@ -177,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
                             if (status == 1) {
                                 isDetailUp = true;
                                 if (userBean.getIdentity().equals("2")) {
+                                    Intent intent = new Intent(MainActivity.this, LocationUpService.class);
+                                    startService(intent);
                                     carInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CarInfo.class);
                                 }
                                 if (userBean.getIdentity().equals("3")) {

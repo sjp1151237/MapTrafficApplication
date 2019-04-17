@@ -1,6 +1,8 @@
 package com.traffic.pd.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import com.traffic.pd.R;
 import com.traffic.pd.adapter.DriversAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.CarInfo;
+import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
@@ -27,6 +30,7 @@ import com.traffic.pd.utils.PostRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +56,7 @@ public class MyDriverActivity extends AppCompatActivity {
     List<CarInfo> carInfoList;
     DriversAdapter driversAdapter;
 
+    String type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +66,13 @@ public class MyDriverActivity extends AppCompatActivity {
         tvBtn.setText("Add Driver");
         tvBtn.setVisibility(View.VISIBLE);
         niceDialog = NiceDialog.init();
-
+        type = getIntent().getStringExtra("type");
+        if(!TextUtils.isEmpty(type)){
+            tvBtn.setVisibility(View.VISIBLE);
+            tvBtn.setText("Sure");
+        }
         carInfoList = new ArrayList<>();
-        driversAdapter = new DriversAdapter(this,carInfoList);
+        driversAdapter = new DriversAdapter(this,carInfoList,type);
         rcvDriver.setLayoutManager(new LinearLayoutManager(this));
         rcvDriver.setAdapter(driversAdapter);
         if (null != MainActivity.userBean && !TextUtils.isEmpty(MainActivity.userBean.getUser_id())) {
@@ -82,7 +91,6 @@ public class MyDriverActivity extends AppCompatActivity {
                 .go(this, new PostRequest.PostListener() {
                     @Override
                     public TestBean postSuccessful(String response) {
-
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = new JSONObject(response);
@@ -164,28 +172,42 @@ public class MyDriverActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_btn:
-                niceDialog.setLayoutId(R.layout.add_driver_dialog).setConvertListener(new ViewConvertListener() {
-                    @Override
-                    protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+                if(TextUtils.isEmpty(type)){
+                    niceDialog.setLayoutId(R.layout.add_driver_dialog).setConvertListener(new ViewConvertListener() {
+                        @Override
+                        protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
 
-                        final EditText editText = holder.getView(R.id.et_driver);
-                        TextView tv_commit = holder.getView(R.id.tv_commit);
-                        tv_commit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                            final EditText editText = holder.getView(R.id.et_driver);
+                            TextView tv_commit = holder.getView(R.id.tv_commit);
+                            tv_commit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
-                                if(TextUtils.isEmpty(editText.getText().toString())){
-                                    ComUtils.showMsg(MyDriverActivity.this,"Please input driver's ID");
-                                    return;
-                                }else{
-                                    addDriver(editText.getText().toString());
-                                    niceDialog.dismiss();
+                                    if(TextUtils.isEmpty(editText.getText().toString())){
+                                        ComUtils.showMsg(MyDriverActivity.this,"Please input driver's ID");
+                                        return;
+                                    }else{
+                                        addDriver(editText.getText().toString());
+                                        niceDialog.dismiss();
+                                    }
+
                                 }
-
-                            }
-                        });
+                            });
+                        }
+                    }).setDimAmount(0.3f).setShowBottom(true).show(getSupportFragmentManager());
+                }else{
+                    ArrayList<String> cars = new ArrayList<>();
+                    for (int i = 0; i < carInfoList.size(); i++) {
+                        if(carInfoList.get(i).isSelect()){
+                            cars.add(carInfoList.get(i).getDriver_id());
+                        }
                     }
-                }).setDimAmount(0.3f).setShowBottom(true).show(getSupportFragmentManager());
+                    Intent intent = new Intent();
+                    intent.putStringArrayListExtra("cars", cars);
+                    setResult(0, intent);
+                    finish();
+                }
+
                 break;
         }
     }

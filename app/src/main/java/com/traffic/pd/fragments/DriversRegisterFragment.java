@@ -210,6 +210,7 @@ public class DriversRegisterFragment extends Fragment {
                             public void run() {
                                 Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.companyInfo.getLicense_pic());
                                 Message msg = new Message();
+                                msg.what = 2;
                                 msg.obj = drawable;
                                 handler.sendMessage(msg);
                             }
@@ -249,7 +250,7 @@ public class DriversRegisterFragment extends Fragment {
                 if(null != MainActivity.carInfo){
                     tvCarType.setText(MainActivity.carInfo.getType());
                     tvLocation.setText(MainActivity.carInfo.getCode());
-                    etPhoneNum.setText(MainActivity.companyInfo.getMobile().replace(MainActivity.companyInfo.getCode(),""));
+                    etPhoneNum.setText(MainActivity.carInfo.getMobile().replace(MainActivity.carInfo.getCode(),""));
                     et_company_name.setText(MainActivity.carInfo.getDriver());
                     tvCountry.setText(MainActivity.carInfo.getCountry());
                     tvProvince.setText(MainActivity.carInfo.getProvince());
@@ -257,9 +258,18 @@ public class DriversRegisterFragment extends Fragment {
                     tvDistrict.setText(MainActivity.carInfo.getDistrict());
                     tvAddressDetail.setText(MainActivity.carInfo.getAddress());
                     etCarLicenseNum.setText(MainActivity.carInfo.getLicense_num());
-                    Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.carInfo.getCar_num_pic());
-                    ivCarLicenseNum.setImageDrawable(drawable);
-
+                    if(null != MainActivity.carInfo.getCar_num_pic()){
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Drawable drawable = ComUtils.loadImageFromNetwork(MainActivity.carInfo.getCar_num_pic());
+                                Message msg = new Message();
+                                msg.obj = drawable;
+                                msg.what = 1;
+                                handler.sendMessage(msg);
+                            }
+                        }).start();
+                    }
                     etIntroduce.setText(MainActivity.carInfo.getIntroduce());
                     // 审核中
                     // 审核失败
@@ -268,13 +278,13 @@ public class DriversRegisterFragment extends Fragment {
                         imgs.clear();
                         imgs.add("");
                         if(null != MainActivity.carInfo.getCar_pic() && MainActivity.carInfo.getCar_pic().size() > 0){
-                            imgs.addAll(imgs);
+                            imgs.addAll(MainActivity.carInfo.getCar_pic());
                         }
                         imgAdapter.notifyDataSetChanged();
                     }else{
                         imgs.clear();
                         if(null != MainActivity.carInfo.getCar_pic() && MainActivity.carInfo.getCar_pic().size() > 0){
-                            imgs.addAll(imgs);
+                            imgs.addAll(MainActivity.carInfo.getCar_pic());
                         }
                         rcvPic.setEnabled(false);
                         imgAdapter.notifyDataSetChanged();

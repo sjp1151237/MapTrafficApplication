@@ -409,10 +409,27 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
-        Intent intent = new Intent(getContext(), OrderDetailActivity.class);
-        intent.putExtra("info",orderBean);
-        startActivity(intent);
+        if(MainActivity.userBean.getIdentity().equals("2")){
+            if(null != MainActivity.carInfo && MainActivity.carInfo.getStatus().equals("2")){
+                OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
+                Intent intent = new Intent(getContext(), OrderDetailActivity.class);
+                intent.putExtra("info",orderBean);
+                startActivity(intent);
+            }
+        }else{
+            ComUtils.showMsg(getContext(),"审核通过才能接单");
+        }
+        if(MainActivity.userBean.getIdentity().equals("3")){
+            if(null != MainActivity.companyInfo && MainActivity.companyInfo.getStatus().equals("2")){
+                OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
+                Intent intent = new Intent(getContext(), OrderDetailActivity.class);
+                intent.putExtra("info",orderBean);
+                startActivity(intent);
+            }
+        }else{
+            ComUtils.showMsg(getContext(),"审核通过才能接单");
+        }
+
         ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
     }
 }
