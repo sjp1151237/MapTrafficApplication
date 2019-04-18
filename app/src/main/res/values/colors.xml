@@ -15,4 +15,6 @@
     <color name="color_white_80">#ccffffff</color>
     <color name="color_black_50">#80000000</color>
 
+    <color name="colorTip">#CC3333</color>
+
 </resources>

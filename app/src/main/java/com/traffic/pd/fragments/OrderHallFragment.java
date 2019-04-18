@@ -1,7 +1,10 @@
 package com.traffic.pd.fragments;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -37,6 +40,8 @@ import com.traffic.pd.R;
 import com.traffic.pd.activity.OrderDetailActivity;
 import com.traffic.pd.adapter.OrderListAdapter;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.constant.EventMessage;
+import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.services.LongPressLocationSource;
@@ -44,6 +49,9 @@ import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.GoogleMapManager;
 import com.traffic.pd.utils.PostRequest;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,10 +82,6 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @BindView(R.id.tv_pos)
-    TextView tvPos;
-    @BindView(R.id.ll_pos)
-    LinearLayout llPos;
     @BindView(R.id.rcv_hall_list)
     RecyclerView rcvHallList;
     Unbinder unbinder;
@@ -107,6 +111,8 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     private LongPressLocationSource mLocationSource;
     GoogleMapManager googleMapManager;
 
+    MyReceive myReceive;
+
     public static OrderHallFragment newInstance(String param1, String param2) {
 
         Bundle args = new Bundle();
@@ -131,6 +137,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (null == mView) {
+            EventBus.getDefault().register(this);
             orderBeans = new ArrayList<>();
             mView = inflater.inflate(R.layout.fragment_order_hall, container, false);
             unbinder = ButterKnife.bind(this, mView);
@@ -142,6 +149,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             isMapReady = false;
             isDataLoad = false;
             isAddMaker = false;
+
             loadData();
 
             mLocationSource = new LongPressLocationSource(this);
@@ -151,16 +159,6 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 new OnMapAndViewReadyListener(mapFragment, this);
             }
             googleMapManager = new GoogleMapManager(getContext(), this);
-
-
-//            loadDataR();
-
-            mView.findViewById(R.id.ll_pos).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getContext(), MainActivityDemo.class));
-                }
-            });
 
         }
         return mView;
@@ -176,6 +174,19 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     public void onPause() {
         super.onPause();
         mLocationSource.onPause();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getEventMessage(EventMessage eventMessage) {
+        switch (eventMessage.getType()) {
+            case EventMessage.REFRESH_ORDER_HALL_DATA:
+                try {
+                    refreshData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 
     private void loadDataR() {
@@ -269,13 +280,8 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         if(null != unbinder){
             unbinder.unbind();
         }
+        EventBus.getDefault().unregister(this);
     }
-
-    @OnClick(R.id.ll_pos)
-    public void onViewClicked() {
-
-    }
-
 
     public void refreshData(){
         mPage = 1;
@@ -330,8 +336,6 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         enableMyLocation();
 
         googleMapManager.getMyLocation();
-        mUiSettings = mMap.getUiSettings();
-        mUiSettings.setZoomControlsEnabled(true);
 
         if(isDataLoad && !isAddMaker){
             addMakers();
@@ -432,4 +436,13 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
         ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
     }
+
+    class MyReceive extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    }
+
 }

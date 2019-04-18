@@ -45,7 +45,12 @@ public class Constant {
 
     public static String ORDER_DTIVERS = HOST + "/api/user/order_drivers";
 
+    public static String GRAB_DEL = HOST + "/api/user/grab_del";
 
+
+    public static String ORDER_EDIT = HOST + "/api/user/order_edit";
+
+    public static String ORDER_CONFIRM = HOST + "/api/user/order_driver_confirm";
 
     public static final int REQUEST_CODE = 1024;
 }

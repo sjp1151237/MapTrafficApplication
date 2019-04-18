@@ -1,9 +1,6 @@
 package com.traffic.pd.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,10 +17,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.othershe.nicedialog.BaseNiceDialog;
+import com.othershe.nicedialog.NiceDialog;
+import com.othershe.nicedialog.ViewConvertListener;
+import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.constant.EventMessage;
 import com.traffic.pd.data.CarInfo;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
@@ -33,6 +35,7 @@ import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 import com.traffic.pd.utils.PreferencesUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,12 +85,15 @@ public class OrderDetailActivity extends AppCompatActivity implements
 
     String fromWhere;
 
+    NiceDialog niceDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
         ButterKnife.bind(this);
-
+        tvTitle.setText(R.string.order_detail);
+        niceDialog = NiceDialog.init();
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         new OnMapAndViewReadyListener(mapFragment, this);
@@ -107,27 +113,30 @@ public class OrderDetailActivity extends AppCompatActivity implements
             }
         }
         if (fromWhere.equals("user")) {
-            if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+            if (MainActivity.userBean.getIdentity().equals("2")) {
                 // 审核中、发布中 可以取消订单
                 if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
-                    tvBtn.setText("Cancel");
+                    tvBtn.setText(R.string.cancel);
                 }
                 // 以拒绝、已完成 可以删除订单
                 if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
-                    tvBtn.setText("Delete");
+//                    tvBtn.setText("Delete");
+                    tvBtn.setVisibility(View.GONE);
                 }
                 // 进行中只有发布者可以操作
                 if (orderBean.getStatus().equals("4")) {
                     tvBtn.setVisibility(View.GONE);
                 }
+            }else if(MainActivity.userBean.getIdentity().equals("3")){
+                tvBtn.setVisibility(View.GONE);
             } else {
                 // 待审核/发布中
                 if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
-                    tvBtn.setText("Cancel");
+                    tvBtn.setText(R.string.oper);
                 }
                 // 已拒绝
                 if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
-                    tvBtn.setText("Delete");
+                    tvBtn.setVisibility(View.GONE);
                 }
                 // 进行中只有发布者可以操作
                 if (orderBean.getStatus().equals("4")) {
@@ -136,7 +145,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
             }
         }
 
-        tvAddCars.setText("已有" + orderBean.getGrab_num() + "辆车接单");
+        tvAddCars.setText(String.format("已有%s辆车接单",orderBean.getGrab_num()));
         if (null != orderBean) {
             tvGetPhone.setText(orderBean.getRecive_mobile());
             tvSendPhone.setText(orderBean.getB_country() + orderBean.getMobile());
@@ -176,7 +185,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn,R.id.ll_call_send, R.id.ll_call_get})
+    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn,R.id.ll_call_send, R.id.ll_call_get,R.id.ll_cars})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -219,15 +228,42 @@ public class OrderDetailActivity extends AppCompatActivity implements
                     } else {
                         // 待审核/发布中
                         if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
-                            userCancelOrder();
+
+                            niceDialog.setLayoutId(R.layout.order_confirm_dialog).setConvertListener(new ViewConvertListener() {
+                                @Override
+                                protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+                                    TextView tv_confirm = holder.getView(R.id.tv_confirm);
+                                    TextView tv_over = holder.getView(R.id.tv_over);
+
+                                    tv_confirm.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(OrderDetailActivity.this,OrderDriversActivity.class);
+                                            intent.putExtra("id",orderBean.getId());
+                                            intent.putExtra("status",orderBean.getStatus());
+                                            startActivityForResult(intent,REFRESH_UI);
+                                            niceDialog.cancelDialog();
+                                        }
+                                    });
+                                    tv_over.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            userOverOrder();
+                                            niceDialog.cancelDialog();
+                                        }
+                                    });
+                                }
+                            }).setDimAmount(0.3f).setShowBottom(true).show(getSupportFragmentManager());
+
                         }
                         // 已拒绝
                         if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
-                            userDeleteOrder();
+                            
                         }
                         // 进行中只有发布者可以操作
                         if (orderBean.getStatus().equals("4")) {
-                            tvBtn.setVisibility(View.GONE);
+                            // 订单完成
+                            userOverOrder();
                         }
                     }
                 }
@@ -246,31 +282,107 @@ public class OrderDetailActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 }
                 break;
+            case R.id.ll_cars:
+                if(MainActivity.userBean.getIdentity().equals(2)){
+                    ComUtils.showMsg(OrderDetailActivity.this,"don't have permission");
+                    return;
+                }
+                Intent intent = new Intent(OrderDetailActivity.this,OrderDriversActivity.class);
+                intent.putExtra("id",orderBean.getId());
+                intent.putExtra("status",orderBean.getStatus());
+                startActivityForResult(intent,REFRESH_UI);
+                break;
         }
     }
 
-    // 用户删除订单
-    private void userDeleteOrder() {
+    // 用户自动完成订单
+    private void userOverOrder() {
+        String url = Constant.ORDER_EDIT;
+        Map<String, String> map = new HashMap<>();
+        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("order_id", orderBean.getId());
+        map.put("status", "5");
+        new PostRequest("userOverOrder", this, true)
+                .go(this, new PostRequest.PostListener() {
+                    @Override
+                    public TestBean postSuccessful(String response) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            int status = jsonObject.getInt("status");
+                            if (status == 1) {
+                                // 刷新数据
+                                EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
+                                ComUtils.showMsg(OrderDetailActivity.this, "success");
+                            }else{
+                                ComUtils.showMsg(OrderDetailActivity.this, "fali");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
 
+                    @Override
+                    public void postError(String error) {
+                        super.postError(error);
+                        ComUtils.showMsg(OrderDetailActivity.this, "error");
+                    }
+
+                    @Override
+                    public void postNull() {
+                        super.postNull();
+                    }
+                }, url, map);
     }
 
-    // 用户取消订单
-    private void userCancelOrder() {
-
-    }
-
-    // 司机删除订单
+    // 司机删除订单 保留
     private void driverDeleteOrder() {
 
     }
 
     // 司机取消订单
     private void driverCancelOrder() {
+        String url = Constant.GRAB_DEL;
+        Map<String, String> map = new HashMap<>();
+        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("order_id", orderBean.getId());
+        new PostRequest("toAddOrder", this, true)
+                .go(this, new PostRequest.PostListener() {
+                    @Override
+                    public TestBean postSuccessful(String response) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            int status = jsonObject.getInt("status");
+                            if (status == 1) {
+                                // 刷新数据
+                                EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
+                                ComUtils.showMsg(OrderDetailActivity.this, "success");
+                                tvBtn.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
 
+                    @Override
+                    public void postError(String error) {
+                        super.postError(error);
+                        ComUtils.showMsg(OrderDetailActivity.this, "error");
+                    }
+
+                    @Override
+                    public void postNull() {
+                        super.postNull();
+                    }
+                }, url, map);
     }
 
     // 公司跳转到自己的车辆
     private static int TO_CAR = 1002;
+    private static int REFRESH_UI = 1003;
     private void toCars() {
         Intent intent = new Intent(this,MyDriverActivity.class);
         intent.putExtra("type","dsfsdf");
@@ -284,11 +396,17 @@ public class OrderDetailActivity extends AppCompatActivity implements
             return;
         }
         if (requestCode == TO_CAR ) {
-
             ArrayList<String> cars = data.getStringArrayListExtra("cars");
             if(null != cars && cars.size() > 0){
                 toAddOrder(cars);
             }
+        }
+        if(requestCode == REFRESH_UI){
+
+            Log.e("toEditOrder","订单开始，刷新UI");
+            tvBtn.setEnabled(false);
+            tvBtn.setText(R.string.order_begin);
+
         }
     }
 
@@ -316,9 +434,11 @@ public class OrderDetailActivity extends AppCompatActivity implements
                         try {
                             jsonObject = new JSONObject(response);
                             int status = jsonObject.getInt("status");
-                            ComUtils.showMsg(OrderDetailActivity.this, jsonObject.getString("msg"));
                             if (status == 1) {
-
+                                // 刷新数据
+                                EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
+                                ComUtils.showMsg(OrderDetailActivity.this, "success");
+                                tvBtn.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -329,6 +449,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
                     @Override
                     public void postError(String error) {
                         super.postError(error);
+                        ComUtils.showMsg(OrderDetailActivity.this, "error");
                     }
 
                     @Override
