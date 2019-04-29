@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.Volley;
+import com.traffic.pd.utils.CrashHandler;
 
 public class MyApplication extends Application {
 
@@ -19,6 +20,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        CrashHandler.getInstance().init(this);
     }
 
     private final String TAG = "MyApplication";

@@ -53,10 +53,11 @@ public class CarDetailActivity extends AppCompatActivity {
         imgs = new ArrayList<>();
         carInfo = (CarInfo) getIntent().getSerializableExtra("info");
 
-        tvDriver.setText(carInfo.getDriver());
-        tvMobile.setText(carInfo.getMobile());
-        tvIntro.setText(carInfo.getIntroduce());
-        tvLocation.setText("location : "+carInfo.getCountry()  + "   "+ carInfo.getProvince()+ "   " + carInfo.getCity()+ "   " + carInfo.getDistrict()+ "   " + carInfo.getAddress());
+        tvTitle.setText("车辆详情");
+        tvDriver.setText("司机："+carInfo.getDriver());
+        tvMobile.setText("联系方式："+carInfo.getMobile());
+        tvIntro.setText("车辆介绍："+carInfo.getIntroduce());
+        tvLocation.setText("地址 : "+carInfo.getCountry()  + "   "+ carInfo.getProvince()+ "   " + carInfo.getCity()+ "   " + carInfo.getDistrict()+ "   " + carInfo.getAddress());
 
         if(null != carInfo.getCar_num_pic()){
             imgs.add(carInfo.getCar_num_pic());
@@ -74,8 +75,11 @@ public class CarDetailActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
+
+                finish();
                 break;
             case R.id.tv_commit:
+
                 break;
         }
     }

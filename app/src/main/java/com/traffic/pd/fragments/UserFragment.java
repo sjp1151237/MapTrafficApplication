@@ -124,6 +124,13 @@ public class UserFragment extends Fragment {
 
             if (null != MainActivity.userBean) {
                 myName.setText(ComUtils.formatString(MainActivity.userBean.getNickname()));
+
+                if(MainActivity.userBean.getIdentity().equals("1")){
+                    rlToShare.setVisibility(View.GONE);
+                }else{
+                    rlToShare.setVisibility(View.VISIBLE);
+                }
+
             }
 
         }
@@ -143,8 +150,8 @@ public class UserFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.take_picture:
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(), LoginActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.ll_order_center:
                 Intent intent1 = new Intent(getActivity(), MyOrderActivity.class);

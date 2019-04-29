@@ -234,12 +234,14 @@
                 android:textSize="16sp" />
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/put_time_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

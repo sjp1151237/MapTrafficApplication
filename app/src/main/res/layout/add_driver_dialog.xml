@@ -19,7 +19,7 @@
         android:textSize="16sp"
         android:textColor="@color/item_title_font"
         android:textColorHint="@color/item_content_font"
-        android:hint="Driver ID"/>
+        android:hint="车牌号"/>
 
     <TextView
         android:id="@+id/tv_commit"
@@ -27,6 +27,7 @@
         android:layout_height="45dp"
         android:background="@color/colorPrimary"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center"
         android:text="commint"
         android:textSize="16sp"

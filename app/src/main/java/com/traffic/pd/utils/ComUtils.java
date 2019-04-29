@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,7 +34,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -145,22 +152,74 @@ public class ComUtils {
      * @param activity
      * @param tv
      */
-    public static void showDatePickerDialog(Activity activity, final TextView tv) {
+    public static void showDatePickerDialog(final Activity activity, final TextView tv) {
         Calendar calendar = Calendar.getInstance();
         // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
         new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
             // 绑定监听器(How the parent is notified that the date is set.)
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String date = year+"-" + monthOfYear+"-"+dayOfMonth;
+                if(compareDate(date,getNowDate()) == 1){
+                    tv.setText("You select ：" + year + "YEAR" + (monthOfYear + 1) + "MONTH" + dayOfMonth + "DAY");
+                    try {
+                        tv.setTag(dateToStamp(date));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    tv.setText("请选择今天或今天以后的日期");
+                }
                 // 此处得到选择的时间，可以进行你想要的操作
-                tv.setText("您选择了：" + year + "年" + (monthOfYear + 1) + "月" + dayOfMonth + "日");
-
             }
         }
                 // 设置初始日期
                 , calendar.get(Calendar.YEAR)
                 , calendar.get(Calendar.MONTH)
                 , calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    /**
+     *
+     * @param dateSelect
+     * @param dateNow
+     * @return
+     */
+    public static int compareDate(String dateSelect, String dateNow){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dt1 = df.parse(dateSelect);
+            Date dt2 = df.parse(dateNow);
+            if (dt1.getTime() > dt2.getTime()) {
+                return 1;
+            } else if (dt1.getTime() < dt2.getTime()) {
+                System.out.println("dt1在dt2后");
+                return -1;
+            } else {
+                return 0;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static String getNowDate() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        return  df.format(new Date());// new Date()为获取当前系统时间
+    }
+
+
+    /*
+     * 将时间转换为时间戳
+     */
+    public static String dateToStamp(String s) throws ParseException{
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime();
+        res = String.valueOf(ts);
+        return res;
     }
 
     /**
@@ -255,6 +314,59 @@ public class ComUtils {
             }
         }).create();
         builder.show();
+    }
+
+    public static String time2Date(Long timeLong){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//要转换的时间格式
+        Date date;
+        try {
+            date = sdf.parse(sdf.format(timeLong));
+            return sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    private static String judgeProvider(Activity activity,LocationManager locationManager) {
+        List<String> prodiverlist = locationManager.getProviders(true);
+        if(prodiverlist.contains(LocationManager.NETWORK_PROVIDER)){
+            return LocationManager.NETWORK_PROVIDER;//网络定位
+        }else if(prodiverlist.contains(LocationManager.GPS_PROVIDER)) {
+            return LocationManager.GPS_PROVIDER;//GPS定位
+        }else{
+            Toast.makeText(activity,"没有可用的位置提供器",Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
+
+    public static Location beginLocatioon(Activity activity) {
+        String serviceString = Context.LOCATION_SERVICE;// 获取的是位置服务
+        //获得位置服务
+        LocationManager locationManager = (LocationManager) activity.getSystemService(serviceString);
+        String provider = judgeProvider(activity,locationManager);
+        //有位置提供器的情况
+        if (provider != null) {
+            //为了压制getLastKnownLocation方法的警告
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return null;
+            }
+            return locationManager.getLastKnownLocation(provider);
+        }else{
+            //不存在位置提供器的情况
+            Toast.makeText(activity,"不存在位置提供器的情况",Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
+
+    public static String formatDoubleThree(double lt){
+        DecimalFormat df = new DecimalFormat("#.000");
+        String str = df.format(lt);
+        return str;
+
     }
 
 }

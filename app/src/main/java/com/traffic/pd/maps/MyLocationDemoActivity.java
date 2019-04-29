@@ -29,21 +29,30 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.EventMessage;
@@ -115,6 +124,10 @@ public class MyLocationDemoActivity extends AppCompatActivity
     };
     Address address;
     LatLng latLng;
+
+    Marker markerLongClick;
+
+    private FusedLocationProviderClient mFusedLocationProviderClient;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventMessage(EventMessage eventMessage) {
         switch (eventMessage.getType()) {
@@ -123,8 +136,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
                     if (eventMessage.getObject() instanceof Address) {
                         address = (Address) eventMessage.getObject();
                         if (null != address) {
-                            tvPos.setText(address.getCountryName() + "   " + address.getAdminArea() + "    " + address.getLocality() + "    " + address.getSubLocality());
-                            tvPos2.setText(address.getLatitude() + "    " + address.getLongitude());
+                            tvPos.setText(ComUtils.formatString(address.getCountryName()) + "   " + ComUtils.formatString(address.getAdminArea()) + "    " + ComUtils.formatString(address.getLocality()) + "    " + ComUtils.formatString(address.getSubLocality()));
+                            tvPos2.setText(ComUtils.formatDoubleThree(address.getLatitude()) + "    " + ComUtils.formatDoubleThree(address.getLongitude()));
                         }
                     }
                     if (eventMessage.getObject() instanceof LatLng) {
@@ -155,7 +168,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
         setContentView(R.layout.my_location_demo);
         ButterKnife.bind(this);
 
-        mLocationSource = new LongPressLocationSource(this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         tvBtn.setText("sure");
         tvBtn.setVisibility(View.VISIBLE);
         tvTitle.setText("Location");
@@ -170,29 +183,74 @@ public class MyLocationDemoActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mLocationSource.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mLocationSource.onPause();
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        map.setLocationSource(mLocationSource);
-        map.setOnMapLongClickListener(mLocationSource);
+        mUiSettings = mMap.getUiSettings();
+        mUiSettings.setMyLocationButtonEnabled(true);
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if(mMap != null){
+                    if(null != markerLongClick){
+                        markerLongClick.remove();
+                    }
+                    markerLongClick = mMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+                    address = null;
+                    Intent intent = new Intent(MyLocationDemoActivity.this, FetchAddressIntentService.class);
+                    intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
+                    intent.putExtra(FetchAddressIntentService.LATLNG_DATA_EXTRA, latLng);
+                    startService(intent);
+                }
+            }
+        });
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         enableMyLocation();
 
         googleMapManager.getMyLocation();
-        mUiSettings = mMap.getUiSettings();
+
         mUiSettings.setZoomControlsEnabled(true);
+        mUiSettings.setCompassEnabled(true);
+
+        mUiSettings.setScrollGesturesEnabled(true);
+        mUiSettings.setZoomGesturesEnabled(true);
+        mUiSettings.setTiltGesturesEnabled(true);
+        mUiSettings.setRotateGesturesEnabled(true);
+
+//        getDeviceLocation();
+
 //
 
+    }
+
+    //这个方法在地图的onMapReady方法中执行
+    private void getDeviceLocation() {
+        try {
+            Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+            locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    if (task.isSuccessful()) {
+                        Location location = task.getResult();
+                        //获取到当前的经纬度传入movecamera中就ok了
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13.0f));
+                    }
+                }
+            });
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
     }
 
     private void toMyLoc() {
@@ -223,6 +281,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
      * Enables the My Location layer if the fine location permission has been granted.
      */
     private void enableMyLocation() {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
@@ -284,18 +343,17 @@ public class MyLocationDemoActivity extends AppCompatActivity
 
     @Override
     public void getLoc(LatLng location) {
+        Log.e("getLoc","获取定位信息==========");
         if (null != location) {
             LatLngBounds bounds = new LatLngBounds.Builder()
                     .include(location)
                     .build();
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+
+            resetLoc(location);
 //            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
 
             address = null;
-            Intent intent = new Intent(this, FetchAddressIntentService.class);
-            intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
-            intent.putExtra(FetchAddressIntentService.LATLNG_DATA_EXTRA, location);
-            startService(intent);
+
         }
     }
 
@@ -332,13 +390,16 @@ public class MyLocationDemoActivity extends AppCompatActivity
 
     @Override
     public void resetLoc(LatLng point) {
+        Log.e("getLoc","resetLoc 重新设置位置==========");
+        if(null != markerLongClick){
+            markerLongClick.remove();
+        }
+        address = null;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(point.latitude, point.longitude), 16.0f));
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
         intent.putExtra(FetchAddressIntentService.LATLNG_DATA_EXTRA, point);
         startService(intent);
     }
-
-    private LongPressLocationSource mLocationSource;
-
 
 }

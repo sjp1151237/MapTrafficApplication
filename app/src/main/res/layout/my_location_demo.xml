@@ -20,6 +20,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     >
+
     <include layout="@layout/common_title"/>
 
     <TextView
@@ -39,7 +40,7 @@
         android:layout_marginLeft="15dp"
         android:gravity="center_vertical"
         android:textSize="16sp"
-        android:text="30.26 123.56"
+        android:text=""
         android:textColor="@color/item_content_font"/>
 
     <FrameLayout

@@ -28,6 +28,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.traffic.pd.utils.ComUtils;
+
 /**
  * The main activity of the API library demo gallery.
  * <p>
@@ -83,6 +85,8 @@ public final class MainActivityDemo extends AppCompatActivity
         list.setAdapter(adapter);
         list.setOnItemClickListener(this);
         list.setEmptyView(findViewById(R.id.empty));
+
+        ComUtils.getLocationPermission(this);
     }
 
     @Override

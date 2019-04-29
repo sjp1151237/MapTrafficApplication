@@ -121,7 +121,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             fresco:actualImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/test02"
             fresco:roundAsCircle="false"
             fresco:roundingBorderColor="@color/white"
             fresco:roundingBorderWidth="1dp" />

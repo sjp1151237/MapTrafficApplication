@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
@@ -41,6 +42,15 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
     public void onBindViewHolder(@NonNull HallViewHolder hallViewHolder, final int i) {
         final OrderBean orderBean = orderBeans.get(i);
 
+        hallViewHolder.tv_begin.setText("开始地址："+orderBean.getCountry() + "  "+orderBean.getProvince()+ "  "+ orderBean.getCity());
+        hallViewHolder.tv_over.setText("目的地址："+orderBean.getRecive_country() + "  "+orderBean.getRecive_province()+ "  "+ orderBean.getRecive_city());
+
+        hallViewHolder.tv_state.setText(stateString(orderBean.getStatus()));
+        try{
+            hallViewHolder.tv_time.setText("开始时间："+ComUtils.time2Date(Long.parseLong(orderBean.getStart_time()) * 1000L));
+        }catch (Exception e){
+
+        }
         hallViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,10 +120,37 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
         return orderBeans.size();
     }
 
-    class HallViewHolder extends RecyclerView.ViewHolder {
 
+    class HallViewHolder extends RecyclerView.ViewHolder {
+        TextView tv_begin,tv_state;
+        TextView tv_over;
+        TextView tv_time;
         public HallViewHolder(@NonNull View itemView) {
             super(itemView);
+            tv_begin = itemView.findViewById(R.id.tv_begin);
+            tv_over = itemView.findViewById(R.id.tv_over);
+            tv_time = itemView.findViewById(R.id.tv_time);
+            tv_state = itemView.findViewById(R.id.tv_state);
+
         }
+    }
+
+    private String stateString(String state){
+        if(state.equals("1")){
+            return mContext.getString(R.string.state_verify);
+        }
+        if(state.equals("2")){
+            return mContext.getString(R.string.state_publishing);
+        }
+        if(state.equals("3")){
+            return mContext.getString(R.string.state_cancel);
+        }
+        if(state.equals("4")){
+            return mContext.getString(R.string.state_ing);
+        }
+        if(state.equals("5")){
+            return mContext.getString(R.string.state_over);
+        }
+        return "";
     }
 }

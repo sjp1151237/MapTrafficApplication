@@ -70,7 +70,6 @@ public class PublishFragment extends Fragment {
     LinearLayout llPhoneCode;
     @BindView(R.id.tv_phone_code)
     TextView tvPhoneCode;
-    Unbinder unbinder1;
     @BindView(R.id.put_time_hour)
     TextView putTimeHour;
     private View mView;
@@ -92,7 +91,6 @@ public class PublishFragment extends Fragment {
             carSelect = new ArrayList<>();
             EventBus.getDefault().register(this);
         }
-        unbinder1 = ButterKnife.bind(this, mView);
         return mView;
     }
     StringBuilder carSelects;
@@ -142,7 +140,7 @@ public class PublishFragment extends Fragment {
             tvPhoneCode.setText("+" + phoneCodeBean.getD());
         }
         if (requestCode == Location_map_s) {
-            addressS = (Address) data.getSerializableExtra("address");
+            addressS = (Address) data.getParcelableExtra("address");
             if (null != addressS) {
                 String addresss = ComUtils.formatString(addressS.getCountryName()) + "  " + ComUtils.formatString(addressS.getAdminArea()) + "   " + ComUtils.formatString(addressS.getLocality()) + "   " + ComUtils.formatString(addressS.getSubLocality());
                 putShippingAddress.setText(addresss);
@@ -150,7 +148,7 @@ public class PublishFragment extends Fragment {
         }
 
         if (requestCode == Location_map_g) {
-            addressG = (Address) data.getSerializableExtra("address");
+            addressG = (Address) data.getParcelableExtra("address");
             if (null != addressG) {
                 String addresss = ComUtils.formatString(addressG.getCountryName()) + "  " + ComUtils.formatString(addressG.getAdminArea()) + "   " + ComUtils.formatString(addressG.getLocality()) + "   " + ComUtils.formatString(addressG.getSubLocality());
                 putReceiptAddress.setText(addresss);
@@ -187,14 +185,14 @@ public class PublishFragment extends Fragment {
                     return;
                 }
 
-//                if(null == addressS){
-//                    ComUtils.showMsg(getContext(),"Please input shipping address.");
-//                    return;
-//                }
-//                if(null == addressG){
-//                    ComUtils.showMsg(getContext(),"Please input the receipt address.");
-//                    return;
-//                }
+                if(null == addressS){
+                    ComUtils.showMsg(getContext(),"Please input shipping address.");
+                    return;
+                }
+                if(null == addressG){
+                    ComUtils.showMsg(getContext(),"Please input the receipt address.");
+                    return;
+                }
                 if(TextUtils.isEmpty(putName.getText().toString())){
                     ComUtils.showMsg(getContext(),"Please enter the consignee's name.");
                     return;
@@ -211,10 +209,10 @@ public class PublishFragment extends Fragment {
                     ComUtils.showMsg(getContext(),"Please enter the appointment Date.");
                     return;
                 }
-                if(putTimeHour.getText().toString().contains("Please")){
-                    ComUtils.showMsg(getContext(),"Please enter the appointment time.");
-                    return;
-                }
+//                if(putTimeHour.getText().toString().contains("Please")){
+//                    ComUtils.showMsg(getContext(),"Please enter the appointment time.");
+//                    return;
+//                }
 
                 upOrder();
 
@@ -229,30 +227,24 @@ public class PublishFragment extends Fragment {
         map.put("car_type", carSelects.toString());
         map.put("num", String.valueOf(carNum));
 
-        map.put("lat", "30");
-        map.put("long", "120");
-//        map.put("lat", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLatitude()))));
-//        map.put("long", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
-//        map.put("country", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getCountryName()))));
-//        map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
-//        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
-//        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
+        map.put("lat", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLatitude()))));
+        map.put("long", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
+        map.put("country", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getCountryName()))));
+        map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
+        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
+        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
 
-//        map.put("address", String.valueOf(ComUtils.formatString(String.valueOf(addressS.get()))));
-        map.put("recive_lat", "20");
-        map.put("recive_long", "105");
-//        map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
-//        map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
-//        map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));
-//        map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
-//        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
-//        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
+        map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
+        map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
+        map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));
+        map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
+        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
+        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
 
-//        map.put("recive_address", String.valueOf(address.getLongitude()));
         map.put("recive_mobile", phoneCodeBean.getD() + putPhoneNum.getText().toString());
         map.put("recive_name", putName.getText().toString());
 
-        map.put("start_time", String.valueOf(new Date().getTime()));
+        map.put("start_time", putTime.getTag().toString());
 
         new PostRequest("upInfo", getContext(), true)
                 .go(getContext(), new PostRequest.PostListener() {
@@ -265,8 +257,9 @@ public class PublishFragment extends Fragment {
                             int status = jsonObject.getInt("status");
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
-
                                 ComUtils.showMsg(getContext(),"订单发布成功");
+
+                                EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

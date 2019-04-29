@@ -24,7 +24,6 @@
                 android:id="@+id/tv_begin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="anhui to shanghai"
                 android:textSize="16sp"
                 android:textColor="@color/item_title_font"/>
 
@@ -33,11 +32,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="大货车5辆 中小型车10辆"
+                android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/item_title_font"/>
 
             <TextView
+                android:id="@+id/tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="@color/colorTip"/>
+
+            <TextView
+                android:id="@+id/tv_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"

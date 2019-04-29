@@ -18,11 +18,15 @@ import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.adapter.OrderListAdapter;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.constant.EventMessage;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,6 +77,7 @@ public class MyOrderFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (null == mView) {
+            EventBus.getDefault().register(this);
             mView = inflater.inflate(R.layout.my_order_fragment, container, false);
             rcvList = mView.findViewById(R.id.rcv_list);
             tvLoading = mView.findViewById(R.id.tv_loading);
@@ -104,6 +109,7 @@ public class MyOrderFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     private void loadData() {
@@ -169,5 +175,18 @@ public class MyOrderFragment extends Fragment {
                         tvLoading.setText("load error");
                     }
                 }, url, map);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getEventMessage(EventMessage eventMessage) {
+        switch (eventMessage.getType()) {
+            case EventMessage.REFRESH_ORDER_HALL_DATA:
+                try {
+                    loadData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 }

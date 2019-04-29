@@ -24,7 +24,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.OrderWebActivity"></activity>
+        <activity android:name=".activity.NavigationActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            >
+
+        </activity>
+        <activity android:name=".activity.OrderWebActivity" />
         <activity
             android:name=".activity.OrderDriversActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -37,7 +42,8 @@
         <activity
             android:name=".activity.OrderDetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.CarDetailActivity" />
+        <activity android:name=".activity.CarDetailActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".activity.CompanyDetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -116,7 +122,8 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
         <activity
             android:name=".BasicMapDemoActivity"
             android:label="@string/basic_map_demo_label" />
@@ -165,7 +172,9 @@
         <activity
             android:name=".maps.MyLocationDemoActivity"
             android:label="@string/my_location_demo_label"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        </activity>
         <activity
             android:name=".OptionsDemoActivity"
             android:label="@string/options_demo_label" />
@@ -228,7 +237,9 @@
             android:label="@string/visible_region_demo_label" />
         <activity
             android:name=".MainActivityDemo"
-            android:label="@string/visible_region_demo_label" />
+            android:label="@string/visible_region_demo_label">
+
+        </activity>
 
         <receiver
             android:name=".services.AlarmReceiver"

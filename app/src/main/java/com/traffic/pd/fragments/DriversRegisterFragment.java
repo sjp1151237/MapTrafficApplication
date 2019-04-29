@@ -667,17 +667,15 @@ public class DriversRegisterFragment extends Fragment {
         map.put("mobile", phoneCodeBean.getD() + etPhoneNum.getText().toString());
         map.put("driver", et_company_name.getText().toString());
         map.put("code", phoneCodeBean.getD());
-//        if(null != address){
-//            map.put("lat", String.valueOf(address.getLatitude()));
-//            map.put("longi", String.valueOf(address.getLongitude()));
-//            map.put("country", ComUtils.formatString(address.getCountryName()));
-//            map.put("province", ComUtils.formatString(address.getAdminArea()));
-//            map.put("city", ComUtils.formatString(address.getLocality()));
-//            map.put("district", ComUtils.formatString(address.getSubLocality()));
-//            map.put("address", tvAddressDetail.getText().toString());
-//        }
-        map.put("lat", "30");
-        map.put("longi", "120");
+        if(null != address){
+            map.put("lat", String.valueOf(address.getLatitude()));
+            map.put("longi", String.valueOf(address.getLongitude()));
+            map.put("country", ComUtils.formatString(address.getCountryName()));
+            map.put("province", ComUtils.formatString(address.getAdminArea()));
+            map.put("city", ComUtils.formatString(address.getLocality()));
+            map.put("district", ComUtils.formatString(address.getSubLocality()));
+            map.put("address", tvAddressDetail.getText().toString());
+        }
         map.put("car_num", etCarLicenseNum.getText().toString());
         map.put("car_num_pic", carLicenseImg);
         map.put("car_pic", selectImgs.toString());
@@ -733,19 +731,17 @@ public class DriversRegisterFragment extends Fragment {
         map.put("user_sign", MainActivity.userBean.getUser_id());
 
         map.put("mobile", tvLocation.getText().toString() + etPhoneNum.getText().toString());
-//        if(null != address){
-//            map.put("lat", String.valueOf(address.getLatitude()));
-//            map.put("longi", String.valueOf(address.getLongitude()));
-//            map.put("country", ComUtils.formatString(address.getCountryName()));
-//            map.put("province", ComUtils.formatString(address.getAdminArea()));
-//            map.put("city", ComUtils.formatString(address.getLocality()));
-//            map.put("district", ComUtils.formatString(address.getSubLocality()));
-//            map.put("address", tvAddressDetail.getText().toString());
-//        }
+        if(null != address){
+            map.put("lat", String.valueOf(address.getLatitude()));
+            map.put("longi", String.valueOf(address.getLongitude()));
+            map.put("country", ComUtils.formatString(address.getCountryName()));
+            map.put("province", ComUtils.formatString(address.getAdminArea()));
+            map.put("city", ComUtils.formatString(address.getLocality()));
+            map.put("district", ComUtils.formatString(address.getSubLocality()));
+            map.put("address", tvAddressDetail.getText().toString());
+        }
         map.put("name", et_company_name.getText().toString());
         map.put("owner", et_contacts.getText().toString());
-        map.put("lat", "35");
-        map.put("longi", "136");
         map.put("license_num", etCarLicenseNum.getText().toString());
         map.put("license_pic", carLicenseImg);
         map.put("pics", selectImgs.toString());

@@ -1,9 +1,12 @@
 package com.traffic.pd.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +29,11 @@ import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
-import com.traffic.pd.data.CarInfo;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
-import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
-import com.traffic.pd.utils.PreferencesUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -41,7 +41,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -75,6 +74,10 @@ public class OrderDetailActivity extends AppCompatActivity implements
     LinearLayout llCallSend;
     @BindView(R.id.ll_call_get)
     LinearLayout llCallGet;
+    @BindView(R.id.tv_share)
+    TextView tvShare;
+    @BindView(R.id.ll_share)
+    LinearLayout llShare;
 
     private GoogleMap mMap = null;
 
@@ -100,6 +103,11 @@ public class OrderDetailActivity extends AppCompatActivity implements
         orderBean = (OrderBean) getIntent().getSerializableExtra("info");
         fromWhere = getIntent().getStringExtra("from");
         tvBtn.setVisibility(View.VISIBLE);
+        if(TextUtils.isEmpty(orderBean.getUrl())){
+            tvShare.setText("share url is null");
+        }else{
+            tvShare.setText("分享链接："+orderBean.getUrl());
+        }
         if (fromWhere.equals("home")) {
             if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
                 if (null != orderBean.getCan_grab()) {
@@ -127,7 +135,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
                 if (orderBean.getStatus().equals("4")) {
                     tvBtn.setVisibility(View.GONE);
                 }
-            }else if(MainActivity.userBean.getIdentity().equals("3")){
+            } else if (MainActivity.userBean.getIdentity().equals("3")) {
                 tvBtn.setVisibility(View.GONE);
             } else {
                 // 待审核/发布中
@@ -140,15 +148,16 @@ public class OrderDetailActivity extends AppCompatActivity implements
                 }
                 // 进行中只有发布者可以操作
                 if (orderBean.getStatus().equals("4")) {
-                    tvBtn.setVisibility(View.GONE);
+                    tvBtn.setVisibility(View.VISIBLE);
+                    tvBtn.setText(R.string.over);
                 }
             }
         }
 
-        tvAddCars.setText(String.format("已有%s辆车接单",orderBean.getGrab_num()));
+        tvAddCars.setText(String.format("已有%s辆车接单", orderBean.getGrab_num()));
         if (null != orderBean) {
-            tvGetPhone.setText(orderBean.getRecive_mobile());
-            tvSendPhone.setText(orderBean.getB_country() + orderBean.getMobile());
+            tvGetPhone.setText("联系收货人："+orderBean.getRecive_mobile());
+            tvSendPhone.setText("联系发货人："+orderBean.getB_country() + orderBean.getMobile());
             try {
                 if (null != MainActivity.carTypeList) {
                     String[] cars = orderBean.getCar_type().split(",");
@@ -185,7 +194,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn,R.id.ll_call_send, R.id.ll_call_get,R.id.ll_cars})
+    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn, R.id.ll_call_send, R.id.ll_call_get, R.id.ll_cars})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -238,10 +247,10 @@ public class OrderDetailActivity extends AppCompatActivity implements
                                     tv_confirm.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            Intent intent = new Intent(OrderDetailActivity.this,OrderDriversActivity.class);
-                                            intent.putExtra("id",orderBean.getId());
-                                            intent.putExtra("status",orderBean.getStatus());
-                                            startActivityForResult(intent,REFRESH_UI);
+                                            Intent intent = new Intent(OrderDetailActivity.this, OrderDriversActivity.class);
+                                            intent.putExtra("id", orderBean.getId());
+                                            intent.putExtra("status", orderBean.getStatus());
+                                            startActivityForResult(intent, REFRESH_UI);
                                             niceDialog.cancelDialog();
                                         }
                                     });
@@ -258,7 +267,7 @@ public class OrderDetailActivity extends AppCompatActivity implements
                         }
                         // 已拒绝
                         if (orderBean.getStatus().equals("3") || orderBean.getStatus().equals("5")) {
-                            
+
                         }
                         // 进行中只有发布者可以操作
                         if (orderBean.getStatus().equals("4")) {
@@ -270,27 +279,27 @@ public class OrderDetailActivity extends AppCompatActivity implements
                 break;
             case R.id.ll_call_send:
                 try {
-                    ComUtils.showCallDialog(OrderDetailActivity.this,orderBean.getB_country() + orderBean.getMobile());
+                    ComUtils.showCallDialog(OrderDetailActivity.this, orderBean.getB_country() + orderBean.getMobile());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.ll_call_get:
                 try {
-                    ComUtils.showCallDialog(OrderDetailActivity.this,orderBean.getRecive_mobile());
+                    ComUtils.showCallDialog(OrderDetailActivity.this, orderBean.getRecive_mobile());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.ll_cars:
-                if(MainActivity.userBean.getIdentity().equals(2)){
-                    ComUtils.showMsg(OrderDetailActivity.this,"don't have permission");
+                if (MainActivity.userBean.getIdentity().equals(2)) {
+                    ComUtils.showMsg(OrderDetailActivity.this, "don't have permission");
                     return;
                 }
-                Intent intent = new Intent(OrderDetailActivity.this,OrderDriversActivity.class);
-                intent.putExtra("id",orderBean.getId());
-                intent.putExtra("status",orderBean.getStatus());
-                startActivityForResult(intent,REFRESH_UI);
+                Intent intent = new Intent(OrderDetailActivity.this, OrderDriversActivity.class);
+                intent.putExtra("id", orderBean.getId());
+                intent.putExtra("status", orderBean.getStatus());
+                startActivityForResult(intent, REFRESH_UI);
                 break;
         }
     }
@@ -314,7 +323,9 @@ public class OrderDetailActivity extends AppCompatActivity implements
                                 // 刷新数据
                                 EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
                                 ComUtils.showMsg(OrderDetailActivity.this, "success");
-                            }else{
+                                tvBtn.setText("已完成");
+                                tvBtn.setEnabled(false);
+                            } else {
                                 ComUtils.showMsg(OrderDetailActivity.this, "fali");
                             }
                         } catch (JSONException e) {
@@ -383,27 +394,28 @@ public class OrderDetailActivity extends AppCompatActivity implements
     // 公司跳转到自己的车辆
     private static int TO_CAR = 1002;
     private static int REFRESH_UI = 1003;
+
     private void toCars() {
-        Intent intent = new Intent(this,MyDriverActivity.class);
-        intent.putExtra("type","dsfsdf");
-        startActivityForResult(intent,TO_CAR);
+        Intent intent = new Intent(this, MyDriverActivity.class);
+        intent.putExtra("type", "dsfsdf");
+        startActivityForResult(intent, TO_CAR);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(null == data){
+        if (null == data) {
             return;
         }
-        if (requestCode == TO_CAR ) {
+        if (requestCode == TO_CAR) {
             ArrayList<String> cars = data.getStringArrayListExtra("cars");
-            if(null != cars && cars.size() > 0){
+            if (null != cars && cars.size() > 0) {
                 toAddOrder(cars);
             }
         }
-        if(requestCode == REFRESH_UI){
+        if (requestCode == REFRESH_UI) {
 
-            Log.e("toEditOrder","订单开始，刷新UI");
+            Log.e("toEditOrder", "订单开始，刷新UI");
             tvBtn.setEnabled(false);
             tvBtn.setText(R.string.order_begin);
 
@@ -415,12 +427,12 @@ public class OrderDetailActivity extends AppCompatActivity implements
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
         map.put("order_id", orderBean.getId());
-        if(null != cars){
+        if (null != cars) {
             StringBuilder carss = new StringBuilder();
             for (int i = 0; i < cars.size(); i++) {
-                if(i == (cars.size() - 1)){
+                if (i == (cars.size() - 1)) {
                     carss.append(cars.get(i));
-                }else{
+                } else {
                     carss.append(cars.get(i) + ",");
                 }
             }
@@ -517,5 +529,16 @@ public class OrderDetailActivity extends AppCompatActivity implements
     }
 
 
-
+    @OnClick(R.id.ll_share)
+    public void onViewClicked() {
+        if(TextUtils.isEmpty(orderBean.getUrl())){
+            ComUtils.showMsg(OrderDetailActivity.this,"share url is null");
+        }else{
+// 得到剪贴板管理器
+            ClipboardManager cmb = (ClipboardManager) this
+                    .getSystemService(Context.CLIPBOARD_SERVICE);
+            cmb.setText(orderBean.getUrl());
+            ComUtils.showMsg(this,"已复制到剪切板");
+        }
+    }
 }

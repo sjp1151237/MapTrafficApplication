@@ -57,6 +57,7 @@ public class CompanyDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_detail);
         ButterKnife.bind(this);
+        tvTitle.setText("公司详情");
         companyInfo = (CompanyInfo) getIntent().getSerializableExtra("info");
         if (null != companyInfo) {
             if(companyInfo.getStatus().equals("2")){

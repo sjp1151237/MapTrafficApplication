@@ -1,6 +1,7 @@
 package com.traffic.pd.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.traffic.pd.R;
 import com.traffic.pd.data.CarType;
+import com.traffic.pd.utils.ComUtils;
+import com.traffic.pd.utils.FrescoUtils;
 
 import java.util.List;
 
@@ -38,7 +41,8 @@ public class CarSelectAdapter extends RecyclerView.Adapter<CarSelectAdapter.CarS
         holder.tv_volume.setText(carType.getVolume());
         holder.tv_capacity.setText(carType.getCapacity());
         holder.tv_car_num.setText(String.valueOf(carType.getNum()));
-
+        Uri uri = Uri.parse(carType.getLogo());
+        FrescoUtils.showThumb(uri, holder.type_picture, ComUtils.dip2px(mContext,100), ComUtils.dip2px(mContext,70));
         holder.rl_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

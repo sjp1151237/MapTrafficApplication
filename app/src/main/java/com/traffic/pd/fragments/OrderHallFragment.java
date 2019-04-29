@@ -137,6 +137,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (null == mView) {
+            Log.e("onCreateView","onCreateView");
             EventBus.getDefault().register(this);
             orderBeans = new ArrayList<>();
             mView = inflater.inflate(R.layout.fragment_order_hall, container, false);
@@ -263,13 +264,13 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         if(null != orderBeans){
 
             for (int i = 0; i < orderBeans.size(); i++) {
-//                LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeans.get(i).getLat()), Double.parseDouble(orderBeans.get(i).getLongi()));
-                LatLng BRISBANE = new LatLng(Double.parseDouble(lats[new Random().nextInt(6)]), Double.parseDouble(longitudes[new Random().nextInt(6)]));
+                LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeans.get(i).getLat()), Double.parseDouble(orderBeans.get(i).getLongi()));
+//                LatLng BRISBANE = new LatLng(Double.parseDouble(lats[new Random().nextInt(6)]), Double.parseDouble(longitudes[new Random().nextInt(6)]));
                 mMap.addMarker(new MarkerOptions()
                         .position(BRISBANE)
-                        .title(orderBeans.get(i).getCar_type())
+                        .title("Date:"+orderBeans.get(i).getStart_time())
                         .zIndex(i)
-                        .snippet("Population: 2,074,200"));
+                        .snippet("To:" + orderBeans.get(i).getRecive_country() + "  "+ orderBeans.get(i).getProvince() + "  "+ orderBeans.get(i).getCity()));
             }
         }
     }
