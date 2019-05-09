@@ -23,8 +23,6 @@ import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.CarSelectActivity;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
-import com.traffic.pd.activity.OrderDetailActivity;
-import com.traffic.pd.activity.OrderDriversActivity;
 import com.traffic.pd.adapter.CargoTypeSelectAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
@@ -53,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.CargoLoadSelect,CargoTypeSelectAdapter.CargoTypeSelect {
+public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.CargoLoadSelect, CargoTypeSelectAdapter.CargoTypeSelect {
 
     @BindView(R.id.put_choice)
     TextView putChoice;
@@ -98,10 +96,18 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
     EditText etRequirements;
     @BindView(R.id.cargo_wrappage)
     EditText cargoWrappage;
+    @BindView(R.id.et_address)
+    EditText etAddress;
+    @BindView(R.id.et_address_receive)
+    EditText etAddressReceive;
+    @BindView(R.id.tv_is_danger)
+    TextView tvIsDanger;
+    @BindView(R.id.ll_is_danger)
+    LinearLayout llIsDanger;
     private View mView;
     private List<CarType> carSelect;
 
-    NiceDialog cargoTypeDialog,cargoLoadDialog;
+    NiceDialog cargoTypeDialog, cargoLoadDialog,dangerDialog;
 
     private static int Location_phone = 1001;
     private static int Location_map_s = 1002;
@@ -113,6 +119,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
     List<String> cargoType;
     List<String> loadType;
+    List<String> dangerType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,6 +132,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
             cargoLoadDialog = NiceDialog.init();
             cargoTypeDialog = NiceDialog.init();
+            dangerDialog = NiceDialog.init();
 
             initData();
         }
@@ -145,6 +153,10 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         cargoType.add("家具");
         cargoType.add("工程物资");
         cargoType.add("其他");
+        dangerType = new ArrayList<>();
+        dangerType.add("是");
+        dangerType.add("否");
+
     }
 
     StringBuilder carSelects;
@@ -212,7 +224,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
     final Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
 
-    @OnClick({R.id.ll_select_car, R.id.put_shipping_address, R.id.put_receipt_address, R.id.ll_phone_code, R.id.put_time, R.id.put_time_hour, R.id.btn_publish,R.id.ll_cargo_type, R.id.ll_way_of_loading})
+    @OnClick({R.id.ll_select_car, R.id.put_shipping_address, R.id.put_receipt_address, R.id.ll_phone_code, R.id.put_time, R.id.put_time_hour, R.id.btn_publish, R.id.ll_cargo_type, R.id.ll_way_of_loading})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_cargo_type:
@@ -222,7 +234,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
                         RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(cargoType,getContext(),PublishFragment.this,PublishFragment.this);
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(cargoType, getContext(), PublishFragment.this, PublishFragment.this);
                         recyclerView.setAdapter(cargoTypeSelectAdapter);
 
                     }
@@ -235,7 +247,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
                         RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(loadType,getContext(),PublishFragment.this,PublishFragment.this);
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(loadType, getContext(), PublishFragment.this, PublishFragment.this);
                         recyclerView.setAdapter(cargoTypeSelectAdapter);
 
                     }
@@ -313,6 +325,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
         map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
         map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
+        map.put("address", String.valueOf(ComUtils.formatString(String.valueOf(etAddress.getText().toString()))));
 
         map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
         map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
@@ -320,11 +333,22 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
         map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
         map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
+        map.put("recive_address", String.valueOf(ComUtils.formatString(String.valueOf(etAddressReceive.getText().toString()))));
 
         map.put("recive_mobile", phoneCodeBean.getD() + putPhoneNum.getText().toString());
         map.put("recive_name", putName.getText().toString());
 
         map.put("start_time", putTime.getTag().toString());
+
+        map.put("goods_kind", tvCargoType.getText().toString());
+        map.put("goods_name", cargoName.getText().toString());
+        map.put("goods_way", tvWayOfLoading.getText().toString());
+        map.put("goods_weight", cargoWeight.getText().toString());
+        map.put("goods_volume", cargoVolume.getText().toString());
+        map.put("goods_size", cargoWhd.getText().toString());
+        map.put("goods_pack", cargoWrappage.getText().toString());
+        map.put("goods_require", etRequirements.getText().toString());
+        map.put("goods_danger", putTime.getTag().toString());
 
         new PostRequest("upInfo", getContext(), true)
                 .go(getContext(), new PostRequest.PostListener() {
@@ -373,4 +397,5 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         tvWayOfLoading.setText(name);
         cargoLoadDialog.cancelDialog();
     }
+
 }
