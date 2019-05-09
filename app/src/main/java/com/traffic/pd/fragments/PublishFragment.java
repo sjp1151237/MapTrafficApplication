@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +15,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.othershe.nicedialog.BaseNiceDialog;
+import com.othershe.nicedialog.NiceDialog;
+import com.othershe.nicedialog.ViewConvertListener;
+import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
-import com.traffic.pd.maps.MyLocationDemoActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.CarSelectActivity;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
+import com.traffic.pd.activity.OrderDetailActivity;
+import com.traffic.pd.activity.OrderDriversActivity;
+import com.traffic.pd.adapter.CargoTypeSelectAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.maps.MyLocationDemoActivity;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
 
@@ -34,7 +43,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -45,7 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class PublishFragment extends Fragment {
+public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.CargoLoadSelect,CargoTypeSelectAdapter.CargoTypeSelect {
 
     @BindView(R.id.put_choice)
     TextView putChoice;
@@ -64,23 +72,47 @@ public class PublishFragment extends Fragment {
     @BindView(R.id.btn_publish)
     Button btnPublish;
     Unbinder unbinder;
-    @BindView(R.id.tv_cn)
-    TextView tvCn;
     @BindView(R.id.ll_phone_code)
     LinearLayout llPhoneCode;
     @BindView(R.id.tv_phone_code)
     TextView tvPhoneCode;
     @BindView(R.id.put_time_hour)
     TextView putTimeHour;
+    @BindView(R.id.cargo_name)
+    EditText cargoName;
+    @BindView(R.id.tv_cargo_type)
+    TextView tvCargoType;
+    @BindView(R.id.ll_cargo_type)
+    LinearLayout llCargoType;
+    @BindView(R.id.tv_way_of_loading)
+    TextView tvWayOfLoading;
+    @BindView(R.id.ll_way_of_loading)
+    LinearLayout llWayOfLoading;
+    @BindView(R.id.cargo_weight)
+    EditText cargoWeight;
+    @BindView(R.id.cargo_volume)
+    EditText cargoVolume;
+    @BindView(R.id.cargo_whd)
+    EditText cargoWhd;
+    @BindView(R.id.et_requirements)
+    EditText etRequirements;
+    @BindView(R.id.cargo_wrappage)
+    EditText cargoWrappage;
     private View mView;
     private List<CarType> carSelect;
+
+    NiceDialog cargoTypeDialog,cargoLoadDialog;
 
     private static int Location_phone = 1001;
     private static int Location_map_s = 1002;
     private static int Location_map_g = 1003;
+    private static int cargo_type = 1004;
 
     PhoneCodeBean phoneCodeBean;
     Address addressS, addressG;
+
+    List<String> cargoType;
+    List<String> loadType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,11 +122,34 @@ public class PublishFragment extends Fragment {
             unbinder = ButterKnife.bind(this, mView);
             carSelect = new ArrayList<>();
             EventBus.getDefault().register(this);
+
+            cargoLoadDialog = NiceDialog.init();
+            cargoTypeDialog = NiceDialog.init();
+
+            initData();
         }
         return mView;
     }
+
+    private void initData() {
+        loadType = new ArrayList<>();
+        loadType.add("散货");
+        loadType.add("集装箱");
+        cargoType = new ArrayList<>();
+        cargoType.add("食品");
+        cargoType.add("矿物");
+        cargoType.add("建材");
+        cargoType.add("车辆");
+        cargoType.add("药品");
+        cargoType.add("服装");
+        cargoType.add("家具");
+        cargoType.add("工程物资");
+        cargoType.add("其他");
+    }
+
     StringBuilder carSelects;
     int carNum;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventMessage(EventMessage eventMessage) {
         switch (eventMessage.getType()) {
@@ -105,7 +160,7 @@ public class PublishFragment extends Fragment {
                     carNum = 0;
                     if (null != carSelect && carSelect.size() > 0) {
                         StringBuilder stringBuilder = new StringBuilder();
-                        carSelects= new StringBuilder();
+                        carSelects = new StringBuilder();
                         for (int i = 0; i < carSelect.size(); i++) {
                             stringBuilder.append("型号：" + carSelect.get(i).getId() + "  车数：" + carSelect.get(i).getNum() + "、");
                             carSelects.append(carSelect.get(i).getId() + ":" + carSelect.get(i).getNum() + ",");
@@ -131,13 +186,12 @@ public class PublishFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(null == data){
+        if (null == data) {
             return;
         }
         if (requestCode == Location_phone && resultCode == 2) {
             phoneCodeBean = (PhoneCodeBean) data.getSerializableExtra("res");
-            tvCn.setText(phoneCodeBean.getA());
-            tvPhoneCode.setText("+" + phoneCodeBean.getD());
+            tvPhoneCode.setText(phoneCodeBean.getA());
         }
         if (requestCode == Location_map_s) {
             addressS = (Address) data.getParcelableExtra("address");
@@ -158,9 +212,35 @@ public class PublishFragment extends Fragment {
 
     final Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
 
-    @OnClick({R.id.ll_select_car, R.id.put_shipping_address, R.id.put_receipt_address, R.id.ll_phone_code, R.id.put_time, R.id.put_time_hour,R.id.btn_publish})
+    @OnClick({R.id.ll_select_car, R.id.put_shipping_address, R.id.put_receipt_address, R.id.ll_phone_code, R.id.put_time, R.id.put_time_hour, R.id.btn_publish,R.id.ll_cargo_type, R.id.ll_way_of_loading})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_cargo_type:
+                cargoTypeDialog.setLayoutId(R.layout.activity_cargo_type).setConvertListener(new ViewConvertListener() {
+                    @Override
+                    protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+
+                        RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(cargoType,getContext(),PublishFragment.this,PublishFragment.this);
+                        recyclerView.setAdapter(cargoTypeSelectAdapter);
+
+                    }
+                }).setDimAmount(0.3f).setShowBottom(true).show(getChildFragmentManager());
+                break;
+            case R.id.ll_way_of_loading:
+                cargoLoadDialog.setLayoutId(R.layout.activity_cargo_type).setConvertListener(new ViewConvertListener() {
+                    @Override
+                    protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+
+                        RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(loadType,getContext(),PublishFragment.this,PublishFragment.this);
+                        recyclerView.setAdapter(cargoTypeSelectAdapter);
+
+                    }
+                }).setDimAmount(0.3f).setShowBottom(true).show(getChildFragmentManager());
+                break;
             case R.id.ll_select_car:
                 startActivity(new Intent(getContext(), CarSelectActivity.class));
                 break;
@@ -180,33 +260,33 @@ public class PublishFragment extends Fragment {
                 ComUtils.showTimePickerDialog(getActivity(), putTimeHour);
                 break;
             case R.id.btn_publish:
-                if(carSelect.size() == 0){
-                    ComUtils.showMsg(getContext(),"Please select car");
+                if (carSelect.size() == 0) {
+                    ComUtils.showMsg(getContext(), "Please select car");
                     return;
                 }
 
-                if(null == addressS){
-                    ComUtils.showMsg(getContext(),"Please input shipping address.");
+                if (null == addressS) {
+                    ComUtils.showMsg(getContext(), "Please input shipping address.");
                     return;
                 }
-                if(null == addressG){
-                    ComUtils.showMsg(getContext(),"Please input the receipt address.");
+                if (null == addressG) {
+                    ComUtils.showMsg(getContext(), "Please input the receipt address.");
                     return;
                 }
-                if(TextUtils.isEmpty(putName.getText().toString())){
-                    ComUtils.showMsg(getContext(),"Please enter the consignee's name.");
+                if (TextUtils.isEmpty(putName.getText().toString())) {
+                    ComUtils.showMsg(getContext(), "Please enter the consignee's name.");
                     return;
                 }
-                if(null == phoneCodeBean){
-                    ComUtils.showMsg(getContext(),"Please select the phone's country code");
+                if (null == phoneCodeBean) {
+                    ComUtils.showMsg(getContext(), "Please select the phone's country code");
                     return;
                 }
-                if(TextUtils.isEmpty(putPhoneNum.getText().toString())){
-                    ComUtils.showMsg(getContext(),"Please enter the consignee's phone num.");
+                if (TextUtils.isEmpty(putPhoneNum.getText().toString())) {
+                    ComUtils.showMsg(getContext(), "Please enter the consignee's phone num.");
                     return;
                 }
-                if(putTime.getText().toString().contains("Please")){
-                    ComUtils.showMsg(getContext(),"Please enter the appointment Date.");
+                if (putTime.getText().toString().contains("Please")) {
+                    ComUtils.showMsg(getContext(), "Please enter the appointment Date.");
                     return;
                 }
 //                if(putTimeHour.getText().toString().contains("Please")){
@@ -257,7 +337,7 @@ public class PublishFragment extends Fragment {
                             int status = jsonObject.getInt("status");
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
-                                ComUtils.showMsg(getContext(),"订单发布成功");
+                                ComUtils.showMsg(getContext(), "订单发布成功");
 
                                 EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
                             }
@@ -282,6 +362,15 @@ public class PublishFragment extends Fragment {
 
     }
 
+    @Override
+    public void cargoTypeSelect(String name) {
+        tvCargoType.setText(name);
+        cargoTypeDialog.cancelDialog();
+    }
 
-
+    @Override
+    public void cargoLoadSelect(String name) {
+        tvWayOfLoading.setText(name);
+        cargoLoadDialog.cancelDialog();
+    }
 }

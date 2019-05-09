@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<CarType> carTypeList;
 
-    UserBean test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(publishFragment);
         fragments.add(orderHallFragmentD);
         fragments.add(orderHallFragmentC);
-
-        Log.e("dfd",test.getIdentity());
 
         isDetailUp = false;
         carTypeList = new ArrayList<>();

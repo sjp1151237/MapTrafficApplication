@@ -37,9 +37,9 @@ public class CarSelectAdapter extends RecyclerView.Adapter<CarSelectAdapter.CarS
     @Override
     public void onBindViewHolder(CarSelectHolder holder, int position) {
         final CarType carType = carTypeList.get(position);
-        holder.tv_weight.setText(carType.getWeight());
-        holder.tv_volume.setText(carType.getVolume());
-        holder.tv_capacity.setText(carType.getCapacity());
+        holder.tv_weight.setText(carType.getWeight() + " t");
+        holder.tv_volume.setText(carType.getVolume() + " m");
+        holder.tv_capacity.setText(carType.getCapacity() + " m3");
         holder.tv_car_num.setText(String.valueOf(carType.getNum()));
         Uri uri = Uri.parse(carType.getLogo());
         FrescoUtils.showThumb(uri, holder.type_picture, ComUtils.dip2px(mContext,100), ComUtils.dip2px(mContext,70));

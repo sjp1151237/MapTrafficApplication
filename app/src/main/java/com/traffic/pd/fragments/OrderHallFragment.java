@@ -419,6 +419,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
                 Intent intent = new Intent(getContext(), OrderDetailActivity.class);
                 intent.putExtra("info",orderBean);
+                intent.putExtra("from", "home");
                 startActivity(intent);
             }
         }else{
@@ -429,6 +430,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
                 Intent intent = new Intent(getContext(), OrderDetailActivity.class);
                 intent.putExtra("info",orderBean);
+                intent.putExtra("from", "home");
                 startActivity(intent);
             }
         }else{

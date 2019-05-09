@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="载重"
+            android:text="Weight"
             android:textColor="@color/item_title_font"
             android:textSize="16sp" />
 
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:gravity="center"
-            android:text="长*宽*高"
+            android:text="D*W*H"
             android:textColor="@color/item_title_font"
             android:textSize="16sp" />
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="载货体积"
+            android:text="Volum"
             android:textColor="@color/item_title_font"
             android:textSize="16sp" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:gravity="center"
-            android:text="需求数量"
+            android:text="Quantity"
             android:textColor="@color/item_title_font"
             android:textSize="16sp" />
     </LinearLayout>

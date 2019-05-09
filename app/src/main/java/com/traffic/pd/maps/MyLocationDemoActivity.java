@@ -370,7 +370,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
             case R.id.tv_pos_2:
                 break;
             case R.id.tv_btn:
-                if(address != null){
+                if(address != null && address.getCountryName() != null){
+                    Log.e("loc",address.toString());
                     Intent intent = new Intent();
                     intent.putExtra("address",address);
                     setResult(0, intent);

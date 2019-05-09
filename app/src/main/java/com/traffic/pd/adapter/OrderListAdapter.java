@@ -46,11 +46,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
         hallViewHolder.tv_over.setText("目的地址："+orderBean.getRecive_country() + "  "+orderBean.getRecive_province()+ "  "+ orderBean.getRecive_city());
 
         hallViewHolder.tv_state.setText(stateString(orderBean.getStatus()));
-        try{
-            hallViewHolder.tv_time.setText("开始时间："+ComUtils.time2Date(Long.parseLong(orderBean.getStart_time()) * 1000L));
-        }catch (Exception e){
-
-        }
         hallViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,12 +119,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
     class HallViewHolder extends RecyclerView.ViewHolder {
         TextView tv_begin,tv_state;
         TextView tv_over;
-        TextView tv_time;
         public HallViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_begin = itemView.findViewById(R.id.tv_begin);
             tv_over = itemView.findViewById(R.id.tv_over);
-            tv_time = itemView.findViewById(R.id.tv_time);
             tv_state = itemView.findViewById(R.id.tv_state);
 
         }

@@ -1,6 +1,5 @@
 package com.traffic.pd.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +22,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +57,7 @@ public class CarSelectActivity extends AppCompatActivity {
         rcvCarSelect.setAdapter(carSelectAdapter);
         tvBtn.setVisibility(View.VISIBLE);
         tvBtn.setText("Sure");
+        tvTitle.setText("Select Cars");
         loadData();
     }
 
