@@ -51,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.CargoLoadSelect, CargoTypeSelectAdapter.CargoTypeSelect {
+public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.CargoLoadSelect, CargoTypeSelectAdapter.CargoTypeSelect , CargoTypeSelectAdapter.CargoDangerSelect {
 
     @BindView(R.id.put_choice)
     TextView putChoice;
@@ -224,9 +224,22 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
     final Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
 
-    @OnClick({R.id.ll_select_car, R.id.put_shipping_address, R.id.put_receipt_address, R.id.ll_phone_code, R.id.put_time, R.id.put_time_hour, R.id.btn_publish, R.id.ll_cargo_type, R.id.ll_way_of_loading})
+    @OnClick({R.id.ll_select_car, R.id.put_shipping_address, R.id.ll_is_danger, R.id.put_receipt_address, R.id.ll_phone_code, R.id.put_time, R.id.put_time_hour, R.id.btn_publish, R.id.ll_cargo_type, R.id.ll_way_of_loading})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_is_danger:
+                dangerDialog.setLayoutId(R.layout.activity_cargo_type).setConvertListener(new ViewConvertListener() {
+                    @Override
+                    protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+
+                        RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(dangerType, getContext(), PublishFragment.this, PublishFragment.this,PublishFragment.this);
+                        recyclerView.setAdapter(cargoTypeSelectAdapter);
+
+                    }
+                }).setDimAmount(0.3f).setShowBottom(true).show(getChildFragmentManager());
+                break;
             case R.id.ll_cargo_type:
                 cargoTypeDialog.setLayoutId(R.layout.activity_cargo_type).setConvertListener(new ViewConvertListener() {
                     @Override
@@ -234,7 +247,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
                         RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(cargoType, getContext(), PublishFragment.this, PublishFragment.this);
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(cargoType, getContext(), PublishFragment.this, PublishFragment.this,PublishFragment.this);
                         recyclerView.setAdapter(cargoTypeSelectAdapter);
 
                     }
@@ -247,7 +260,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
                         RecyclerView recyclerView = holder.getView(R.id.rcv_car_go_type);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(loadType, getContext(), PublishFragment.this, PublishFragment.this);
+                        CargoTypeSelectAdapter cargoTypeSelectAdapter = new CargoTypeSelectAdapter(loadType, getContext(), PublishFragment.this, PublishFragment.this,PublishFragment.this);
                         recyclerView.setAdapter(cargoTypeSelectAdapter);
 
                     }
@@ -279,11 +292,11 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
                 if (null == addressS) {
                     ComUtils.showMsg(getContext(), "Please input shipping address.");
-                    return;
+//                    return;
                 }
                 if (null == addressG) {
                     ComUtils.showMsg(getContext(), "Please input the receipt address.");
-                    return;
+//                    return;
                 }
                 if (TextUtils.isEmpty(putName.getText().toString())) {
                     ComUtils.showMsg(getContext(), "Please enter the consignee's name.");
@@ -319,21 +332,37 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         map.put("car_type", carSelects.toString());
         map.put("num", String.valueOf(carNum));
 
-        map.put("lat", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLatitude()))));
-        map.put("long", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
-        map.put("country", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getCountryName()))));
-        map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
-        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
-        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
-        map.put("address", String.valueOf(ComUtils.formatString(String.valueOf(etAddress.getText().toString()))));
+//        map.put("lat", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLatitude()))));
+//        map.put("long", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
+//        map.put("country", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getCountryName()))));
+//        map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
+//        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
+//        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
+//        map.put("address", String.valueOf(ComUtils.formatString(String.valueOf(etAddress.getText().toString()))));
 
-        map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
-        map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
-        map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));
-        map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
-        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
-        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
-        map.put("recive_address", String.valueOf(ComUtils.formatString(String.valueOf(etAddressReceive.getText().toString()))));
+        map.put("lat", "32.5");
+        map.put("long", "120.56");
+        map.put("country", "china");
+        map.put("province", "henan");
+        map.put("city", "zhengzhou");
+        map.put("district", "gaoxinqu");
+        map.put("address", "lianhuajie mudanlu");
+
+//        map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
+//        map.put("recive_long", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
+//        map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));
+//        map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
+//        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
+//        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
+//        map.put("recive_address", String.valueOf(ComUtils.formatString(String.valueOf(etAddressReceive.getText().toString()))));
+
+        map.put("recive_lat", "20.57");
+        map.put("recive_long", "86.56");
+        map.put("recive_country","china");
+        map.put("recive_province", "shagnhai");
+        map.put("recive_city", "shagnhai");
+        map.put("recive_district","pudongxinqu");
+        map.put("recive_address", "shijidadao 588hao");
 
         map.put("recive_mobile", phoneCodeBean.getD() + putPhoneNum.getText().toString());
         map.put("recive_name", putName.getText().toString());
@@ -348,7 +377,9 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         map.put("goods_size", cargoWhd.getText().toString());
         map.put("goods_pack", cargoWrappage.getText().toString());
         map.put("goods_require", etRequirements.getText().toString());
-        map.put("goods_danger", putTime.getTag().toString());
+        if(!TextUtils.isEmpty(putTime.getTag().toString())){
+            map.put("goods_danger", putTime.getTag().toString().equals("是")?"1":"0");
+        }
 
         new PostRequest("upInfo", getContext(), true)
                 .go(getContext(), new PostRequest.PostListener() {
@@ -398,4 +429,9 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         cargoLoadDialog.cancelDialog();
     }
 
+    @Override
+    public void cargoDangerSelect(String name) {
+        tvIsDanger.setText(name);
+        dangerDialog.cancelDialog();
+    }
 }

@@ -159,9 +159,10 @@ public class ComUtils {
             // 绑定监听器(How the parent is notified that the date is set.)
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                monthOfYear ++;
                 String date = year+"-" + monthOfYear+"-"+dayOfMonth;
                 if(compareDate(date,getNowDate()) == 1){
-                    tv.setText("You select ：" + year + "YEAR" + (monthOfYear + 1) + "MONTH" + dayOfMonth + "DAY");
+                    tv.setText("You select ：" + year + " YEAR " + (monthOfYear) + " MONTH " + dayOfMonth + " DAY ");
                     try {
                         tv.setTag(dateToStamp(date));
                     } catch (ParseException e) {

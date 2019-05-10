@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class OrderBean implements Serializable {
     String id;
-    String        uid;
+    String uid;
     String weight;
-    String         car_type;
+    String car_type;
     String num;
-    String         grab_num;
+    String grab_num;
     String pics;
 
     String b_country;
@@ -284,30 +284,113 @@ public class OrderBean implements Serializable {
         this.lat = lat;
     }
 
-    String         add_time;
-    String  start_time;
-    String          end_time;
-    String  status;
-    String          country;
-    String   province;
-    String          city;
-    String  district;
-    String          address;
-    String    intro;
-    String          price;
-    String   pay_way;
-    String          recive_country;
-    String   recive_province;
-    String           recive_city;
-    String  recive_district;
-    String          recive_address;
-    String   recive_mobile;
-    String          recive_name;
-    String    recive_lat;
-    String         recive_long;
-    String  lat;
+    String add_time;
+    String start_time;
+    String end_time;
+    String status;
+    String country;
+    String province;
+    String city;
+    String district;
+    String address;
+    String intro;
+    String price;
+    String pay_way;
+    String recive_country;
+    String recive_province;
+    String recive_city;
+    String recive_district;
+    String recive_address;
+    String recive_mobile;
+    String recive_name;
+    String recive_lat;
+    String recive_long;
+    String lat;
     String longi;
     String recive_longi;
+
+    String goods_kind;
+    String goods_name;
+    String goods_way;
+    String goods_weight;
+
+    public String getGoods_kind() {
+        return goods_kind;
+    }
+
+    public void setGoods_kind(String goods_kind) {
+        this.goods_kind = goods_kind;
+    }
+
+    public String getGoods_name() {
+        return goods_name;
+    }
+
+    public void setGoods_name(String goods_name) {
+        this.goods_name = goods_name;
+    }
+
+    public String getGoods_way() {
+        return goods_way;
+    }
+
+    public void setGoods_way(String goods_way) {
+        this.goods_way = goods_way;
+    }
+
+    public String getGoods_weight() {
+        return goods_weight;
+    }
+
+    public void setGoods_weight(String goods_weight) {
+        this.goods_weight = goods_weight;
+    }
+
+    public String getGoods_volume() {
+        return goods_volume;
+    }
+
+    public void setGoods_volume(String goods_volume) {
+        this.goods_volume = goods_volume;
+    }
+
+    public String getGoods_size() {
+        return goods_size;
+    }
+
+    public void setGoods_size(String goods_size) {
+        this.goods_size = goods_size;
+    }
+
+    public String getGoods_pack() {
+        return goods_pack;
+    }
+
+    public void setGoods_pack(String goods_pack) {
+        this.goods_pack = goods_pack;
+    }
+
+    public String getGoods_require() {
+        return goods_require;
+    }
+
+    public void setGoods_require(String goods_require) {
+        this.goods_require = goods_require;
+    }
+
+    public String getGoods_danger() {
+        return goods_danger;
+    }
+
+    public void setGoods_danger(String goods_danger) {
+        this.goods_danger = goods_danger;
+    }
+
+    String goods_volume;
+    String goods_size;
+    String goods_pack;
+    String goods_require;
+    String goods_danger;
 
     public String getLongi() {
         return longi;

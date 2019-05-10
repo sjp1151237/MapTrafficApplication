@@ -421,9 +421,9 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 intent.putExtra("info",orderBean);
                 intent.putExtra("from", "home");
                 startActivity(intent);
+            }else{
+                ComUtils.showMsg(getContext(),"审核通过才能接单");
             }
-        }else{
-            ComUtils.showMsg(getContext(),"审核通过才能接单");
         }
         if(MainActivity.userBean.getIdentity().equals("3")){
             if(null != MainActivity.companyInfo && MainActivity.companyInfo.getStatus().equals("2")){
@@ -432,12 +432,12 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 intent.putExtra("info",orderBean);
                 intent.putExtra("from", "home");
                 startActivity(intent);
+            }else{
+                ComUtils.showMsg(getContext(),"审核通过才能接单");
             }
-        }else{
-            ComUtils.showMsg(getContext(),"审核通过才能接单");
         }
 
-        ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
+//        ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
     }
 
     class MyReceive extends BroadcastReceiver{

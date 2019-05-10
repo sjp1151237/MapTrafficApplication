@@ -16,12 +16,14 @@ public class CargoTypeSelectAdapter extends RecyclerView.Adapter<CargoTypeSelect
     Context context;
     CargoTypeSelect cargoTypeSelect;
     CargoLoadSelect cargoLoadSelect;
+    CargoDangerSelect cargoDangerSelect;
 
-    public CargoTypeSelectAdapter(List<String> listCargo,Context context,CargoTypeSelect cargoTypeSelect,CargoLoadSelect cargoLoadSelect){
+    public CargoTypeSelectAdapter(List<String> listCargo,Context context,CargoTypeSelect cargoTypeSelect,CargoLoadSelect cargoLoadSelect,CargoDangerSelect cargoDangerSelect){
         this.listCargo = listCargo;
         this.context = context;
         this.cargoLoadSelect = cargoLoadSelect;
         this.cargoTypeSelect = cargoTypeSelect;
+        this.cargoDangerSelect = cargoDangerSelect;
 
     }
     @NonNull
@@ -42,7 +44,12 @@ public class CargoTypeSelectAdapter extends RecyclerView.Adapter<CargoTypeSelect
                 if(listCargo.size() > 2){
                     cargoTypeSelect.cargoTypeSelect(listCargo.get(i));
                 }else{
-                    cargoLoadSelect.cargoLoadSelect(listCargo.get(i));
+                    if(listCargo.get(0).equals("是")){
+                        cargoDangerSelect.cargoDangerSelect(listCargo.get(i));
+                    }else{
+                        cargoLoadSelect.cargoLoadSelect(listCargo.get(i));
+                    }
+
                 }
 
             }
@@ -69,5 +76,9 @@ public class CargoTypeSelectAdapter extends RecyclerView.Adapter<CargoTypeSelect
 
     public interface CargoLoadSelect{
         void cargoLoadSelect(String name);
+    }
+
+    public interface CargoDangerSelect{
+        void cargoDangerSelect(String name);
     }
 }

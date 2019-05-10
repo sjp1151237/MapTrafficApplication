@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.NavigationActivity">
+    >
 
-    <com.youth.banner.Banner
-        android:id="@+id/banner"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_guide"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@null"
-        app:indicator_drawable_selected="@drawable/banner_circle_shape_red"
-        app:indicator_drawable_unselected="@drawable/banner_circle_shape_white"
-        app:indicator_height="10dp"
-        app:indicator_margin="5dp"
-        app:indicator_width="10dp" />
+        />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        >
+        <ImageView
+            android:id="@+id/iv_1"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/indictor_selector"/>
+
+        <ImageView
+            android:id="@+id/iv_2"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="23dp"
+            android:background="@drawable/indictor_selector"/>
+
+        <ImageView
+            android:id="@+id/iv_3"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="23dp"
+            android:background="@drawable/indictor_selector"/>
+    </LinearLayout>
+
+</RelativeLayout>
