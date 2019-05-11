@@ -24,7 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.OrderLocActivity"></activity>
+        <activity android:name=".activity.OrderLocActivity" android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity android:name=".activity.CargoTypeActivity" />
         <activity android:name=".activity.OrderWebActivity" />
         <activity
@@ -39,7 +39,8 @@
         <activity
             android:name=".activity.OrderDetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.CarDetailActivity" />
+        <activity android:name=".activity.CarDetailActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".activity.CompanyDetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

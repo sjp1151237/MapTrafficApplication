@@ -61,6 +61,7 @@ public class OrderDriverAdapter extends RecyclerView.Adapter<OrderDriverAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, CarDetailActivity.class);
                 intent.putExtra("info",carInfoList.get(i));
+                intent.putExtra("status",type);
                 mContext.startActivity(intent);
             }
         });

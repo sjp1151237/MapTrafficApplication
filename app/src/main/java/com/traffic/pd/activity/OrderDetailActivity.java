@@ -13,19 +13,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.othershe.nicedialog.BaseNiceDialog;
 import com.othershe.nicedialog.NiceDialog;
 import com.othershe.nicedialog.ViewConvertListener;
 import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
-import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
@@ -47,10 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OrderDetailActivity extends AppCompatActivity implements
-        GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnMapClickListener,
-        OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener {
+public class OrderDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.ll_back)
     LinearLayout llBack;
@@ -66,8 +55,6 @@ public class OrderDetailActivity extends AppCompatActivity implements
     LinearLayout llCarDetail;
     OrderBean orderBean;
 
-    private static final LatLng BRISBANE = new LatLng(-27.47093, 153.0235);
-    private static final LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
     @BindView(R.id.tv_add_cars)
     TextView tvAddCars;
     @BindView(R.id.ll_call_send)
@@ -79,16 +66,41 @@ public class OrderDetailActivity extends AppCompatActivity implements
     @BindView(R.id.ll_share)
     LinearLayout llShare;
 
-    private GoogleMap mMap = null;
-
-    /**
-     * Keeps track of the selected marker.
-     */
-    private Marker mSelectedMarker;
-
     String fromWhere;
 
     NiceDialog niceDialog;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.tv_address_receive)
+    TextView tvAddressReceive;
+    @BindView(R.id.tv_cargo_name)
+    TextView tvCargoName;
+    @BindView(R.id.tv_cargo_type)
+    TextView tvCargoType;
+    @BindView(R.id.tv_way_of_loading)
+    TextView tvWayOfLoading;
+    @BindView(R.id.tv_cargo_weight)
+    TextView tvCargoWeight;
+    @BindView(R.id.tv_cargo_volume)
+    TextView tvCargoVolume;
+    @BindView(R.id.tv_cargo_whd)
+    TextView tvCargoWhd;
+    @BindView(R.id.tv_requirements)
+    TextView tvRequirements;
+    @BindView(R.id.tv_cargo_wrappage)
+    TextView tvCargoWrappage;
+    @BindView(R.id.tv_is_danger)
+    TextView tvIsDanger;
+    @BindView(R.id.tv_address_start)
+    TextView tvAddressStart;
+    @BindView(R.id.tv_receive_address_start)
+    TextView tvReceiveAddressStart;
+    @BindView(R.id.ll_start)
+    LinearLayout llStart;
+    @BindView(R.id.llover)
+    LinearLayout llover;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,16 +109,16 @@ public class OrderDetailActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         tvTitle.setText(R.string.order_detail);
         niceDialog = NiceDialog.init();
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        new OnMapAndViewReadyListener(mapFragment, this);
+
         orderBean = (OrderBean) getIntent().getSerializableExtra("info");
+
+        initOrderView();
         fromWhere = getIntent().getStringExtra("from");
         tvBtn.setVisibility(View.VISIBLE);
-        if(TextUtils.isEmpty(orderBean.getUrl())){
+        if (TextUtils.isEmpty(orderBean.getUrl())) {
             tvShare.setText("share url is null");
-        }else{
-            tvShare.setText("分享链接："+orderBean.getUrl());
+        } else {
+            tvShare.setText("分享链接：" + orderBean.getUrl());
         }
         if (fromWhere.equals("home")) {
             if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
@@ -156,8 +168,8 @@ public class OrderDetailActivity extends AppCompatActivity implements
 
         tvAddCars.setText(String.format("已有%s辆车接单", orderBean.getGrab_num()));
         if (null != orderBean) {
-            tvGetPhone.setText("联系收货人："+orderBean.getRecive_mobile());
-            tvSendPhone.setText("联系发货人："+orderBean.getB_country() + orderBean.getMobile());
+            tvGetPhone.setText("联系收货人：" + orderBean.getRecive_mobile());
+            tvSendPhone.setText("联系发货人：" + orderBean.getB_country() + orderBean.getMobile());
             try {
                 if (null != MainActivity.carTypeList) {
                     String[] cars = orderBean.getCar_type().split(",");
@@ -194,9 +206,75 @@ public class OrderDetailActivity extends AppCompatActivity implements
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn, R.id.ll_call_send, R.id.ll_call_get, R.id.ll_cars})
+    private void initOrderView() {
+        if (null != orderBean) {
+            tvTime.setText("开始时间 ："+ ComUtils.formatString(orderBean.getStart_time()));
+            tvReceiveAddressStart.setText("终点 : " + ComUtils.formatString(orderBean.getRecive_country()) + " " + ComUtils.formatString(orderBean.getRecive_province()) + " " + ComUtils.formatString(orderBean.getRecive_city()) + " " + ComUtils.formatString(orderBean.getRecive_district()) + "\n" + ComUtils.formatString(orderBean.getRecive_address()));
+            tvAddressStart.setText("起点 : " + ComUtils.formatString(orderBean.getCountry()) + " " + ComUtils.formatString(orderBean.getProvince()) + " " + ComUtils.formatString(orderBean.getCity()) + " " + ComUtils.formatString(orderBean.getDistrict()) + "\n" + ComUtils.formatString(orderBean.getAddress()));
+//            tvAddressReceive.setText(ComUtils.formatString(orderBean.getRecive_address()));
+//            tvAddress.setText(ComUtils.formatString(orderBean.getAddress()));
+            if (TextUtils.isEmpty(orderBean.getGoods_name())) {
+                tvCargoName.setVisibility(View.GONE);
+            } else {
+                tvCargoName.setText("货物名称 : " + ComUtils.formatString(orderBean.getGoods_name()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_kind())) {
+                tvCargoType.setVisibility(View.GONE);
+            } else {
+                tvCargoType.setText("货物种类 : " + ComUtils.formatString(orderBean.getGoods_kind()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_way())) {
+                tvWayOfLoading.setVisibility(View.GONE);
+            } else {
+                tvWayOfLoading.setText("装货方式 : " + ComUtils.formatString(orderBean.getGoods_way()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_volume())) {
+                tvCargoVolume.setVisibility(View.GONE);
+            } else {
+                tvCargoVolume.setText("货物体积 : " + ComUtils.formatString(orderBean.getGoods_volume()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_weight())) {
+                tvCargoWeight.setVisibility(View.GONE);
+            } else {
+                tvCargoWeight.setText("货物毛重 : " + ComUtils.formatString(orderBean.getGoods_weight()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_size())) {
+                tvCargoWhd.setVisibility(View.GONE);
+            } else {
+                tvCargoWhd.setText("货物长宽高 : " + ComUtils.formatString(orderBean.getGoods_size()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_pack())) {
+                tvCargoWrappage.setVisibility(View.GONE);
+            } else {
+                tvCargoWrappage.setText("外包装材质 : " + ComUtils.formatString(orderBean.getGoods_pack()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_require())) {
+                tvRequirements.setVisibility(View.GONE);
+            } else {
+                tvRequirements.setText("装货要求 : " + ComUtils.formatString(orderBean.getGoods_require()));
+            }
+            if (TextUtils.isEmpty(orderBean.getGoods_danger())) {
+                tvIsDanger.setVisibility(View.GONE);
+            } else {
+                String isDan = orderBean.getGoods_require().equals("1") ? "是" : "否";
+                tvIsDanger.setText("是否是危化品 : " + isDan);
+            }
+        }
+    }
+
+    @OnClick({R.id.ll_back, R.id.ll_car_detail, R.id.tv_btn, R.id.ll_call_send, R.id.ll_call_get, R.id.ll_cars, R.id.ll_start, R.id.llover})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_start:
+            case R.id.llover:
+                Intent intents = new Intent(OrderDetailActivity.this, OrderLocActivity.class);
+                intents.putExtra("begin_lat", ComUtils.formatString(orderBean.getLat()));
+                intents.putExtra("begin_long", ComUtils.formatString(orderBean.getLongi()));
+
+                intents.putExtra("over_lat", ComUtils.formatString(orderBean.getRecive_lat()));
+                intents.putExtra("over_long", ComUtils.formatString(orderBean.getRecive_longi()));
+                startActivity(intents);
+                break;
             case R.id.ll_back:
                 finish();
                 break;
@@ -461,6 +539,8 @@ public class OrderDetailActivity extends AppCompatActivity implements
                     @Override
                     public void postError(String error) {
                         super.postError(error);
+                        // 刷新数据
+                        EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
                         ComUtils.showMsg(OrderDetailActivity.this, "error");
                     }
 
@@ -471,74 +551,17 @@ public class OrderDetailActivity extends AppCompatActivity implements
                 }, url, map);
     }
 
-    @Override
-    public void onMapClick(LatLng latLng) {
-        mSelectedMarker = null;
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        if (marker.equals(mSelectedMarker)) {
-            mSelectedMarker = null;
-            return true;
-        }
-
-        mSelectedMarker = marker;
-        return false;
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Hide the zoom controls.
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-
-        // Add lots of markers to the map.
-        addMarkersToMap();
-
-        // Set listener for marker click event.  See the bottom of this class for its behavior.
-        mMap.setOnMarkerClickListener(this);
-
-        // Set listener for map click event.  See the bottom of this class for its behavior.
-        mMap.setOnMapClickListener(this);
-
-        // Override the default content description on the view, for accessibility mode.
-        // Ideally this string would be localized.
-        googleMap.setContentDescription("Demo showing how to close the info window when the currently"
-                + " selected marker is re-tapped.");
-
-        LatLngBounds bounds = new LatLngBounds.Builder()
-                .include(BRISBANE)
-                .include(MELBOURNE)
-                .build();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 30));
-    }
-
-    private void addMarkersToMap() {
-        mMap.addMarker(new MarkerOptions()
-                .position(BRISBANE)
-                .title("Brisbane")
-                .snippet("Population: 2,074,200"));
-
-        mMap.addMarker(new MarkerOptions()
-                .position(MELBOURNE)
-                .title("Melbourne")
-                .snippet("Population: 4,137,400"));
-
-    }
-
-
     @OnClick(R.id.ll_share)
     public void onViewClicked() {
-        if(TextUtils.isEmpty(orderBean.getUrl())){
-            ComUtils.showMsg(OrderDetailActivity.this,"share url is null");
-        }else{
+        if (TextUtils.isEmpty(orderBean.getUrl())) {
+            ComUtils.showMsg(OrderDetailActivity.this, "share url is null");
+        } else {
 // 得到剪贴板管理器
             ClipboardManager cmb = (ClipboardManager) this
                     .getSystemService(Context.CLIPBOARD_SERVICE);
             cmb.setText(orderBean.getUrl());
-            ComUtils.showMsg(this,"已复制到剪切板");
+            ComUtils.showMsg(this, "已复制到剪切板");
         }
     }
+
 }

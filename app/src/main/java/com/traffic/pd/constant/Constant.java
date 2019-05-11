@@ -52,5 +52,7 @@ public class Constant {
 
     public static String ORDER_CONFIRM = HOST + "/api/user/order_driver_confirm";
 
+    public static String CAR_STAR = HOST + "/api/user/driver_score";
+
     public static final int REQUEST_CODE = 1024;
 }

@@ -84,7 +84,7 @@ public class MyOrderFragment extends Fragment {
             srl = mView.findViewById(R.id.srl);
 
             orderBeans = new ArrayList<>();
-            hallListAdapter = new OrderListAdapter(getContext(), orderBeans,"user");
+            hallListAdapter = new OrderListAdapter(getContext(), orderBeans,"user",mParam1);
             srl.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
             srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override

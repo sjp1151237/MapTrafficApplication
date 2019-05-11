@@ -109,7 +109,7 @@
 
             <EditText
                 android:id="@+id/et_address"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="20dp"
                 android:background="@null"
@@ -155,7 +155,7 @@
 
             <EditText
                 android:id="@+id/et_address_receive"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="20dp"
                 android:background="@null"
