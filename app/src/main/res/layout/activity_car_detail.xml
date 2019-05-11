@@ -51,7 +51,6 @@
                 android:textColor="@color/item_title_font"
                 />
 
-
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"

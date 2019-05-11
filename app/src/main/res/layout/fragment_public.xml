@@ -17,8 +17,8 @@
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:background="#fff">
+        android:background="#fff"
+        android:scrollbars="vertical">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -29,49 +29,60 @@
                 android:id="@+id/ll_select_car"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="20dp"
-                        android:text="Truck type and num select"
+                        android:text="选择车辆"
                         android:textColor="@color/item_title_font"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/xing" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/put_choice"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginBottom="20dp"
-                        android:hint="You don't have a choice"
+                        android:layout_weight="1"
+                        android:hint="您还没有选择所需车辆"
                         android:textColor="@color/item_title_font"
                         android:textColorHint="@color/item_content_font"
                         android:textSize="16sp" />
+
+                    <RelativeLayout
+                        android:layout_width="60dp"
+                        android:layout_height="45dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="60dp"
-                    android:layout_height="45dp">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/right" />
-                </RelativeLayout>
             </LinearLayout>
 
             <View
@@ -79,6 +90,66 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="起运点"
+                        android:textColor="@color/item_title_font"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/xing" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/put_choice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_weight="1"
+                        android:hint="您还没有选择所需车辆"
+                        android:textColor="@color/item_title_font"
+                        android:textColorHint="@color/item_content_font"
+                        android:textSize="16sp" />
+
+                    <RelativeLayout
+                        android:layout_width="60dp"
+                        android:layout_height="45dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/right" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,24 +261,27 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:background="@color/divider_color_dan" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
+                    android:text="Phone country"
                     android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="Phone country"/>
+                    android:textSize="16sp" />
+
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
+                    android:src="@mipmap/xing" />
             </LinearLayout>
 
             <LinearLayout
@@ -218,24 +292,25 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_phone_code"
                     android:layout_width="0dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
-                    android:enabled="false"
                     android:clickable="false"
-                    android:textColor="@color/item_title_font"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
                     android:hint="Please select the consignee's phone country"
                     android:text=""
+                    android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/right"/>
+                    android:src="@mipmap/right" />
             </LinearLayout>
 
             <View
@@ -288,24 +363,25 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_cargo_type"
                     android:layout_width="0dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
-                    android:enabled="false"
                     android:clickable="false"
-                    android:textColor="@color/item_title_font"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
                     android:hint="Please select the cargo type"
                     android:text=""
+                    android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/right"/>
+                    android:src="@mipmap/right" />
             </LinearLayout>
 
             <View
@@ -322,24 +398,25 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_way_of_loading"
                     android:layout_width="0dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
-                    android:enabled="false"
                     android:clickable="false"
-                    android:textColor="@color/item_title_font"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
                     android:hint="Please select the way of loading"
                     android:text=""
+                    android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/right"/>
+                    android:src="@mipmap/right" />
             </LinearLayout>
 
             <View
@@ -446,24 +523,25 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_is_danger"
                     android:layout_width="0dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
-                    android:enabled="false"
                     android:clickable="false"
-                    android:textColor="@color/item_title_font"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
                     android:hint="Please select the way of loading"
                     android:text=""
+                    android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/right"/>
+                    android:src="@mipmap/right" />
             </LinearLayout>
 
             <View
@@ -492,7 +570,6 @@
                 android:background="@color/divider_color_dan" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/put_time_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -503,19 +580,19 @@
                 android:paddingBottom="20dp"
                 android:textColor="@color/item_title_font"
                 android:textColorHint="@color/item_content_font"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btn_publish"
                 android:layout_width="200dp"
                 android:layout_height="45dp"
-                android:background="@drawable/com_btn_shape"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:background="@drawable/com_btn_shape"
                 android:text="RELEASE"
-                android:textColor="#fff"
-                />
+                android:textColor="#fff" />
 
 
         </LinearLayout>
