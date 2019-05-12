@@ -54,5 +54,7 @@ public class Constant {
 
     public static String CAR_STAR = HOST + "/api/user/driver_score";
 
+    public static String UPDATE = HOST + "/api/user/version";
+
     public static final int REQUEST_CODE = 1024;
 }

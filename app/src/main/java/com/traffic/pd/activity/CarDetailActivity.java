@@ -116,6 +116,9 @@ public class CarDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_btn:
+                if(null == MainActivity.userBean){
+                    return;
+                }
                 startDialog.setLayoutId(R.layout.car_to_star).setConvertListener(new ViewConvertListener() {
                     @Override
                     protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
@@ -148,7 +151,9 @@ public class CarDetailActivity extends AppCompatActivity {
                                 startDialog.cancelDialog();
                                 String url = Constant.CAR_STAR;
                                 Map<String, String> map = new HashMap<>();
-                                map.put("driver_id",carInfo.getDriver_id());
+                                map.put("user_sign",MainActivity.userBean.getUser_id());
+                                map.put("driver_id",carInfo.getId());
+                                map.put("order_id",carInfo.getOrder_id());
                                 map.put("score",String.valueOf(finalStar));
                                 new PostRequest("CAR_STAR", CarDetailActivity.this, true)
                                         .go(CarDetailActivity.this, new PostRequest.PostListener() {
@@ -159,8 +164,11 @@ public class CarDetailActivity extends AppCompatActivity {
                                                 try {
                                                     jsonObject = new JSONObject(response);
                                                     int status = jsonObject.getInt("status");
-                                                    String msg = jsonObject.getString("msg");
-                                                    ComUtils.showMsg(CarDetailActivity.this, msg);
+                                                    if(status == 1){
+                                                        ComUtils.showMsg(CarDetailActivity.this, "success");
+                                                    }else{
+                                                        ComUtils.showMsg(CarDetailActivity.this, "You have been graded");
+                                                    }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }

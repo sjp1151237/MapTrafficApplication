@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,8 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
@@ -33,7 +30,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.traffic.pd.MainActivity;
-import com.traffic.pd.MainActivityDemo;
 import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
@@ -41,7 +37,6 @@ import com.traffic.pd.activity.OrderDetailActivity;
 import com.traffic.pd.adapter.OrderListAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
-import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.services.LongPressLocationSource;
@@ -59,11 +54,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -214,6 +206,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         String url = Constant.GET_ORDER_LIST;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("country", "china");
         map.put("page", String.valueOf(mPage));
         map.put("size", String.valueOf(mSize));
         new PostRequest("loadData", getContext(), true)

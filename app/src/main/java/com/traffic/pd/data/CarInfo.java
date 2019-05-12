@@ -13,6 +13,16 @@ public class CarInfo implements Serializable {
     String district;
     String introduce;
 
+    public String getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
+    }
+
+    String order_id;
+
     public String getDriver_id() {
         return driver_id;
     }
