@@ -104,13 +104,6 @@ public class MainActivity extends AppCompatActivity {
             }
             vpMain.setScroll(false);
         }
-//        else {
-//            tag = "2";
-//            if (null != tag) {
-//                vpMain.setAdapter(new MainFreagmentAdapter(getSupportFragmentManager(), tag, fragments));
-//            }
-//            vpMain.setScroll(false);
-//        }
         ComUtils.getLocationPermission(this);
 
         if (null != userBean && !userBean.getIdentity().equals("1")) {
@@ -183,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MainActivity.this, LocationUpService.class);
                                     startService(intent);
                                     carInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CarInfo.class);
-
-                                    UpdateCarLoction.updateCarLoc(MainActivity.this,"","");
                                 }
                                 if (userBean.getIdentity().equals("3")) {
                                     companyInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("data"),CompanyInfo.class);

@@ -33,14 +33,16 @@
         android:text="position"
         android:textColor="@color/item_title_font"/>
 
-    <TextView
+    <EditText
         android:id="@+id/tv_pos_2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:gravity="center_vertical"
         android:textSize="16sp"
         android:text=""
+        android:hint="可输入输入街道门牌号"
         android:textColor="@color/item_content_font"/>
 
     <FrameLayout

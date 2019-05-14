@@ -29,8 +29,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,7 +44,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -100,10 +101,10 @@ public class MyLocationDemoActivity extends AppCompatActivity
     TextView tvBtn;
     @BindView(R.id.tv_pos)
     TextView tvPos;
-    @BindView(R.id.tv_pos_2)
-    TextView tvPos2;
     @BindView(R.id.layout)
     FrameLayout layout;
+    @BindView(R.id.tv_pos_2)
+    EditText tvPos2;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -128,6 +129,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
     Marker markerLongClick;
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventMessage(EventMessage eventMessage) {
         switch (eventMessage.getType()) {
@@ -137,17 +139,17 @@ public class MyLocationDemoActivity extends AppCompatActivity
                         address = (Address) eventMessage.getObject();
                         if (null != address) {
                             tvPos.setText(ComUtils.formatString(address.getCountryName()) + "   " + ComUtils.formatString(address.getAdminArea()) + "    " + ComUtils.formatString(address.getLocality()) + "    " + ComUtils.formatString(address.getSubLocality()));
-                            tvPos2.setText(ComUtils.formatDoubleThree(address.getLatitude()) + "    " + ComUtils.formatDoubleThree(address.getLongitude()));
+                            tvPos2.setText(address.getThoroughfare() + " * " + ComUtils.formatString(address.getSubThoroughfare()));
                         }
                     }
                     if (eventMessage.getObject() instanceof LatLng) {
-                        Locale locale = new Locale("","");
+                        Locale locale = new Locale("", "");
                         address = new Address(locale);
                         address.setLatitude(latLng.latitude);
                         address.setLongitude(latLng.longitude);
                         latLng = (LatLng) eventMessage.getObject();
                         tvPos.setText("no address found");
-                        if(null != latLng){
+                        if (null != latLng) {
                             tvPos2.setText(latLng.latitude + "    " + latLng.longitude);
                         }
                     }
@@ -198,8 +200,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                if(mMap != null){
-                    if(null != markerLongClick){
+                if (mMap != null) {
+                    if (null != markerLongClick) {
                         markerLongClick.remove();
                     }
                     markerLongClick = mMap.addMarker(new MarkerOptions()
@@ -228,67 +230,17 @@ public class MyLocationDemoActivity extends AppCompatActivity
         mUiSettings.setTiltGesturesEnabled(true);
         mUiSettings.setRotateGesturesEnabled(true);
 
-//        getDeviceLocation();
-
-//
-
     }
-
-    //这个方法在地图的onMapReady方法中执行
-    private void getDeviceLocation() {
-        try {
-            Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-            locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    if (task.isSuccessful()) {
-                        Location location = task.getResult();
-                        //获取到当前的经纬度传入movecamera中就ok了
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13.0f));
-                    }
-                }
-            });
-        } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-
-    private void toMyLoc() {
-
-    }
-
-    LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
-
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-    };
 
     /**
-     * Enables the My Location layer if the fine location permission has been granted.
      */
     private void enableMyLocation() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION, true);
         } else if (mMap != null) {
-            // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
         }
     }
@@ -296,8 +248,6 @@ public class MyLocationDemoActivity extends AppCompatActivity
     @Override
     public boolean onMyLocationButtonClick() {
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
         return false;
     }
 
@@ -315,10 +265,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
 
         if (PermissionUtils.isPermissionGranted(permissions, grantResults,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
             enableMyLocation();
         } else {
-            // Display the missing permission error dialog when the fragments resume.
             mPermissionDenied = true;
         }
     }
@@ -327,7 +275,6 @@ public class MyLocationDemoActivity extends AppCompatActivity
     protected void onResumeFragments() {
         super.onResumeFragments();
         if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
             showMissingPermissionError();
             mPermissionDenied = false;
         }
@@ -343,21 +290,19 @@ public class MyLocationDemoActivity extends AppCompatActivity
 
     @Override
     public void getLoc(LatLng location) {
-        Log.e("getLoc","获取定位信息==========");
+        Log.e("getLoc", "获取定位信息==========");
         if (null != location) {
             LatLngBounds bounds = new LatLngBounds.Builder()
                     .include(location)
                     .build();
 
             resetLoc(location);
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-
             address = null;
 
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.tv_title, R.id.tv_pos, R.id.tv_pos_2,R.id.tv_btn})
+    @OnClick({R.id.ll_back, R.id.tv_title, R.id.tv_pos, R.id.tv_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -367,17 +312,18 @@ public class MyLocationDemoActivity extends AppCompatActivity
                 break;
             case R.id.tv_pos:
                 break;
-            case R.id.tv_pos_2:
-                break;
             case R.id.tv_btn:
-                if(address != null && address.getCountryName() != null){
-                    Log.e("loc",address.toString());
+                if (address != null && address.getCountryName() != null) {
+                    Log.e("loc", address.toString());
                     Intent intent = new Intent();
-                    intent.putExtra("address",address);
+                    intent.putExtra("address", address);
+                    if(!TextUtils.isEmpty(tvPos2.getText().toString())){
+                        intent.putExtra("detail", tvPos2.getText().toString());
+                    }
                     setResult(0, intent);
                     finish();
-                }else{
-                    ComUtils.showMsg(MyLocationDemoActivity.this,"获取定位信息失败");
+                } else {
+                    ComUtils.showMsg(MyLocationDemoActivity.this, "获取定位信息失败");
                 }
                 break;
         }
@@ -391,8 +337,8 @@ public class MyLocationDemoActivity extends AppCompatActivity
 
     @Override
     public void resetLoc(LatLng point) {
-        Log.e("getLoc","resetLoc 重新设置位置==========");
-        if(null != markerLongClick){
+        Log.e("getLoc", "resetLoc 重新设置位置==========");
+        if (null != markerLongClick) {
             markerLongClick.remove();
         }
         address = null;

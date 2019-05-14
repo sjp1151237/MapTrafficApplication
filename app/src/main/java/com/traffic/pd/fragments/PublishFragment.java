@@ -24,6 +24,7 @@ import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.CarSelectActivity;
 import com.traffic.pd.activity.ChoosePhoneCodeActivity;
+import com.traffic.pd.activity.MyOrderActivity;
 import com.traffic.pd.adapter.CargoTypeSelectAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
@@ -116,7 +117,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
     private View mView;
     private List<CarType> carSelect;
 
-    NiceDialog cargoTypeDialog, cargoLoadDialog, dangerDialog;
+    NiceDialog cargoTypeDialog, cargoLoadDialog, dangerDialog,orderSuccessDialog;
 
     private static int Location_phone = 1001;
     private static int Location_map_s = 1002;
@@ -149,6 +150,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
             cargoLoadDialog = NiceDialog.init();
             cargoTypeDialog = NiceDialog.init();
             dangerDialog = NiceDialog.init();
+            orderSuccessDialog = NiceDialog.init();
 
             initData();
         }
@@ -313,7 +315,6 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
                     ComUtils.showMsg(getContext(), "Please select car");
                     return;
                 }
-
                 if (null == addressS) {
                     ComUtils.showMsg(getContext(), "Please input shipping address.");
                     return;
@@ -409,8 +410,56 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
                             int status = jsonObject.getInt("status");
                             String msg = jsonObject.getString("msg");
                             if (status == 1) {
-                                ComUtils.showMsg(getContext(), "订单发布成功");
+                                orderSuccessDialog.setLayoutId(R.layout.to_order_detail).setConvertListener(new ViewConvertListener() {
+                                    @Override
+                                    protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
 
+                                        TextView tv_cancel = holder.getView(R.id.tv_cancel);
+                                        TextView tv_sure = holder.getView(R.id.tv_sure);
+                                        tv_cancel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                orderSuccessDialog.cancelDialog();
+                                            }
+                                        });
+                                        tv_sure.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Intent intent1 = new Intent(getActivity(), MyOrderActivity.class);
+                                                startActivity(intent1);
+                                                orderSuccessDialog.cancelDialog();
+                                            }
+                                        });
+
+                                    }
+                                })
+                                        .setDimAmount(0.3f)
+                                        .setMargin(30)
+                                        .setShowBottom(false)
+                                        .show(getChildFragmentManager());
+
+                                carSelect.clear();
+                                putChoice.setText("");
+                                addressS = null;
+                                addressG = null;
+                                putShippingAddress.setText("");
+                                putReceiptAddress.setText("");
+                                putName.setText("");
+                                putPhoneNum.setText("");
+                                putTime.setText("");
+                                putTime.setTag("");
+                                tvCargoType.setText("");
+                                etRequirements.setText("");
+                                cargoName.setText("");
+                                cargoWrappage.setText("");
+                                cargoW.setText("");
+                                cargoVolume.setText("");
+                                cargoWeight.setText("");
+                                cargoD.setText("");
+                                cargoH.setText("");
+                                tvCargoType.setText("");
+                                tvIsDanger.setText("");
+                                tvWayOfLoading.setText("");
                                 EventBus.getDefault().post(new EventMessage(EventMessage.REFRESH_ORDER_HALL_DATA, ""));
                             }
                         } catch (JSONException e) {

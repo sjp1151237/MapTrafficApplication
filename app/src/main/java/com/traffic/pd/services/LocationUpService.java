@@ -9,6 +9,9 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.traffic.pd.MainActivity;
+import com.traffic.pd.update.UpdateCarLoction;
+
 import java.util.Date;
 
 public class LocationUpService extends Service {
@@ -30,6 +33,8 @@ public class LocationUpService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // 实时上传司机的位置
+                UpdateCarLoction.updateCarLoc(LocationUpService.this,"50.36","89.65");
                 Log.d("LongRunningService", "executed at " + new Date().
                         toString());
             }

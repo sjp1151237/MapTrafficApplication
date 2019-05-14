@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
@@ -54,8 +57,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -77,6 +82,10 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     @BindView(R.id.rcv_hall_list)
     RecyclerView rcvHallList;
     Unbinder unbinder;
+    @BindView(R.id.tv_loc)
+    TextView tvLoc;
+    @BindView(R.id.ll_loc)
+    LinearLayout llLoc;
 
     private String mParam1;
     private String mParam2;
@@ -85,7 +94,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     OrderListAdapter hallListAdapter;
 
-    int mPage,mSize;
+    int mPage, mSize;
 
 
     private GoogleMap mMap = null;
@@ -129,12 +138,12 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (null == mView) {
-            Log.e("onCreateView","onCreateView");
+            Log.e("onCreateView", "onCreateView");
             EventBus.getDefault().register(this);
             orderBeans = new ArrayList<>();
             mView = inflater.inflate(R.layout.fragment_order_hall, container, false);
             unbinder = ButterKnife.bind(this, mView);
-            hallListAdapter = new OrderListAdapter(getContext(),orderBeans,"home");
+            hallListAdapter = new OrderListAdapter(getContext(), orderBeans, "home");
             rcvHallList.setLayoutManager(new LinearLayoutManager(getContext()));
             rcvHallList.setAdapter(hallListAdapter);
             mPage = 1;
@@ -148,7 +157,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             mLocationSource = new LongPressLocationSource(this);
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-            if(null != mapFragment){
+            if (null != mapFragment) {
                 new OnMapAndViewReadyListener(mapFragment, this);
             }
             googleMapManager = new GoogleMapManager(getContext(), this);
@@ -183,8 +192,8 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     }
 
     private void loadDataR() {
-        String[] lats = {"30","-21","-56","69","80","60","32","78"};
-        String[] longitudes = {"-25.36","108.256","29.265","39.245","78.598","88.598","-25.36","-28.63"};
+        String[] lats = {"30", "-21", "-56", "69", "80", "60", "32", "78"};
+        String[] longitudes = {"-25.36", "108.256", "29.265", "39.245", "78.598", "88.598", "-25.36", "-28.63"};
         orderBeans = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             OrderBean orderBean = new OrderBean();
@@ -194,19 +203,25 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             orderBeans.add(orderBean);
         }
         isDataLoad = true;
-        if(isMapReady && !isAddMaker){
+        if (isMapReady && !isAddMaker) {
             addMakers();
         }
     }
 
-    private void loadData() {
-        if(null == MainActivity.userBean){
+    public void loadData() {
+        if (null == MainActivity.userBean) {
             return;
         }
         String url = Constant.GET_ORDER_LIST;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
         map.put("country", "china");
+//        if(null != MainActivity.companyInfo){
+//            map.put("country", MainActivity.companyInfo.getCountry());
+//        }
+//        if(null != MainActivity.carInfo){
+//            map.put("country", MainActivity.carInfo.getCountry());
+//        }
         map.put("page", String.valueOf(mPage));
         map.put("size", String.valueOf(mSize));
         new PostRequest("loadData", getContext(), true)
@@ -222,13 +237,13 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                             if (status == 1) {
                                 isDataLoad = true;
                                 orderBeans.clear();
-                                orderBeans.addAll(JSONArray.parseArray(jsonObject.getString("data"),OrderBean.class));
+                                orderBeans.addAll(JSONArray.parseArray(jsonObject.getString("data"), OrderBean.class));
 
                                 hallListAdapter.notifyDataSetChanged();
-                                if(!isAddMaker && isMapReady){
+                                if (!isAddMaker && isMapReady) {
                                     addMakers();
                                 }
-                                Log.e("tag",response);
+                                Log.e("tag", response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -249,37 +264,46 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                     }
                 }, url, map);
     }
-    String[] lats = {"30","-21","-56","69","80","60","32","78"};
-    String[] longitudes = {"-25.36","108.256","29.265","39.245","78.598","88.598","-25.36","-28.63"};
+
+    String[] lats = {"30", "-21", "-56", "69", "80", "60", "32", "78"};
+    String[] longitudes = {"-25.36", "108.256", "29.265", "39.245", "78.598", "88.598", "-25.36", "-28.63"};
+
     private void addMakers() {
         isAddMaker = true;
 
-        if(null != orderBeans){
+        if (null != orderBeans) {
 
             for (int i = 0; i < orderBeans.size(); i++) {
                 LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeans.get(i).getLat()), Double.parseDouble(orderBeans.get(i).getLongi()));
-//                LatLng BRISBANE = new LatLng(Double.parseDouble(lats[new Random().nextInt(6)]), Double.parseDouble(longitudes[new Random().nextInt(6)]));
                 mMap.addMarker(new MarkerOptions()
                         .position(BRISBANE)
-                        .title("Date:"+orderBeans.get(i).getStart_time())
+                        .title("Date:" + orderBeans.get(i).getStart_time())
                         .zIndex(i)
-                        .snippet("To:" + orderBeans.get(i).getRecive_country() + "  "+ orderBeans.get(i).getProvince() + "  "+ orderBeans.get(i).getCity()));
+                        .snippet("To:" + orderBeans.get(i).getRecive_country() + "  " + orderBeans.get(i).getProvince() + "  " + orderBeans.get(i).getCity()));
             }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("clear","地图情理。。。。。。。。。。。。。。。。");
+                    mMap.clear();
+                }
+            },20000);
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(null != unbinder){
+        if (null != unbinder) {
             unbinder.unbind();
         }
         EventBus.getDefault().unregister(this);
     }
 
-    public void refreshData(){
+    public void refreshData() {
         mPage = 1;
-        mSize = 100;
+        mSize = 1000000;
         loadData();
     }
 
@@ -331,11 +355,13 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
         googleMapManager.getMyLocation();
 
-        if(isDataLoad && !isAddMaker){
+        if (isDataLoad && !isAddMaker) {
             addMakers();
         }
     }
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
@@ -345,8 +371,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             // Permission to access the location is missing.
             PermissionUtils.requestPermission((AppCompatActivity) getActivity(), LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION, true);
-        }
-        else if (mMap != null) {
+        } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
         }
@@ -407,33 +432,38 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        if(MainActivity.userBean.getIdentity().equals("2")){
-            if(null != MainActivity.carInfo && MainActivity.carInfo.getStatus().equals("2")){
+        if (MainActivity.userBean.getIdentity().equals("2")) {
+            if (null != MainActivity.carInfo && MainActivity.carInfo.getStatus().equals("2")) {
                 OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
                 Intent intent = new Intent(getContext(), OrderDetailActivity.class);
-                intent.putExtra("info",orderBean);
+                intent.putExtra("info", orderBean);
                 intent.putExtra("from", "home");
                 startActivity(intent);
-            }else{
-                ComUtils.showMsg(getContext(),"审核通过才能接单");
+            } else {
+                ComUtils.showMsg(getContext(), "审核通过才能接单");
             }
         }
-        if(MainActivity.userBean.getIdentity().equals("3")){
-            if(null != MainActivity.companyInfo && MainActivity.companyInfo.getStatus().equals("2")){
+        if (MainActivity.userBean.getIdentity().equals("3")) {
+            if (null != MainActivity.companyInfo && MainActivity.companyInfo.getStatus().equals("2")) {
                 OrderBean orderBean = orderBeans.get((int) marker.getZIndex());
                 Intent intent = new Intent(getContext(), OrderDetailActivity.class);
-                intent.putExtra("info",orderBean);
+                intent.putExtra("info", orderBean);
                 intent.putExtra("from", "home");
                 startActivity(intent);
-            }else{
-                ComUtils.showMsg(getContext(),"审核通过才能接单");
+            } else {
+                ComUtils.showMsg(getContext(), "审核通过才能接单");
             }
         }
 
 //        ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
     }
 
-    class MyReceive extends BroadcastReceiver{
+    @OnClick(R.id.ll_loc)
+    public void onViewClicked() {
+
+    }
+
+    class MyReceive extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {

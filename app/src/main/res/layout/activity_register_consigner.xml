@@ -19,130 +19,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="user name"/>
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="用户名"
+                        android:textColor="@color/item_title_font"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/xing" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_username"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
                     android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:textColorHint="@color/item_content_font"
-                    android:hint="enter phonenum"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:background="@color/divider_color_dan"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:maxLines="1"
                     android:layout_marginLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="location"/>
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_location"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <EditText
-                    android:id="@+id/tv_location"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:clickable="false"
-                    android:textColor="@color/item_title_font"
-                    android:hint="Please select your phone country"
-                    android:text=""
-                    android:textColorHint="@color/item_content_font"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"/>
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@mipmap/right"/>
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/divider_color_dan"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="phonenum"/>
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
-                    android:id="@+id/et_phonenum"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
+                    android:layout_marginRight="20dp"
+                    android:hint="请输入用户名"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:hint="enter phonenum"/>
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
             <View
@@ -154,35 +67,126 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/item_title_font"
-                    android:textSize="16sp"
-                    android:text="password"/>
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="手机号"
+                        android:textColor="@color/item_title_font"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/xing" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_phonenum"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:background="@null"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:layout_marginLeft="20dp"
+                        android:hint="请填您的手机号码"
+                        android:textColor="@color/item_title_font"
+                        android:textColorHint="@color/item_content_font"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:maxLines="1"
+                            android:text="China"
+                            android:textColor="@color/colorTip"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/right2" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="密码"
+                        android:textColor="@color/item_title_font"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/xing" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_password"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:textSize="16sp"
+                    android:background="@null"
+                    android:maxLines="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="请输入密码"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
-                    android:hint="enter password"/>
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
             <View
@@ -194,35 +198,71 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="确认密码"
+                        android:textColor="@color/item_title_font"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/xing" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/et_password_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@null"
+                    android:maxLines="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="请重新输入密码"
+                    android:textColor="@color/item_title_font"
+                    android:textColorHint="@color/item_content_font"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/divider_color_dan"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="选择身份"
                     android:textColor="@color/item_title_font"
                     android:textSize="16sp"
-                    android:text="password"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="5dp"
-                    android:src="@mipmap/xing"/>
-
-                <EditText
-                    android:id="@+id/et_password_two"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:layout_height="45dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/item_title_font"
-                    android:textColorHint="@color/item_content_font"
-                    android:hint="confirm password"/>
+                    android:src="@mipmap/xing" />
             </LinearLayout>
 
             <RadioGroup
@@ -231,6 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -269,14 +310,13 @@
     <TextView
         android:id="@+id/btn_regist"
         android:layout_width="200dp"
-        android:layout_height="45dp"
+        android:layout_height="44dp"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:text="commit"
-        android:background="@color/colorPrimary"
+        android:text="Commit"
+        android:background="@drawable/btn_round_shape"
         android:gravity="center"
         android:layout_margin="15dp"
         />
-
 
 </LinearLayout>

@@ -162,7 +162,7 @@ public class ComUtils {
                 monthOfYear ++;
                 String date = year+"-" + monthOfYear+"-"+dayOfMonth;
                 if(compareDate(date,getNowDate()) == 1){
-                    tv.setText("You select ：" + year + " YEAR " + (monthOfYear) + " MONTH " + dayOfMonth + " DAY ");
+                    tv.setText( year + " year " + (monthOfYear) + " month " + dayOfMonth + " day ");
                     try {
                         tv.setTag(dateToStamp(date));
                     } catch (ParseException e) {

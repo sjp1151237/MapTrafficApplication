@@ -12,6 +12,31 @@
         android:orientation="horizontal"
         android:background="@color/colorPrimary">
 
+
+        <LinearLayout
+            android:id="@+id/ll_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/loc"/>
+
+            <TextView
+                android:id="@+id/tv_loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:text="China"/>
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -25,8 +25,8 @@ public class UpdateCarLoction {
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
         map.put("id", MainActivity.carInfo.getId());
-        map.put("lat_n", "56.236");
-        map.put("long_n", "120.560");
+        map.put("lat_n", lat_n);
+        map.put("long_n", long_n);
         new PostRequest("updateCarLoc", context, false)
                 .go(context, new PostRequest.PostListener() {
                     @Override

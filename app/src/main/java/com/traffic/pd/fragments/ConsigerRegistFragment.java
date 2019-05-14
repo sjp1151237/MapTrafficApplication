@@ -52,7 +52,7 @@ public class ConsigerRegistFragment extends Fragment {
     TextView btnRegist;
     Unbinder unbinder1;
     @BindView(R.id.tv_location)
-    EditText tvLocation;
+    TextView tvLocation;
     @BindView(R.id.ll_location)
     LinearLayout llLocation;
 
@@ -65,7 +65,6 @@ public class ConsigerRegistFragment extends Fragment {
     RadioButton rbCompany;
     @BindView(R.id.rg_main)
     RadioGroup rgMain;
-    Unbinder unbinder2;
     @BindView(R.id.et_username)
     EditText etUsername;
 
@@ -76,7 +75,6 @@ public class ConsigerRegistFragment extends Fragment {
             mView = inflater.inflate(R.layout.activity_register_consigner, container, false);
             unbinder = ButterKnife.bind(this, mView);
         }
-        unbinder2 = ButterKnife.bind(this, mView);
         return mView;
     }
 
@@ -188,7 +186,7 @@ public class ConsigerRegistFragment extends Fragment {
         if (requestCode == locCode && resultCode == 2) {
 
             phoneCodeBean = (PhoneCodeBean) data.getSerializableExtra("res");
-            tvLocation.setText(phoneCodeBean.getA() + "   " + phoneCodeBean.getD());
+            tvLocation.setText(phoneCodeBean.getA());
 
         }
 
