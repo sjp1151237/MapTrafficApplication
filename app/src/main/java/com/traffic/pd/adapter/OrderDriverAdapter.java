@@ -51,9 +51,9 @@ public class OrderDriverAdapter extends RecyclerView.Adapter<OrderDriverAdapter.
         driversHolder.tv_phone.setText("Call: " + carInfo.getMobile());
 
         if(type.equals("2") && MainActivity.userBean.getIdentity().equals("1")){
-            driversHolder.iv_select.setVisibility(View.VISIBLE);
+            driversHolder.rl_select.setVisibility(View.VISIBLE);
         }else{
-            driversHolder.iv_select.setVisibility(View.GONE);
+            driversHolder.rl_select.setVisibility(View.GONE);
         }
 
         driversHolder.itemView.setOnClickListener(new View.OnClickListener() {

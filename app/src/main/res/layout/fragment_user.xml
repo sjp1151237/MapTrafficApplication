@@ -118,7 +118,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="50dp"
                 android:background="@color/tabcontral_n" />
 
             <LinearLayout
@@ -158,7 +157,7 @@
             <View
                 android:id="@+id/v_driver"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="0.5dp"
                 android:background="@color/tabcontral_n" />
 
             <LinearLayout
@@ -199,7 +198,7 @@
             <View
                 android:id="@+id/v_company"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="0.5dp"
                 android:background="@color/tabcontral_n" />
 
             <LinearLayout
@@ -241,7 +240,6 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="50dp"
                 android:background="@color/tabcontral_n" />
 
             <LinearLayout
@@ -282,7 +280,7 @@
             <View
                 android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="0.5dp"
                 android:background="@color/tabcontral_n" />
 
 
@@ -325,7 +323,6 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="50dp"
                 android:background="@color/tabcontral_n" />
 
             <LinearLayout
@@ -367,7 +364,6 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="50dp"
                 android:background="@color/tabcontral_n" />
 
             <LinearLayout
@@ -384,7 +380,7 @@
                     android:layout_height="18dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/about_us" />
+                    android:src="@mipmap/out" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -407,7 +403,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="50dp"
                 android:background="@color/tabcontral_n" />
         </LinearLayout>
     </ScrollView>

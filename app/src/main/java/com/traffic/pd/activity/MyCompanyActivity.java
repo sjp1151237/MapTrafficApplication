@@ -100,5 +100,6 @@ public class MyCompanyActivity extends AppCompatActivity {
 
     @OnClick(R.id.ll_back)
     public void onViewClicked() {
+        finish();
     }
 }

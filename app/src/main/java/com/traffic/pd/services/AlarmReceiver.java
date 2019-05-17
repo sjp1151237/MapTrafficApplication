@@ -8,6 +8,7 @@ import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
     public AlarmReceiver() {
+
     }
 
     @Override

@@ -24,6 +24,7 @@
         android:background="@color/divider_color_dan"/>
 
     <LinearLayout
+        android:id="@+id/ll_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"

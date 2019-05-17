@@ -52,8 +52,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.EventMessage;
@@ -74,10 +72,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * This demo shows how GMS Location can be used to check for changes to the users location.  The
- * "My Location" button uses GMS Location to set the blue dot representing the users location.
- * Permission for {@link Manifest.permission#ACCESS_FINE_LOCATION} is requested at run
- * time. If the permission has not been granted, the Activity is finished with an error message.
+ *
  */
 public class MyLocationDemoActivity extends AppCompatActivity
         implements
@@ -174,6 +169,12 @@ public class MyLocationDemoActivity extends AppCompatActivity
         tvBtn.setText("sure");
         tvBtn.setVisibility(View.VISIBLE);
         tvTitle.setText("Location");
+
+        if(!TextUtils.isEmpty(getIntent().getStringExtra("from"))){
+            tvPos2.setVisibility(View.GONE);
+        }else{
+            tvPos2.setVisibility(View.VISIBLE);
+        }
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

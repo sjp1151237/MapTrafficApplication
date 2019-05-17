@@ -37,6 +37,7 @@ public class UpDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tag = getIntent().getStringExtra("tag");
 
+        tvTitle.setText("基本信息");
         driversRegisterFragment = DriversRegisterFragment.newInstance(tag,"");
         //获取管理者
         supportFragmentManager = getSupportFragmentManager();

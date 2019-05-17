@@ -34,7 +34,7 @@
                 android:layout_marginRight="10dp"
                 android:textSize="18sp"
                 android:textColor="@color/white"
-                android:text="China"/>
+                android:text=""/>
         </LinearLayout>
 
         <TextView

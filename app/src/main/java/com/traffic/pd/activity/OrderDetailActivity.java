@@ -214,42 +214,42 @@ public class OrderDetailActivity extends AppCompatActivity {
 //            tvAddressReceive.setText(ComUtils.formatString(orderBean.getRecive_address()));
 //            tvAddress.setText(ComUtils.formatString(orderBean.getAddress()));
             if (TextUtils.isEmpty(orderBean.getGoods_name())) {
-                tvCargoName.setVisibility(View.GONE);
+                tvCargoName.setText("货物名称 : " + "未知");
             } else {
                 tvCargoName.setText("货物名称 : " + ComUtils.formatString(orderBean.getGoods_name()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_kind())) {
-                tvCargoType.setVisibility(View.GONE);
+                tvCargoType.setText("货物种类 : " + "未知");
             } else {
                 tvCargoType.setText("货物种类 : " + ComUtils.formatString(orderBean.getGoods_kind()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_way())) {
-                tvWayOfLoading.setVisibility(View.GONE);
+                tvWayOfLoading.setText("装货方式 : " + "未知");
             } else {
                 tvWayOfLoading.setText("装货方式 : " + ComUtils.formatString(orderBean.getGoods_way()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_volume())) {
-                tvCargoVolume.setVisibility(View.GONE);
+                tvCargoVolume.setText("货物体积 : " + "未知");
             } else {
                 tvCargoVolume.setText("货物体积 : " + ComUtils.formatString(orderBean.getGoods_volume()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_weight())) {
-                tvCargoWeight.setVisibility(View.GONE);
+                tvCargoWeight.setText("货物毛重 : " + "未知");
             } else {
                 tvCargoWeight.setText("货物毛重 : " + ComUtils.formatString(orderBean.getGoods_weight()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_size())) {
-                tvCargoWhd.setVisibility(View.GONE);
+                tvCargoWhd.setText("货物长宽高 : " + "未知");
             } else {
                 tvCargoWhd.setText("货物长宽高 : " + ComUtils.formatString(orderBean.getGoods_size()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_pack())) {
-                tvCargoWrappage.setVisibility(View.GONE);
+                tvCargoWrappage.setText("外包装材质 : " + "未知");
             } else {
                 tvCargoWrappage.setText("外包装材质 : " + ComUtils.formatString(orderBean.getGoods_pack()));
             }
             if (TextUtils.isEmpty(orderBean.getGoods_require())) {
-                tvRequirements.setVisibility(View.GONE);
+                tvRequirements.setText("装货要求 : " + "无");
             } else {
                 tvRequirements.setText("装货要求 : " + ComUtils.formatString(orderBean.getGoods_require()));
             }

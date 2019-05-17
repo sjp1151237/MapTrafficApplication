@@ -122,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="司机姓名"
+                        android:text="公司名字"
                         android:textColor="@color/item_title_font"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -142,7 +142,7 @@
                     android:maxLines="1"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:hint="请输入司机姓名"
+                    android:hint="请输入公司名字"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
                     android:textSize="16sp" />
@@ -170,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="车辆位置"
+                        android:text="公司位置位置"
                         android:textColor="@color/item_title_font"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -300,7 +300,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="车牌号"
+                        android:text="营业执照号"
                         android:textColor="@color/item_title_font"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -320,7 +320,7 @@
                     android:maxLines="1"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:hint="请输入车牌号"
+                    android:hint="请输入营业执照号"
                     android:textColor="@color/item_title_font"
                     android:textColorHint="@color/item_content_font"
                     android:textSize="16sp" />
@@ -343,7 +343,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:text="车牌号照片"
+                    android:text="营业执照照片"
                     android:textColor="@color/item_title_font"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -380,7 +380,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:text="车辆照片"
+                    android:text="公司照片"
                     android:textColor="@color/item_title_font"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -412,6 +412,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:visibility="gone"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -432,6 +433,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_cartype"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -457,12 +459,6 @@
                     android:layout_centerInParent="true"
                     android:src="@mipmap/right2" />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/divider_color_dan"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -87,7 +87,7 @@ public class DriversRegisterFragment extends Fragment {
     @BindView(R.id.ll_select_car_location)
     LinearLayout llSelectCarLocation;
     @BindView(R.id.tv_address_detail)
-    EditText tvAddressDetail;
+    TextView tvAddressDetail;
     @BindView(R.id.et_car_license_num)
     EditText etCarLicenseNum;
     @BindView(R.id.iv_car_license_num)
@@ -124,6 +124,7 @@ public class DriversRegisterFragment extends Fragment {
     List<String> selectImgs;
     private int mWith;
     ImgAdapter imgAdapter;
+    String addressDetail;
 
     Handler handler = new Handler(){
         @Override
@@ -417,7 +418,7 @@ public class DriversRegisterFragment extends Fragment {
             return;
         if (requestCode == Location_phone && resultCode == 2) {
             phoneCodeBean = (PhoneCodeBean) data.getSerializableExtra("res");
-            tvLocation.setText(phoneCodeBean.getA() + "   " + phoneCodeBean.getD());
+            tvLocation.setText(phoneCodeBean.getA());
         }
         if (requestCode == Location_phone && resultCode == 3) {
             carType = (CarType) data.getSerializableExtra("car");
@@ -430,6 +431,14 @@ public class DriversRegisterFragment extends Fragment {
                 tvProvince.setText(ComUtils.formatString(address.getAdminArea()));
                 tvCity.setText(ComUtils.formatString(address.getLocality()));
                 tvDistrict.setText(ComUtils.formatString(address.getSubLocality()));
+
+                tvAddressDetail.setText(data.getStringExtra("detail"));
+                if (!TextUtils.isEmpty(data.getStringExtra("detail"))) {
+                    addressDetail = data.getStringExtra("detail");
+                } else {
+                    addressDetail = "";
+                }
+
             }
         }
         if (resultCode == getActivity().RESULT_OK) {

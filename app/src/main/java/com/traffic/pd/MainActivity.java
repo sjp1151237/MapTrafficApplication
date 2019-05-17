@@ -8,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -242,5 +244,20 @@ public class MainActivity extends AppCompatActivity {
         if (orderHallFragmentD != null) {
             orderHallFragmentD.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_UP) {
+            Toast.makeText(this,"请按Home键返回桌面",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 }

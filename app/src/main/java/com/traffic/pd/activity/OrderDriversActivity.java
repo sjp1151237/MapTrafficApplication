@@ -45,12 +45,14 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
     @BindView(R.id.rcv_cars)
     RecyclerView rcvCars;
 
-    String orderId,orderStatus;
+    String orderId, orderStatus;
 
     List<CarInfo> carInfoList;
     OrderDriverAdapter driversAdapter;
     @BindView(R.id.tv_tip)
     TextView tvTip;
+    @BindView(R.id.ll_tip)
+    LinearLayout llTip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,14 +95,16 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
                                 rcvCars.setLayoutManager(new LinearLayoutManager(OrderDriversActivity.this));
                                 rcvCars.setAdapter(driversAdapter);
 
-                                if(orderStatus.equals("2") && MainActivity.userBean.getIdentity().equals("1")){
+                                if (orderStatus.equals("2") && MainActivity.userBean.getIdentity().equals("1")) {
                                     tvBtn.setVisibility(View.VISIBLE);
                                     tvBtn.setText(R.string.begin);
+                                    llTip.setVisibility(View.VISIBLE);
                                     tvTip.setVisibility(View.VISIBLE);
                                     tvTip.setText("You have select " + carInfoList.size() + " cars ,press 'Begin' to start the Order");
-                                }else{
+                                } else {
                                     tvBtn.setVisibility(View.GONE);
                                     tvTip.setVisibility(View.GONE);
+                                    llTip.setVisibility(View.GONE);
                                 }
 
                             }
@@ -128,7 +132,7 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
 
     }
 
-    @OnClick({R.id.ll_back, R.id.tv_btn})
+    @OnClick({R.id.ll_back, R.id.tv_btn,R.id.ll_tip})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -136,6 +140,8 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
                 break;
             case R.id.tv_btn:
                 toConfirm();
+                break;
+            case R.id.ll_tip:
                 break;
         }
     }
@@ -149,10 +155,10 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
 
         StringBuilder carss = new StringBuilder();
         for (int i = 0; i < carInfoList.size(); i++) {
-            if(carInfoList.get(i).isSelect()){
-                if(i == (carInfoList.size() - 1)){
+            if (carInfoList.get(i).isSelect()) {
+                if (i == (carInfoList.size() - 1)) {
                     carss.append(carInfoList.get(i).getId());
-                }else{
+                } else {
                     carss.append(carInfoList.get(i).getId() + ",");
                 }
             }
@@ -169,7 +175,7 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
                             if (status == 1) {
                                 ComUtils.showMsg(OrderDriversActivity.this, "success");
                                 toEditOrder();
-                            }else{
+                            } else {
                                 tvBtn.setEnabled(true);
                             }
                         } catch (JSONException e) {
@@ -243,10 +249,11 @@ public class OrderDriversActivity extends AppCompatActivity implements OrderDriv
     public void selectCar() {
         int select = 0;
         for (int i = 0; i < carInfoList.size(); i++) {
-            if(carInfoList.get(i).isSelect()){
+            if (carInfoList.get(i).isSelect()) {
                 select++;
             }
         }
         tvTip.setText("You have select " + select + " cars ,press 'Begin' to start the Order");
     }
+
 }

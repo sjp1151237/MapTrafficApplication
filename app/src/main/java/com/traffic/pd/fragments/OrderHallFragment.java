@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,16 +34,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.othershe.nicedialog.BaseNiceDialog;
+import com.othershe.nicedialog.NiceDialog;
+import com.othershe.nicedialog.ViewConvertListener;
+import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.OnMapAndViewReadyListener;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.OrderDetailActivity;
+import com.traffic.pd.adapter.CargoTypeSelectAdapter;
 import com.traffic.pd.adapter.OrderListAdapter;
+import com.traffic.pd.adapter.PhoneCodeAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.constant.EventMessage;
 import com.traffic.pd.data.OrderBean;
+import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.maps.MyLocationDemoActivity;
 import com.traffic.pd.services.LongPressLocationSource;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.GoogleMapManager;
@@ -109,10 +119,14 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     private boolean mPermissionDenied = false;
     private UiSettings mUiSettings;
-    private LongPressLocationSource mLocationSource;
     GoogleMapManager googleMapManager;
 
     MyReceive myReceive;
+
+    String mCountry;
+    NiceDialog mNiceDialog;
+    List<PhoneCodeBean> beanList;
+    Address mAddress;
 
     public static OrderHallFragment newInstance(String param1, String param2) {
 
@@ -147,20 +161,35 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
             rcvHallList.setLayoutManager(new LinearLayoutManager(getContext()));
             rcvHallList.setAdapter(hallListAdapter);
             mPage = 1;
-            mSize = 100;
+            mSize = 10000000;
             isMapReady = false;
             isDataLoad = false;
             isAddMaker = false;
 
-            loadData();
+            mNiceDialog = NiceDialog.init();
+            String data = ComUtils.getJson("sds.json", getContext());
+            if(!TextUtils.isEmpty(data)){
+                beanList = JSONArray.parseArray(data,PhoneCodeBean.class);
+            }
 
-            mLocationSource = new LongPressLocationSource(this);
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             if (null != mapFragment) {
                 new OnMapAndViewReadyListener(mapFragment, this);
             }
             googleMapManager = new GoogleMapManager(getContext(), this);
+
+            if(null != MainActivity.companyInfo){
+                mCountry = MainActivity.companyInfo.getCountry();
+                tvLoc.setText(MainActivity.companyInfo.getCountry());
+            }
+            if(null != MainActivity.carInfo){
+                mCountry = MainActivity.carInfo.getCountry();
+                tvLoc.setText(MainActivity.carInfo.getCountry());
+            }
+
+            loadData();
+
 
         }
         return mView;
@@ -169,13 +198,11 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     @Override
     public void onResume() {
         super.onResume();
-        mLocationSource.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mLocationSource.onPause();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -191,37 +218,16 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         }
     }
 
-    private void loadDataR() {
-        String[] lats = {"30", "-21", "-56", "69", "80", "60", "32", "78"};
-        String[] longitudes = {"-25.36", "108.256", "29.265", "39.245", "78.598", "88.598", "-25.36", "-28.63"};
-        orderBeans = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            OrderBean orderBean = new OrderBean();
-            orderBean.setLat(lats[i]);
-            orderBean.setLongi(longitudes[i]);
-            orderBean.setCar_type("车型");
-            orderBeans.add(orderBean);
-        }
-        isDataLoad = true;
-        if (isMapReady && !isAddMaker) {
-            addMakers();
-        }
-    }
-
     public void loadData() {
         if (null == MainActivity.userBean) {
             return;
         }
         String url = Constant.GET_ORDER_LIST;
         Map<String, String> map = new HashMap<>();
+        if(!TextUtils.isEmpty(mCountry)){
+            map.put("country", mCountry);
+        }
         map.put("user_sign", MainActivity.userBean.getUser_id());
-        map.put("country", "china");
-//        if(null != MainActivity.companyInfo){
-//            map.put("country", MainActivity.companyInfo.getCountry());
-//        }
-//        if(null != MainActivity.carInfo){
-//            map.put("country", MainActivity.carInfo.getCountry());
-//        }
         map.put("page", String.valueOf(mPage));
         map.put("size", String.valueOf(mSize));
         new PostRequest("loadData", getContext(), true)
@@ -241,6 +247,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
                                 hallListAdapter.notifyDataSetChanged();
                                 if (!isAddMaker && isMapReady) {
+                                    mMap.clear();
                                     addMakers();
                                 }
                                 Log.e("tag", response);
@@ -265,14 +272,9 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 }, url, map);
     }
 
-    String[] lats = {"30", "-21", "-56", "69", "80", "60", "32", "78"};
-    String[] longitudes = {"-25.36", "108.256", "29.265", "39.245", "78.598", "88.598", "-25.36", "-28.63"};
-
     private void addMakers() {
         isAddMaker = true;
-
         if (null != orderBeans) {
-
             for (int i = 0; i < orderBeans.size(); i++) {
                 LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeans.get(i).getLat()), Double.parseDouble(orderBeans.get(i).getLongi()));
                 mMap.addMarker(new MarkerOptions()
@@ -281,14 +283,6 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                         .zIndex(i)
                         .snippet("To:" + orderBeans.get(i).getRecive_country() + "  " + orderBeans.get(i).getProvince() + "  " + orderBeans.get(i).getCity()));
             }
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.e("clear","地图情理。。。。。。。。。。。。。。。。");
-                    mMap.clear();
-                }
-            },20000);
         }
     }
 
@@ -315,19 +309,12 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (marker.equals(mSelectedMarker)) {
-            // The showing info window has already been closed - that's the first thing to happen
-            // when any marker is clicked.
-            // Return true to indicate we have consumed the event and that we do not want the
-            // the default behavior to occur (which is for the camera to move such that the
-            // marker is centered and for the marker's info window to open, if it has one).
             mSelectedMarker = null;
             return true;
         }
 
         mSelectedMarker = marker;
 
-        // Return false to indicate that we have not consumed the event and that we wish
-        // for the default behavior to occur.
         return false;
     }
 
@@ -344,7 +331,6 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         // Set listener for map click event.  See the bottom of this class for its behavior.
         mMap.setOnMapClickListener(this);
 
-        mMap.setLocationSource(mLocationSource);
         isMapReady = true;
 
         mMap.setOnInfoWindowClickListener(this);
@@ -379,13 +365,11 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(getContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -396,10 +380,7 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
     @Override
     public void getLoc(LatLng location) {
         if (null != location) {
-            LatLngBounds bounds = new LatLngBounds.Builder()
-                    .include(location)
-                    .build();
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 12.0f));
         }
     }
 
@@ -409,13 +390,10 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
-
         if (PermissionUtils.isPermissionGranted(permissions, grantResults,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
             enableMyLocation();
         } else {
-            // Display the missing permission error dialog when the fragments resume.
             mPermissionDenied = true;
         }
     }
@@ -454,13 +432,14 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
                 ComUtils.showMsg(getContext(), "审核通过才能接单");
             }
         }
-
-//        ComUtils.showMsg(getContext(),"这是第" + marker.getZIndex() + "  " + marker.getTitle() + "  " + marker.getId()+ "  " + marker.getSnippet()+ "  " + marker.getTag());
     }
 
+    private static int Location_map_s = 1002;
     @OnClick(R.id.ll_loc)
     public void onViewClicked() {
-
+        Intent intent = new Intent(getContext(), MyLocationDemoActivity.class);
+        intent.putExtra("from","orderhall");
+        startActivityForResult(intent, Location_map_s);
     }
 
     class MyReceive extends BroadcastReceiver {
@@ -471,4 +450,19 @@ public class OrderHallFragment extends Fragment implements GoogleMap.OnMarkerCli
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (null == data) {
+            return;
+        }
+        if (requestCode == Location_map_s) {
+            mAddress = (Address) data.getParcelableExtra("address");
+            if(TextUtils.isEmpty(mAddress.getCountryName())){
+                tvLoc.setText(mAddress.getCountryName());
+                mCountry = mAddress.getCountryName();
+                refreshData();
+            }
+        }
+    }
 }

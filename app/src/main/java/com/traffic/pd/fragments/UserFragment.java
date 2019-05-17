@@ -115,6 +115,7 @@ public class UserFragment extends Fragment {
             mView = inflater.inflate(R.layout.fragment_user, container, false);
             unbinder = ButterKnife.bind(this, mView);
             llDriver.setVisibility(View.GONE);
+            vDriver.setVisibility(View.GONE);
             myReceiver = new MyReceiver();
 
             alertDialog = NiceDialog.init();
@@ -235,6 +236,8 @@ public class UserFragment extends Fragment {
         if (null != MainActivity.carInfo) {
             llDriver.setVisibility(View.GONE);
             llCompany.setVisibility(View.VISIBLE);
+            vDriver.setVisibility(View.GONE);
+            vCompany.setVisibility(View.VISIBLE);
             if (MainActivity.carInfo.getStatus().equals("1")) {
                 tvState.setText("审核中");
             }
@@ -250,6 +253,8 @@ public class UserFragment extends Fragment {
         if (null != MainActivity.companyInfo) {
             llDriver.setVisibility(View.VISIBLE);
             llCompany.setVisibility(View.GONE);
+            vDriver.setVisibility(View.VISIBLE);
+            vCompany.setVisibility(View.GONE);
             if (MainActivity.companyInfo.getStatus().equals("1")) {
                 tvState.setText("审核中");
             }
