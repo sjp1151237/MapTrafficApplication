@@ -38,8 +38,8 @@ public class ChoosePhoneCodeActivity extends AppCompatActivity implements PhoneC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_phone_code);
 
-        tvTitle.setText("号码归属地");
         ButterKnife.bind(this);
+        tvTitle.setText("号码归属地");
         String data = ComUtils.getJson("sds.json", this);
         if(!TextUtils.isEmpty(data)){
             beanList = JSONArray.parseArray(data,PhoneCodeBean.class);

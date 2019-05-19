@@ -50,15 +50,10 @@ public class LocationUpService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // 实时上传司机的位置
-                getLoc();
-            }
-        }).start();
+        // 实时上传司机的位置
+        getLoc();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int anHour = 10 * 1000; // 半小时
+        int anHour = 30 * 60*1000; // 半小时
 //        int anHour = 1000; // 10秒
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
         Intent i = new Intent(this, AlarmReceiver.class);
