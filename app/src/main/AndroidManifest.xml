@@ -24,7 +24,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.OrderHomeActivity"></activity>
+        <activity
+            android:name=".activity.NaviTestActivity"
+            android:label="@string/title_activity_navi_test"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.OrderHomeActivity" />
         <activity
             android:name=".activity.OrderLocActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -111,7 +115,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

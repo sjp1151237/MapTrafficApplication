@@ -264,5 +264,6 @@
     <string name="state_cancel">已取消</string>
     <string name="state_ing">进行中</string>
     <string name="state_over">已完成</string>
+    <string name="title_activity_navi_test">NaviTestActivity</string>
 
 </resources>

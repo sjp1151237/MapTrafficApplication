@@ -1,6 +1,7 @@
 package com.traffic.pd;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.CompanyInfo;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.data.UserBean;
+import com.traffic.pd.fragments.CurrentCarsFragment;
+import com.traffic.pd.fragments.MyOrderFragment;
 import com.traffic.pd.fragments.OrderHallFragment;
 import com.traffic.pd.fragments.PublishFragment;
 import com.traffic.pd.fragments.UserFragment;
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     PublishFragment publishFragment = new PublishFragment();
     OrderHallFragment orderHallFragmentD = OrderHallFragment.newInstance("2", "");
     OrderHallFragment orderHallFragmentC = OrderHallFragment.newInstance("3", "");
+    CurrentCarsFragment currentCarsFragment = new CurrentCarsFragment();
 
     UserFragment userFragment;
 
@@ -80,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ComUtils.immerseHeadT(this, Color.TRANSPARENT);
         setContentView(R.layout.activity_main);
         Fresco.initialize(this);
         ButterKnife.bind(this);
 
         fragments = new ArrayList<>();
-        fragments.add(publishFragment);
+        fragments.add(currentCarsFragment);
         fragments.add(orderHallFragmentD);
         fragments.add(orderHallFragmentC);
 

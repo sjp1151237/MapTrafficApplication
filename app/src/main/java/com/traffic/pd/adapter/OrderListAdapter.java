@@ -9,13 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.OrderDetailActivity;
-import com.traffic.pd.activity.OrderDriversActivity;
-import com.traffic.pd.activity.OrderWebActivity;
 import com.traffic.pd.data.OrderBean;
-import com.traffic.pd.utils.ComUtils;
 
 import java.util.List;
 
@@ -58,63 +54,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
         hallViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.userBean.getIdentity().equals("1")) {
-                    if (orderBean.getStatus().equals(4)) {
-
-                        Intent intent = new Intent(mContext, OrderWebActivity.class);
-                        intent.putExtra("id", orderBean.getId());
-                        intent.putExtra("status", orderBean.getStatus());
-                        mContext.startActivity(intent);
-
-                    } else {
-                        OrderBean orderBean = orderBeans.get(i);
-                        Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                        intent.putExtra("from", fromWhere);
-                        intent.putExtra("info", orderBean);
-                        mContext.startActivity(intent);
-                    }
-                }
-                if (MainActivity.userBean.getIdentity().equals("2")) {
-                    if (null != MainActivity.carInfo && MainActivity.carInfo.getStatus().equals("2")) {
-                        if (orderBean.getStatus().equals(4)) {
-
-                            Intent intent = new Intent(mContext, OrderWebActivity.class);
-                            intent.putExtra("id", orderBean.getId());
-                            intent.putExtra("status", orderBean.getStatus());
-                            mContext.startActivity(intent);
-
-                        } else {
-                            OrderBean orderBean = orderBeans.get(i);
-                            Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                            intent.putExtra("from", fromWhere);
-                            intent.putExtra("info", orderBean);
-                            mContext.startActivity(intent);
-                        }
-                    } else {
-                        ComUtils.showMsg(mContext, "审核通过才能接单");
-                    }
-                }
-                if (MainActivity.userBean.getIdentity().equals("3")) {
-                    if (null != MainActivity.companyInfo && MainActivity.companyInfo.getStatus().equals("2")) {
-                        if (orderBean.getStatus().equals(4)) {
-
-                            Intent intent = new Intent(mContext, OrderWebActivity.class);
-                            intent.putExtra("id", orderBean.getId());
-                            intent.putExtra("status", orderBean.getStatus());
-                            mContext.startActivity(intent);
-
-                        }else{
-                            OrderBean orderBean = orderBeans.get(i);
-                            Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                            intent.putExtra("from", fromWhere);
-                            intent.putExtra("info", orderBean);
-                            mContext.startActivity(intent);
-                        }
-
-                    } else {
-                        ComUtils.showMsg(mContext, "审核通过才能接单");
-                    }
-                }
+                OrderBean orderBean = orderBeans.get(i);
+                Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                intent.putExtra("from", fromWhere);
+                intent.putExtra("info", orderBean);
+                mContext.startActivity(intent);
             }
         });
     }
