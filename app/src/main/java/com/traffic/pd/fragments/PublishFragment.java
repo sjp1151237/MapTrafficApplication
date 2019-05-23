@@ -143,7 +143,6 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
             tvTitle.setText("发布订单");
             tvBtn.setText("发布");
-            llBack.setVisibility(View.GONE);
             tvBtn.setVisibility(View.VISIBLE);
 
             cargoLoadDialog = NiceDialog.init();

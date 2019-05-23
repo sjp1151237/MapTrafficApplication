@@ -1,18 +1,19 @@
 package com.traffic.pd.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.othershe.nicedialog.BaseNiceDialog;
 import com.othershe.nicedialog.NiceDialog;
 import com.othershe.nicedialog.ViewConvertListener;
@@ -22,9 +23,9 @@ import com.traffic.pd.R;
 import com.traffic.pd.adapter.ImagesAdapter;
 import com.traffic.pd.constant.Constant;
 import com.traffic.pd.data.CarInfo;
-import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.utils.ComUtils;
+import com.traffic.pd.utils.FrescoUtils;
 import com.traffic.pd.utils.PostRequest;
 
 import org.json.JSONException;
@@ -66,6 +67,8 @@ public class CarDetailActivity extends AppCompatActivity {
     NiceDialog startDialog;
 
     String orderStatus;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +80,18 @@ public class CarDetailActivity extends AppCompatActivity {
 
         tvTitle.setText("车辆详情");
         orderStatus = getIntent().getStringExtra("status");
-        if(!TextUtils.isEmpty(orderStatus)){
-            if(orderStatus.equals("5")){
+        if (!TextUtils.isEmpty(orderStatus)) {
+            if (orderStatus.equals("5")) {
                 tvBtn.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 tvBtn.setVisibility(View.GONE);
             }
-        }else{
+        } else {
             tvBtn.setVisibility(View.GONE);
         }
 
         tvBtn.setText("打分");
-        tvGrade.setText("服务分： "+carInfo.getScore() + "  (满分5分)");
+        tvGrade.setText("服务分： " + carInfo.getScore() + "  (满分5分)");
         tvDriver.setText("司机：" + carInfo.getDriver());
         tvMobile.setText("联系方式：" + carInfo.getMobile());
         tvIntro.setText("车辆介绍：" + carInfo.getIntroduce());
@@ -102,21 +105,30 @@ public class CarDetailActivity extends AppCompatActivity {
         }
         imagesAdapter = new ImagesAdapter(imgs, this);
         rcvPic.setLayoutManager(new LinearLayoutManager(this));
-        rcvPic.setAdapter(imagesAdapter);
+
+//        for (int i = 0; i < imgs.size(); i++) {
+//            View view = LayoutInflater.from(this).inflate(R.layout.images_item,null);
+//            SimpleDraweeView iv_img = view.findViewById(R.id.iv_img);
+//            Uri uri = Uri.parse(imgs.get(i));
+//            FrescoUtils.showThumb(uri, iv_img, 300, 500);
+//
+//            llContent.addView(view);
+//        }
+//        rcvPic.setAdapter(imagesAdapter);
 
         startDialog = NiceDialog.init();
 
 
     }
 
-    @OnClick({R.id.ll_back,R.id.tv_btn})
+    @OnClick({R.id.ll_back, R.id.tv_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
                 finish();
                 break;
             case R.id.tv_btn:
-                if(null == MainActivity.userBean){
+                if (null == MainActivity.userBean) {
                     return;
                 }
                 startDialog.setLayoutId(R.layout.car_to_star).setConvertListener(new ViewConvertListener() {
@@ -151,10 +163,10 @@ public class CarDetailActivity extends AppCompatActivity {
                                 startDialog.cancelDialog();
                                 String url = Constant.CAR_STAR;
                                 Map<String, String> map = new HashMap<>();
-                                map.put("user_sign",MainActivity.userBean.getUser_id());
-                                map.put("driver_id",carInfo.getId());
-                                map.put("order_id",carInfo.getOrder_id());
-                                map.put("score",String.valueOf(finalStar));
+                                map.put("user_sign", MainActivity.userBean.getUser_id());
+                                map.put("driver_id", carInfo.getId());
+                                map.put("order_id", carInfo.getOrder_id());
+                                map.put("score", String.valueOf(finalStar));
                                 new PostRequest("CAR_STAR", CarDetailActivity.this, true)
                                         .go(CarDetailActivity.this, new PostRequest.PostListener() {
 
@@ -164,9 +176,9 @@ public class CarDetailActivity extends AppCompatActivity {
                                                 try {
                                                     jsonObject = new JSONObject(response);
                                                     int status = jsonObject.getInt("status");
-                                                    if(status == 1){
+                                                    if (status == 1) {
                                                         ComUtils.showMsg(CarDetailActivity.this, "success");
-                                                    }else{
+                                                    } else {
                                                         ComUtils.showMsg(CarDetailActivity.this, "You have been graded");
                                                     }
                                                 } catch (JSONException e) {
@@ -198,4 +210,7 @@ public class CarDetailActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.ll_content)
+    public void onViewClicked() {
+    }
 }

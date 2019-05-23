@@ -42,8 +42,9 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImagesHold
 
 //        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imagesHolder.iv_img.getLayoutParams();
 //        params.width = withL;
+        //        imagesHolder.iv_img.setImageURI(uri);
         Uri uri = Uri.parse(stringList.get(i));
-//        imagesHolder.iv_img.setImageURI(uri);
+
         FrescoUtils.showThumb(uri, imagesHolder.iv_img, 300, 500);
     }
 

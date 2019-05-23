@@ -21,6 +21,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
     Context mContext;
     String fromWhere;
     String orderType;
+    ClickOrder clickOrder;
 
     public OrderListAdapter(Context mContext, List<OrderBean> orderBeans, String fromWhere) {
         this.mContext = mContext;
@@ -33,6 +34,14 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
         this.orderBeans = orderBeans;
         this.fromWhere = fromWhere;
         this.orderType = orderType;
+    }
+
+    public OrderListAdapter(Context mContext, List<OrderBean> orderBeans, String fromWhere,String orderType,ClickOrder clickOrder) {
+        this.mContext = mContext;
+        this.orderBeans = orderBeans;
+        this.fromWhere = fromWhere;
+        this.orderType = orderType;
+        this.clickOrder = clickOrder;
     }
 
     @NonNull
@@ -54,11 +63,18 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
         hallViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OrderBean orderBean = orderBeans.get(i);
-                Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                intent.putExtra("from", fromWhere);
-                intent.putExtra("info", orderBean);
-                mContext.startActivity(intent);
+                if(fromWhere.equals("CurrentCarsFragment")){
+                    if(null != clickOrder){
+                        clickOrder.clickOrder(i);
+                    }
+                }else{
+                    OrderBean orderBean = orderBeans.get(i);
+                    Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                    intent.putExtra("from", fromWhere);
+                    intent.putExtra("info", orderBean);
+                    mContext.startActivity(intent);
+                }
+
             }
         });
     }
@@ -99,5 +115,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Hall
             return mContext.getString(R.string.state_over);
         }
         return "";
+    }
+
+    public interface ClickOrder{
+        void clickOrder(int pos);
     }
 }

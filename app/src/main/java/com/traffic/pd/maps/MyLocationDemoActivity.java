@@ -115,7 +115,21 @@ public class MyLocationDemoActivity extends AppCompatActivity
                         address = (Address) eventMessage.getObject();
                         if (null != address) {
                             tvPos.setText(ComUtils.formatString(address.getCountryName()) + "   " + ComUtils.formatString(address.getAdminArea()) + "    " + ComUtils.formatString(address.getLocality()) + "    " + ComUtils.formatString(address.getSubLocality()));
+                            tvPos.setText("下面是谷歌地图服务返回的所有位置信息并用 _ 隔开");
                             tvPos2.setText(address.getThoroughfare() + " * " + ComUtils.formatString(address.getSubThoroughfare()));
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("CountryName: ").append(address.getCountryName());//国家
+                              stringBuilder.append("    FeatureName: ").append(address.getFeatureName());//周边地址
+                              stringBuilder.append("    Locality: ").append(address.getLocality());//市
+                              stringBuilder.append("    PostalCode: ").append(address.getPostalCode());
+                             stringBuilder.append("    CountryCode: ").append(address.getCountryCode());//国家编码
+                              stringBuilder.append("    AdminArea: ").append(address.getAdminArea());//省份
+                              stringBuilder.append("    SubAdminArea: ").append(address.getSubAdminArea());
+                              stringBuilder.append("    Thoroughfare: ").append(address.getThoroughfare());//道路
+                              stringBuilder.append("    SubLocality: ").append(address.getSubLocality());//香洲区
+                             stringBuilder.append("    Latitude: ").append(address.getLatitude());//经度
+                             stringBuilder.append("    Longitude: ").append(address.getLongitude());//维度
+                            tvPos2.setText(stringBuilder.toString());
                         }
                     }
                     if (eventMessage.getObject() instanceof LatLng) {

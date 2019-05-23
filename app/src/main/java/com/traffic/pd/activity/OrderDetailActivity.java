@@ -24,8 +24,10 @@ import com.traffic.pd.constant.EventMessage;
 import com.traffic.pd.data.CarType;
 import com.traffic.pd.data.OrderBean;
 import com.traffic.pd.data.TestBean;
+import com.traffic.pd.data.UserBean;
 import com.traffic.pd.utils.ComUtils;
 import com.traffic.pd.utils.PostRequest;
+import com.traffic.pd.utils.PreferencesUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -101,6 +103,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     LinearLayout llover;
     @BindView(R.id.tv_time)
     TextView tvTime;
+    UserBean userBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +114,10 @@ public class OrderDetailActivity extends AppCompatActivity {
         niceDialog = NiceDialog.init();
 
         orderBean = (OrderBean) getIntent().getSerializableExtra("info");
-
+        userBean = com.alibaba.fastjson.JSONObject.parseObject(PreferencesUtils.getSharePreStr(this, Constant.USER_INFO), UserBean.class);
+        if(null == userBean){
+            finish();
+        }
         initOrderView();
         fromWhere = getIntent().getStringExtra("from");
         tvBtn.setVisibility(View.VISIBLE);
@@ -121,7 +127,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             tvShare.setText("分享链接：" + orderBean.getUrl());
         }
         if (fromWhere.equals("home")) {
-            if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+            if (userBean.getIdentity().equals("2") || userBean.getIdentity().equals("3")) {
                 if (null != orderBean.getCan_grab()) {
                     if (orderBean.getCan_grab().equals("0")) {
                         tvBtn.setVisibility(View.GONE);
@@ -133,7 +139,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             }
         }
         if (fromWhere.equals("user")) {
-            if (MainActivity.userBean.getIdentity().equals("2")) {
+            if (null != userBean && userBean.getIdentity().equals("2")) {
                 // 审核中、发布中 可以取消订单
                 if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
                     tvBtn.setText(R.string.cancel);
@@ -147,7 +153,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                 if (orderBean.getStatus().equals("4")) {
                     tvBtn.setVisibility(View.GONE);
                 }
-            } else if (MainActivity.userBean.getIdentity().equals("3")) {
+            } else if (userBean.getIdentity().equals("3")) {
                 tvBtn.setVisibility(View.GONE);
             } else {
                 // 待审核/发布中
@@ -283,13 +289,13 @@ public class OrderDetailActivity extends AppCompatActivity {
                 break;
             case R.id.tv_btn:
                 if (fromWhere.equals("home")) {
-                    if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+                    if (userBean.getIdentity().equals("2") || userBean.getIdentity().equals("3")) {
                         if (null != orderBean.getCan_grab()) {
                             if (orderBean.getCan_grab().equals("0")) {
                                 driverCancelOrder();
                             }
                             if (orderBean.getCan_grab().equals("1")) {
-                                if (MainActivity.userBean.getIdentity().equals("2")) {
+                                if (userBean.getIdentity().equals("2")) {
                                     toAddOrder(null);
                                 } else {
                                     toCars();
@@ -299,7 +305,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                     }
                 }
                 if (fromWhere.equals("user")) {
-                    if (MainActivity.userBean.getIdentity().equals("2") || MainActivity.userBean.getIdentity().equals("3")) {
+                    if (userBean.getIdentity().equals("2") || userBean.getIdentity().equals("3")) {
                         // 审核中、发布中 可以取消订单
                         if (orderBean.getStatus().equals("1") || orderBean.getStatus().equals("2")) {
                             driverCancelOrder();
@@ -370,7 +376,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.ll_cars:
-                if (MainActivity.userBean.getIdentity().equals(2)) {
+                if (userBean.getIdentity().equals(2)) {
                     ComUtils.showMsg(OrderDetailActivity.this, "don't have permission");
                     return;
                 }
@@ -386,7 +392,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private void userOverOrder() {
         String url = Constant.ORDER_EDIT;
         Map<String, String> map = new HashMap<>();
-        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("user_sign", userBean.getUser_id());
         map.put("order_id", orderBean.getId());
         map.put("status", "5");
         new PostRequest("userOverOrder", this, true)
@@ -434,7 +440,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private void driverCancelOrder() {
         String url = Constant.GRAB_DEL;
         Map<String, String> map = new HashMap<>();
-        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("user_sign", userBean.getUser_id());
         map.put("order_id", orderBean.getId());
         new PostRequest("toAddOrder", this, true)
                 .go(this, new PostRequest.PostListener() {
@@ -503,7 +509,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private void toAddOrder(ArrayList<String> cars) {
         String url = Constant.GRAB_ORDER;
         Map<String, String> map = new HashMap<>();
-        map.put("user_sign", MainActivity.userBean.getUser_id());
+        map.put("user_sign", userBean.getUser_id());
         map.put("order_id", orderBean.getId());
         if (null != cars) {
             StringBuilder carss = new StringBuilder();

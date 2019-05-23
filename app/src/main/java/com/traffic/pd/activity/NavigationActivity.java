@@ -168,10 +168,16 @@ public class NavigationActivity extends AppCompatActivity {
             finish();
         } else {
             UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(PreferencesUtils.getSharePreStr(this, Constant.USER_INFO), UserBean.class);
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("user", userBean);
-            startActivity(intent);
-            finish();
+            if(userBean.getIdentity().equals("1")){
+                Intent intent = new Intent(this,ConsigerHomeActivity.class);
+                startActivity(intent);
+                finish();
+            }else{
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.putExtra("user",userBean);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }
