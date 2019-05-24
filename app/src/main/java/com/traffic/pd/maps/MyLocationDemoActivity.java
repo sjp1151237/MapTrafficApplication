@@ -124,7 +124,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
                               stringBuilder.append("    PostalCode: ").append(address.getPostalCode());
                              stringBuilder.append("    CountryCode: ").append(address.getCountryCode());//国家编码
                               stringBuilder.append("    AdminArea: ").append(address.getAdminArea());//省份
-                              stringBuilder.append("    SubAdminArea: ").append(address.getSubAdminArea());
+                              stringBuilder.append("    SubAdminArea: ").append(address.getSubAdminArea());// 市
                               stringBuilder.append("    Thoroughfare: ").append(address.getThoroughfare());//道路
                               stringBuilder.append("    SubLocality: ").append(address.getSubLocality());//香洲区
                              stringBuilder.append("    Latitude: ").append(address.getLatitude());//经度
