@@ -3,6 +3,7 @@ package com.traffic.pd.maps;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +83,12 @@ public class MyLocationDemoActivity extends AppCompatActivity
     FrameLayout layout;
     @BindView(R.id.tv_pos_2)
     EditText tvPos2;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.tv_city)
+    TextView tvCity;
+    @BindView(R.id.tv_sure)
+    TextView tvSure;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -114,22 +122,23 @@ public class MyLocationDemoActivity extends AppCompatActivity
                     if (eventMessage.getObject() instanceof Address) {
                         address = (Address) eventMessage.getObject();
                         if (null != address) {
-                            tvPos.setText(ComUtils.formatString(address.getCountryName()) + "   " + ComUtils.formatString(address.getAdminArea()) + "    " + ComUtils.formatString(address.getLocality()) + "    " + ComUtils.formatString(address.getSubLocality()));
-                            tvPos.setText("下面是谷歌地图服务返回的所有位置信息并用 _ 隔开");
-                            tvPos2.setText(address.getThoroughfare() + " * " + ComUtils.formatString(address.getSubThoroughfare()));
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("CountryName: ").append(address.getCountryName());//国家
-                              stringBuilder.append("    FeatureName: ").append(address.getFeatureName());//周边地址
-                              stringBuilder.append("    Locality: ").append(address.getLocality());//市
-                              stringBuilder.append("    PostalCode: ").append(address.getPostalCode());
-                             stringBuilder.append("    CountryCode: ").append(address.getCountryCode());//国家编码
-                              stringBuilder.append("    AdminArea: ").append(address.getAdminArea());//省份
-                              stringBuilder.append("    SubAdminArea: ").append(address.getSubAdminArea());// 市
-                              stringBuilder.append("    Thoroughfare: ").append(address.getThoroughfare());//道路
-                              stringBuilder.append("    SubLocality: ").append(address.getSubLocality());//香洲区
-                             stringBuilder.append("    Latitude: ").append(address.getLatitude());//经度
-                             stringBuilder.append("    Longitude: ").append(address.getLongitude());//维度
-                            tvPos2.setText(stringBuilder.toString());
+                            tvPos.setText(address.getThoroughfare() + "   " + address.getLocality());
+                            tvPos2.setText(address.getFeatureName());
+                            tvCity.setVisibility(View.VISIBLE);
+                            tvCity.setText(ComUtils.formatString(address.getSubAdminArea()));
+//                            StringBuilder stringBuilder = new StringBuilder();
+//                            stringBuilder.append("CountryName: ").append(address.getCountryName());//国家
+//                              stringBuilder.append("    FeatureName: ").append(address.getFeatureName());//周边地址
+//                              stringBuilder.append("    Locality: ").append(address.getLocality());//市
+//                              stringBuilder.append("    PostalCode: ").append(address.getPostalCode());
+//                             stringBuilder.append("    CountryCode: ").append(address.getCountryCode());//国家编码
+//                              stringBuilder.append("    AdminArea: ").append(address.getAdminArea());//省份
+//                              stringBuilder.append("    SubAdminArea: ").append(address.getSubAdminArea());// 市
+//                              stringBuilder.append("    Thoroughfare: ").append(address.getThoroughfare());//道路
+//                              stringBuilder.append("    SubLocality: ").append(address.getSubLocality());//香洲区
+//                             stringBuilder.append("    Latitude: ").append(address.getLatitude());//经度
+//                             stringBuilder.append("    Longitude: ").append(address.getLongitude());//维度
+//                            tvPos2.setText(stringBuilder.toString());
                         }
                     }
                     if (eventMessage.getObject() instanceof LatLng) {
@@ -157,6 +166,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ComUtils.immerseHeadT(this, Color.TRANSPARENT);
         setContentView(R.layout.my_location_demo);
         ButterKnife.bind(this);
 
@@ -164,12 +174,9 @@ public class MyLocationDemoActivity extends AppCompatActivity
         tvBtn.setText("sure");
         tvBtn.setVisibility(View.VISIBLE);
         tvTitle.setText("Location");
-
-        if(!TextUtils.isEmpty(getIntent().getStringExtra("from"))){
-            tvPos2.setVisibility(View.GONE);
-        }else{
-            tvPos2.setVisibility(View.VISIBLE);
-        }
+        tvCity.setVisibility(View.GONE);
+        tvPos.setText("详细地址加载中...");
+        tvPos2.setText("");
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -192,7 +199,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMyLocationButtonEnabled(true);
+        mUiSettings.setMyLocationButtonEnabled(false);
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -205,6 +212,9 @@ public class MyLocationDemoActivity extends AppCompatActivity
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
                     address = null;
+                    tvPos.setText("详细地址加载中...");
+                    tvPos2.setText("");
+                    tvCity.setVisibility(View.GONE);
                     Intent intent = new Intent(MyLocationDemoActivity.this, FetchAddressIntentService.class);
                     intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
                     intent.putExtra(FetchAddressIntentService.LATLNG_DATA_EXTRA, latLng);
@@ -218,7 +228,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
 
         googleMapManager.getMyLocation();
 
-        mUiSettings.setZoomControlsEnabled(true);
+        mUiSettings.setZoomControlsEnabled(false);
         mUiSettings.setCompassEnabled(true);
 
         mUiSettings.setScrollGesturesEnabled(true);
@@ -298,9 +308,26 @@ public class MyLocationDemoActivity extends AppCompatActivity
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.tv_title, R.id.tv_pos, R.id.tv_btn})
+    @OnClick({R.id.ll_back, R.id.tv_title, R.id.tv_pos, R.id.tv_btn, R.id.iv_back, R.id.tv_sure})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.tv_sure:
+                if (address != null && address.getCountryName() != null) {
+                    Log.e("loc", address.toString());
+                    Intent intent = new Intent();
+                    intent.putExtra("address", address);
+                    if (!TextUtils.isEmpty(tvPos2.getText().toString())) {
+                        intent.putExtra("detail", tvPos2.getText().toString());
+                    }
+                    setResult(0, intent);
+                    finish();
+                } else {
+                    ComUtils.showMsg(MyLocationDemoActivity.this, "获取定位信息失败");
+                }
+                break;
             case R.id.ll_back:
                 finish();
                 break;
@@ -309,18 +336,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
             case R.id.tv_pos:
                 break;
             case R.id.tv_btn:
-                if (address != null && address.getCountryName() != null) {
-                    Log.e("loc", address.toString());
-                    Intent intent = new Intent();
-                    intent.putExtra("address", address);
-                    if(!TextUtils.isEmpty(tvPos2.getText().toString())){
-                        intent.putExtra("detail", tvPos2.getText().toString());
-                    }
-                    setResult(0, intent);
-                    finish();
-                } else {
-                    ComUtils.showMsg(MyLocationDemoActivity.this, "获取定位信息失败");
-                }
+
                 break;
         }
     }

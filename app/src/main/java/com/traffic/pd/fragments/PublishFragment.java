@@ -230,7 +230,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
             }
 
             if (null != addressS) {
-                String addresss = ComUtils.formatString(addressS.getCountryName()) + "  " + ComUtils.formatString(addressS.getAdminArea()) + "   " + ComUtils.formatString(addressS.getLocality()) + "   " + ComUtils.formatString(addressS.getSubLocality());
+                String addresss = ComUtils.formatString(addressS.getSubAdminArea()) + "   " + ComUtils.formatString(addressS.getLocality() + "   " + ComUtils.formatString(addressS.getThoroughfare()));
                 putShippingAddress.setText(addresss);
             }
         }
@@ -243,7 +243,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
                 recAddressDetail = "";
             }
             if (null != addressG) {
-                String addresss = ComUtils.formatString(addressG.getCountryName()) + "  " + ComUtils.formatString(addressG.getAdminArea()) + "   " + ComUtils.formatString(addressG.getLocality()) + "   " + ComUtils.formatString(addressG.getSubLocality());
+                String addresss =  ComUtils.formatString(addressG.getSubAdminArea()) + "   " + ComUtils.formatString(addressG.getLocality() + "   " + ComUtils.formatString(addressG.getThoroughfare()));
                 putReceiptAddress.setText(addresss);
             }
         }
@@ -251,7 +251,7 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
 
     final Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
 
-    @OnClick({R.id.tv_btn,R.id.ll_select_car, R.id.ll_put_time, R.id.ll_shipping_address, R.id.ll_is_danger, R.id.ll_receipt_address, R.id.ll_phone_code, R.id.ll_cargo_type, R.id.ll_way_of_loading})
+    @OnClick({R.id.tv_btn,R.id.ll_select_car, R.id.ll_put_time, R.id.ll_shipping_address, R.id.ll_is_danger, R.id.ll_receipt_address, R.id.ll_phone_code, R.id.ll_cargo_type, R.id.ll_way_of_loading,R.id.ll_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_is_danger:
@@ -308,6 +308,9 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
             case R.id.ll_put_time:
                 ComUtils.showDatePickerDialog(getActivity(), putTime);
                 break;
+            case  R.id.ll_back:
+                getActivity().finish();
+                break;
             case R.id.tv_btn:
                 if (carSelect.size() == 0) {
                     ComUtils.showMsg(getContext(), "Please select car");
@@ -359,21 +362,18 @@ public class PublishFragment extends Fragment implements CargoTypeSelectAdapter.
         map.put("longi", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLongitude()))));
         map.put("country", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getCountryName()))));
         map.put("province", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getAdminArea()))));
-        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
-        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubLocality()))));
-        if (!TextUtils.isEmpty(addressDetail)) {
-            map.put("address", addressDetail);
-        }
+        map.put("city", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getSubAdminArea()))));
+        map.put("district", String.valueOf(ComUtils.formatString(String.valueOf(addressS.getLocality()))));
+        map.put("address", ComUtils.formatString(String.valueOf(addressS.getThoroughfare())) + "   " + addressDetail);
 
         map.put("recive_lat", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLatitude()))));
         map.put("recive_longi", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLongitude()))));
         map.put("recive_country", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getCountryName()))));
         map.put("recive_province", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getAdminArea()))));
-        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
-        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubLocality()))));
-        if (!TextUtils.isEmpty(recAddressDetail)) {
-            map.put("recive_address", recAddressDetail);
-        }
+        map.put("recive_city", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getSubAdminArea()))));
+        map.put("recive_district", String.valueOf(ComUtils.formatString(String.valueOf(addressG.getLocality()))));
+        map.put("recive_address", ComUtils.formatString(String.valueOf(addressG.getThoroughfare())) + "   " + recAddressDetail);
+
         map.put("recive_mobile", phoneCodeBean.getD() + putPhoneNum.getText().toString());
         map.put("recive_name", putName.getText().toString());
 
