@@ -9,12 +9,37 @@
 
     <include layout="@layout/common_title"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_code"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_tip"
+            android:visibility="gone"
+            android:layout_width="50dp"
+            android:background="@color/white"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_color_dan"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_code"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

@@ -40,12 +40,12 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImagesHold
     public void onBindViewHolder(@NonNull ImagesHolder imagesHolder, int i) {
         int withL = (int) ((mWith - ComUtils.dip2px(context, 30)) * (3/4.00));
 
-//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imagesHolder.iv_img.getLayoutParams();
-//        params.width = withL;
-        //        imagesHolder.iv_img.setImageURI(uri);
-        Uri uri = Uri.parse(stringList.get(i));
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imagesHolder.iv_img.getLayoutParams();
+        params.width = withL;
 
-        FrescoUtils.showThumb(uri, imagesHolder.iv_img, 300, 500);
+        Uri uri = Uri.parse(stringList.get(i));
+        imagesHolder.iv_img.setImageURI(uri);
+//        FrescoUtils.showThumb(uri, imagesHolder.iv_img, 300, 500);
     }
 
     @Override

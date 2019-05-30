@@ -82,13 +82,15 @@ public class MyLocationDemoActivity extends AppCompatActivity
     @BindView(R.id.layout)
     FrameLayout layout;
     @BindView(R.id.tv_pos_2)
-    EditText tvPos2;
+    TextView tvPos2;
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.tv_city)
     TextView tvCity;
     @BindView(R.id.tv_sure)
     TextView tvSure;
+    @BindView(R.id.et_detail)
+    EditText etDetail;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -320,7 +322,7 @@ public class MyLocationDemoActivity extends AppCompatActivity
                     Intent intent = new Intent();
                     intent.putExtra("address", address);
                     if (!TextUtils.isEmpty(tvPos2.getText().toString())) {
-                        intent.putExtra("detail", tvPos2.getText().toString());
+                        intent.putExtra("detail", etDetail.getText().toString());
                     }
                     setResult(0, intent);
                     finish();

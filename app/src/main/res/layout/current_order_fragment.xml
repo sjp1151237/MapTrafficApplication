@@ -71,7 +71,6 @@
             android:layout_gravity="end|bottom"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_alignTop="@id/ll_bottom"
             android:id="@+id/floatbutton"
             app:elevation="6dp"
             android:clickable="true"
@@ -106,6 +105,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/item_content_font"/>
         </LinearLayout>
+
     </LinearLayout>
 
 

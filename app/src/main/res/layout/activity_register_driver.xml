@@ -59,7 +59,7 @@
                         android:inputType="number"
                         android:maxLines="1"
                         android:layout_marginLeft="20dp"
-                        android:hint="请填写收货人电话"
+                        android:hint="请填写司机电话"
                         android:textColor="@color/item_title_font"
                         android:textColorHint="@color/item_content_font"
                         android:textSize="16sp" />

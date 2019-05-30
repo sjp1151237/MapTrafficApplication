@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.traffic.pd.R;
 import com.traffic.pd.adapter.CarSelectAdapter;
 import com.traffic.pd.constant.Constant;

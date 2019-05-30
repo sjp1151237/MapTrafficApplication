@@ -106,16 +106,19 @@ public class LoginActivity extends AppCompatActivity {
                             if (status == 1) {
                                 UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("result"),UserBean.class);
                                 PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,jsonObject.getString("result"));
-                                if(userBean.getIdentity().equals("1")){
-                                    Intent intent = new Intent(getContext(),ConsigerHomeActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else{
-                                    Intent intent = new Intent(getContext(),MainActivity.class);
-                                    intent.putExtra("user",userBean);
-                                    startActivity(intent);
-                                    finish();
-                                }
+//                                if(userBean.getIdentity().equals("1")){
+//                                    Intent intent = new Intent(getContext(),ConsigerHomeActivity.class);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }else{
+//                                    Intent intent = new Intent(getContext(),MainActivity.class);
+//                                    intent.putExtra("user",userBean);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
+                                Intent intent = new Intent(getContext(),MainActivity.class);
+                                intent.putExtra("user",userBean);
+                                startActivity(intent);
 
                             }
                         } catch (JSONException e) {

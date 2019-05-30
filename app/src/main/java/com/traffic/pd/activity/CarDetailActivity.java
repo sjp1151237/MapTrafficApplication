@@ -106,14 +106,14 @@ public class CarDetailActivity extends AppCompatActivity {
         imagesAdapter = new ImagesAdapter(imgs, this);
         rcvPic.setLayoutManager(new LinearLayoutManager(this));
 
-//        for (int i = 0; i < imgs.size(); i++) {
-//            View view = LayoutInflater.from(this).inflate(R.layout.images_item,null);
-//            SimpleDraweeView iv_img = view.findViewById(R.id.iv_img);
-//            Uri uri = Uri.parse(imgs.get(i));
-//            FrescoUtils.showThumb(uri, iv_img, 300, 500);
-//
-//            llContent.addView(view);
-//        }
+        for (int i = 0; i < imgs.size(); i++) {
+            View view = LayoutInflater.from(this).inflate(R.layout.images_item,null);
+            SimpleDraweeView iv_img = view.findViewById(R.id.iv_img);
+            Uri uri = Uri.parse(imgs.get(i));
+            FrescoUtils.showThumb(uri, iv_img, 300, 500);
+
+            llContent.addView(view);
+        }
 //        rcvPic.setAdapter(imagesAdapter);
 
         startDialog = NiceDialog.init();

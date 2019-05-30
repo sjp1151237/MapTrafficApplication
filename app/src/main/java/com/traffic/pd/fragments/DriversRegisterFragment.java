@@ -360,7 +360,7 @@ public class DriversRegisterFragment extends Fragment {
             case R.id.ll_introduce:
                 break;
             case R.id.tv_commit:
-                if (tvLocation.getText().toString().contains("Please")) {
+                if(null == phoneCodeBean){
                     ComUtils.showMsg(getContext(), "Please select your phone country");
                     return;
                 }
@@ -368,10 +368,10 @@ public class DriversRegisterFragment extends Fragment {
                     ComUtils.showMsg(getContext(), "Please enter phonenum");
                     return;
                 }
-//                if (null == address) {
-//                    ComUtils.showMsg(getContext(), "Please select car location");
-//                    return;
-//                }
+                if (null == address) {
+                    ComUtils.showMsg(getContext(), "Please select car location");
+                    return;
+                }
                 if (TextUtils.isEmpty(etCarLicenseNum.getText().toString())) {
                     ComUtils.showMsg(getContext(), "Please input car license num");
                     return;
@@ -684,6 +684,7 @@ public class DriversRegisterFragment extends Fragment {
             map.put("city", ComUtils.formatString(address.getLocality()));
             map.put("district", ComUtils.formatString(address.getSubLocality()));
             map.put("address", tvAddressDetail.getText().toString());
+
         }
         map.put("car_num", etCarLicenseNum.getText().toString());
         map.put("car_num_pic", carLicenseImg);

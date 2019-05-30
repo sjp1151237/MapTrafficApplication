@@ -43,6 +43,7 @@ import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.PermissionUtils;
 import com.traffic.pd.R;
+import com.traffic.pd.activity.CarDetailActivity;
 import com.traffic.pd.activity.OnlyUserActivity;
 import com.traffic.pd.activity.PublishActivity;
 import com.traffic.pd.adapter.MyOrderListAdapter;
@@ -107,6 +108,8 @@ public class CurrentCarsFragment extends Fragment implements
     List<CarInfo> carInfoList;
 
     NiceDialog niceDialogOrder;
+
+    OrderBean orderNow;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -297,7 +300,7 @@ public class CurrentCarsFragment extends Fragment implements
 
                                 if (orderBeanList.size() > 0) {
                                     tvOrder.setText("订单号：" + orderBeanList.get(0).getId());
-
+                                    orderNow = orderBeanList.get(0);
                                     loadDrivers(orderBeanList.get(0).getId());
                                 } else {
                                     tvOrder.setText("暂无进行中的订单");
@@ -335,7 +338,7 @@ public class CurrentCarsFragment extends Fragment implements
         unbinder.unbind();
     }
 
-    private void loadDrivers(String orderId) {
+    private void loadDrivers(final String orderId) {
         String url = Constant.ORDER_DTIVERS;
         Map<String, String> map = new HashMap<>();
         map.put("user_sign", MainActivity.userBean.getUser_id());
@@ -355,7 +358,7 @@ public class CurrentCarsFragment extends Fragment implements
 
                                 if (carInfoList.size() > 0) {
                                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(carInfoList.get(0).getLat_n()), Double.parseDouble(carInfoList.get(0).getLong_n())), 13.0f));
-                                    addMakers();
+                                    addMakers(orderId);
                                     tvOrder.setText(tvOrder.getText().toString() + "   车辆数：" + carInfoList.size());
                                 } else {
                                     Toast.makeText(getContext(), "当前订单无车辆接单", Toast.LENGTH_SHORT).show();
@@ -386,8 +389,29 @@ public class CurrentCarsFragment extends Fragment implements
 
     }
 
-    private void addMakers() {
+    private void addMakers(String orderId) {
         mMap.clear();
+        for (int i = 0; i < orderBeanList.size(); i++) {
+            if(orderBeanList.get(i).getId().equals(orderId)){
+                if(null != orderBeanList.get(i).getLat() && null != orderBeanList.get(i).getLongi()){
+                    LatLng BRISBANE = new LatLng(Double.parseDouble(orderBeanList.get(i).getLat()), Double.parseDouble(orderBeanList.get(i).getLongi()));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(BRISBANE)
+                            .title("起点")
+                            .zIndex(-1)
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.begin_flag)));
+                }
+
+                if(null != orderBeanList.get(i).getRecive_lat() && null != orderBeanList.get(i).getRecive_longi()){
+                    LatLng BRISBANE2 = new LatLng(Double.parseDouble(orderBeanList.get(i).getRecive_lat()), Double.parseDouble(orderBeanList.get(i).getRecive_longi()));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(BRISBANE2)
+                            .title("终点")
+                            .zIndex(-2)
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.final_flag)));
+                }
+            }
+        }
         if (null != carInfoList) {
             for (int i = 0; i < carInfoList.size(); i++) {
                 try {
@@ -412,6 +436,7 @@ public class CurrentCarsFragment extends Fragment implements
         if (orderBeanList.size() >= (pos + 1) && pos != 0) {
             tvOrder.setText("订单号：" + orderBeanList.get(0).getId());
             niceDialogOrder.cancelDialog();
+            orderNow = orderBeanList.get(pos);
             loadDrivers(orderBeanList.get(pos).getId());
         }else{
             niceDialogOrder.cancelDialog();
@@ -420,7 +445,16 @@ public class CurrentCarsFragment extends Fragment implements
     private AddressResultReceiver mResultReceiver;
     @Override
     public void onInfoWindowClick(Marker marker) {
-
+        int pos = (int) marker.getZIndex();
+        if(pos >= 0 && carInfoList.size() > pos){
+            try {
+                Intent intent = new Intent(getContext(),CarDetailActivity.class);
+                intent.putExtra("info",carInfoList.get(pos));
+                startActivity(intent);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -431,11 +465,17 @@ public class CurrentCarsFragment extends Fragment implements
                     if (eventMessage.getObject() instanceof Address) {
                         Address addressS = (Address) eventMessage.getObject();
                         String addresss = ComUtils.formatString(addressS.getCountryName()) + "  " + ComUtils.formatString(addressS.getAdminArea()) + "   " + ComUtils.formatString(addressS.getLocality()) + "   " + ComUtils.formatString(addressS.getSubLocality());
-                        tvLocDetail.setText(addresss);
+                        if(tvLocDetail.getText().toString().equals("位置信息加载中...")){
+                            tvLocDetail.setText(addresss);
+                        }
+
                     }
                     if (eventMessage.getObject() instanceof LatLng) {
                         LatLng latLng = (LatLng) eventMessage.getObject();
-                        tvLocDetail.setText("经度：" +latLng.latitude + "纬度：" + latLng.longitude);
+                        if(tvLocDetail.getText().toString().equals("位置信息加载中...")){
+                            tvLocDetail.setText("经度：" +latLng.latitude + "纬度：" + latLng.longitude);
+                        }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -447,12 +487,13 @@ public class CurrentCarsFragment extends Fragment implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        int pos = (int) marker.getZIndex();
         llBottom.setVisibility(View.VISIBLE);
+        int pos = (int) marker.getZIndex();
         tvLocDetail.setText("位置信息加载中...");
 
-        if(carInfoList.size() >= pos){
+        if(pos > 0 && carInfoList.size() >= pos){
             try {
+                tvLocDetail.setText("详细位置加载中...");
                 CarInfo carInfo = carInfoList.get(pos);
                 LatLng latLng = new LatLng(Double.parseDouble(carInfo.getLat_n()), Double.parseDouble(carInfo.getLong_n()));
                 Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
@@ -462,6 +503,15 @@ public class CurrentCarsFragment extends Fragment implements
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
+        }else{
+            if(pos == -1){
+                if(null != orderNow){
+                    tvLocDetail.setText(orderNow.getCountry() + "   "+orderNow.getProvince() + "   "+ orderNow.getCity() + "   " +orderNow.getDistrict() + "   " + orderNow.getAddress());
+                }
+            }
+            if(pos == -2){
+                tvLocDetail.setText(orderNow.getRecive_country() + "   "+orderNow.getRecive_province() + "   "+ orderNow.getRecive_city() + "   " +orderNow.getRecive_district() + "   " + orderNow.getRecive_address());
+            }
         }
         return false;
     }
@@ -470,4 +520,5 @@ public class CurrentCarsFragment extends Fragment implements
     public void onMapClick(LatLng latLng) {
         llBottom.setVisibility(View.GONE);
     }
+
 }

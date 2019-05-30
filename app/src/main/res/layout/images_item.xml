@@ -9,8 +9,9 @@
         android:id="@+id/iv_img"
         android:layout_width="300dp"
         android:layout_height="500dp"
+        fresco:progressBarImage="@mipmap/loading"
+        fresco:progressBarAutoRotateInterval="1000"
         android:layout_marginTop="15dp"
-        fresco:placeholderImage="@mipmap/test02"
         android:layout_marginLeft="15dp"
         fresco:actualImageScaleType="focusCrop"
          />

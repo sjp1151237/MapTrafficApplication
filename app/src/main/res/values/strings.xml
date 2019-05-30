@@ -265,5 +265,9 @@
     <string name="state_ing">进行中</string>
     <string name="state_over">已完成</string>
     <string name="title_activity_navi_test">NaviTestActivity</string>
+    <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>
