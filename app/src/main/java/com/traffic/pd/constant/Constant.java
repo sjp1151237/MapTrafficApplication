@@ -57,4 +57,6 @@ public class Constant {
     public static String UPDATE = HOST + "/api/user/version";
 
     public static final int REQUEST_CODE = 1024;
+
+    public static String GET_MSG_CODE = HOST + "/api/user/sendsms";
 }
