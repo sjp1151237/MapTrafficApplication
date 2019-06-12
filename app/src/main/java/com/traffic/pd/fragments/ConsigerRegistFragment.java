@@ -159,6 +159,7 @@ public class ConsigerRegistFragment extends Fragment {
                 map.put("password", etPassword.getText().toString());
                 map.put("password2", etPasswordTwo.getText().toString());
                 map.put("country", phoneCodeBean.getD());
+                map.put("phonecode", phoneCodeBean.getD());
                 map.put("username", etUsername.getText().toString());
                 map.put("identity", String.valueOf(type));
                 new PostRequest(TAG, getContext(), false)
@@ -215,7 +216,8 @@ public class ConsigerRegistFragment extends Fragment {
         }
         startTimer();
         Map<String, String> map = new HashMap<>();
-        map.put("mobile", phoneCodeBean.getD() + etPhonenum.getText().toString());
+        map.put("phonecode", phoneCodeBean.getD());
+        map.put("mobile",    etPhonenum.getText().toString());
         new PostRequest(TAG, getContext(), false)
                 .go(getContext(), new PostRequest.PostListener() {
                     @Override
