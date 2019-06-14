@@ -28,10 +28,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.activity.LoginActivity;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.data.PhoneCodeBean;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,24 +100,25 @@ public class ComUtils {
         return isget;
     }
 
-    /**
+    /*
      * 获取国家码
-     */
-    public static String getCountryZipCode(Context context) {
-        String CountryID = "";
+     * */
+    public static PhoneCodeBean getCountryZipCodeLoc(Context context)
+    {
         String CountryZipCode = "";
-        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        Log.d("ss", "CountryID--->>>" + CountryID);
-        String[] rl = context.getResources().getStringArray(R.array.CountryCodes);
-        for (int i = 0; i < rl.length; i++) {
-            String[] g = rl[i].split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                break;
+        Locale locale = context.getResources().getConfiguration().locale;
+        CountryZipCode = locale.getCountry();
+        List<PhoneCodeBean> beanList;
+        String data = ComUtils.getJson("sds.json", context);
+        if (!TextUtils.isEmpty(data)) {
+            beanList = JSONArray.parseArray(data, PhoneCodeBean.class);
+            for (int i = 0; i < beanList.size(); i++) {
+                if (!TextUtils.isEmpty(beanList.get(i).getC()) && beanList.get(i).getC().equals(CountryZipCode)) {
+                    return beanList.get(i);
+                }
             }
         }
-        return CountryZipCode;
+        return null;
     }
 
     public static String getJson(String fileName, Context context) {
@@ -393,5 +396,6 @@ public class ComUtils {
             e.printStackTrace();
         }
     }
+
 
 }

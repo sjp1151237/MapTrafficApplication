@@ -10,13 +10,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.othershe.nicedialog.BaseNiceDialog;
 import com.othershe.nicedialog.NiceDialog;
-import com.othershe.nicedialog.ViewConvertListener;
-import com.othershe.nicedialog.ViewHolder;
 import com.traffic.pd.MainActivity;
 import com.traffic.pd.R;
 import com.traffic.pd.constant.Constant;
+import com.traffic.pd.data.PhoneCodeBean;
 import com.traffic.pd.data.TestBean;
 import com.traffic.pd.data.UserBean;
 import com.traffic.pd.utils.ComUtils;
@@ -49,6 +47,13 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvCommit;
 
     NiceDialog niceDialog;
+    @BindView(R.id.tv_location)
+    TextView tvLocation;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
+
+    private static int locCode = 1024;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +64,31 @@ public class LoginActivity extends AppCompatActivity {
         tvBtn.setVisibility(View.VISIBLE);
         tvBtn.setText("Sign up");
         niceDialog = NiceDialog.init();
-
+        phoneCodeBean = ComUtils.getCountryZipCodeLoc(this);
+        if(null != phoneCodeBean){
+            tvLocation.setText(phoneCodeBean.getA());
+        }
     }
 
-    @OnClick({R.id.ll_back, R.id.tv_btn, R.id.tv_commit})
+    @OnClick({R.id.ll_back, R.id.tv_btn, R.id.tv_commit,R.id.ll_location})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_location:
+                startActivityForResult(new Intent(getContext(), ChoosePhoneCodeActivity.class), locCode);
+                break;
             case R.id.ll_back:
                 finish();
                 break;
             case R.id.tv_btn:
                 // 注册
-                startActivity(new Intent(getContext(),RegisterActivity.class));
+                startActivity(new Intent(getContext(), RegisterActivity.class));
                 finish();
                 break;
             case R.id.tv_commit:
+                if(null ==phoneCodeBean){
+                    ComUtils.showMsg(getContext(), "please select phone country");
+                    return;
+                }
                 if (TextUtils.isEmpty(etNum.getText().toString())) {
                     ComUtils.showMsg(getContext(), "please enter phone num");
                     return;
@@ -82,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     ComUtils.showMsg(getContext(), "please enter psw");
                     return;
                 }
-                toLogin(etNum.getText().toString(),etPsw.getText().toString());
+                toLogin(etNum.getText().toString(), etPsw.getText().toString());
                 break;
         }
     }
@@ -92,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("username", username);
         map.put("password", psw);
+        map.put("phonecode", phoneCodeBean.getD());
         new PostRequest("toLogin", getContext(), true)
                 .go(getContext(), new PostRequest.PostListener() {
                     @Override
@@ -104,8 +120,8 @@ public class LoginActivity extends AppCompatActivity {
                             String msg = jsonObject.getString("msg");
                             ComUtils.showMsg(getContext(), msg);
                             if (status == 1) {
-                                UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("result"),UserBean.class);
-                                PreferencesUtils.putSharePre(getContext(),Constant.USER_INFO,jsonObject.getString("result"));
+                                UserBean userBean = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getString("result"), UserBean.class);
+                                PreferencesUtils.putSharePre(getContext(), Constant.USER_INFO, jsonObject.getString("result"));
 //                                if(userBean.getIdentity().equals("1")){
 //                                    Intent intent = new Intent(getContext(),ConsigerHomeActivity.class);
 //                                    startActivity(intent);
@@ -116,9 +132,11 @@ public class LoginActivity extends AppCompatActivity {
 //                                    startActivity(intent);
 //                                    finish();
 //                                }
-                                Intent intent = new Intent(getContext(),MainActivity.class);
-                                intent.putExtra("user",userBean);
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                intent.putExtra("user", userBean);
                                 startActivity(intent);
+
+                            }else{
 
                             }
                         } catch (JSONException e) {
@@ -144,4 +162,19 @@ public class LoginActivity extends AppCompatActivity {
     private Context getContext() {
         return LoginActivity.this;
     }
+
+    PhoneCodeBean phoneCodeBean;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == locCode && resultCode == 2) {
+
+            phoneCodeBean = (PhoneCodeBean) data.getSerializableExtra("res");
+            tvLocation.setText(phoneCodeBean.getA());
+
+        }
+
+    }
+
 }

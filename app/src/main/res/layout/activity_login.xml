@@ -15,20 +15,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <EditText
-            android:id="@+id/et_num"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@drawable/line_et_bg"
             android:layout_height="45dp"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/item_title_font"
-            android:textColorHint="@color/item_content_font"
-            android:hint="phone num"
-            />
+            >
+            <EditText
+                android:id="@+id/et_num"
+                android:layout_width="match_parent"
+                android:background="@drawable/line_et_bg"
+                android:layout_height="45dp"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/item_title_font"
+                android:textColorHint="@color/item_content_font"
+                android:hint="phone num"
+                />
+
+            <LinearLayout
+                android:layout_alignParentRight="true"
+                android:id="@+id/ll_location"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:maxLines="1"
+                    android:text="China"
+                    android:textColor="@color/colorTip"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/right2" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
 
 
         <EditText

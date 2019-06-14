@@ -147,9 +147,12 @@ public class UserFragment extends Fragment {
         getActivity().unregisterReceiver(myReceiver);
     }
 
-    @OnClick({R.id.take_picture,R.id.ll_company, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard, R.id.ll_out_login, R.id.rl_to_share})
+    @OnClick({R.id.ll_change,R.id.take_picture,R.id.ll_company, R.id.ll_order_center, R.id.ll_driver, R.id.ll_Customer_Service, R.id.ll_Forgot_password, R.id.ll_about_us, R.id.ll_Charge_standard, R.id.ll_out_login, R.id.rl_to_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_change:
+                
+                break;
             case R.id.take_picture:
 //                Intent intent = new Intent(getContext(), LoginActivity.class);
 //                startActivity(intent);
