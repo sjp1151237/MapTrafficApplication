@@ -70,9 +70,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.ll_back, R.id.tv_btn, R.id.tv_commit,R.id.ll_location})
+    @OnClick({R.id.ll_back, R.id.tv_btn, R.id.tv_commit,R.id.ll_location,R.id.ll_changepsw})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_changepsw:
+                startActivity(new Intent(getContext(),ChangePasswordActivity.class));
+                break;
             case R.id.ll_location:
                 startActivityForResult(new Intent(getContext(), ChoosePhoneCodeActivity.class), locCode);
                 break;
